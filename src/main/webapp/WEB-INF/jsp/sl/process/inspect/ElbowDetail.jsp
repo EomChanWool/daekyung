@@ -354,7 +354,7 @@
                                 <a href="#" class="btn btn-warning btn-icon-split" onclick="fn_view_report('${detail.isiReportImage}')">
 				                                        <span class="text">보고서 보기</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_Ok_ins('${detail.isiId}','2')">
+				                                    <a href="${pageContext.request.contextPath}/sl/process/inspect/downloadInspect.do?fileName=${detail.isiReportImage}" class="btn btn-danger btn-icon-split">
 				                                        <span class="text">보고서 다운</span>
 				                                    </a>
                                 </c:if>
