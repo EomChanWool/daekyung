@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -57,34 +59,34 @@ public class Scheduler {
 //	}
 	
 	//ini 파일 읽어들이기 예제
-	@Scheduled(cron = "10 55 8 * * *")
-	public void sampleIni() throws Exception{
-		String fileName = "C:\\test\\sample.ini";
-		File fileToParse = new File(fileName);
-		
-		INIConfiguration iniConfiguration = new INIConfiguration();
-		try (FileReader fileReader = new FileReader(fileToParse)) {
-		    iniConfiguration.read(fileReader);
-		}
-		
-		Map<String, Map<String,String>> map =  new HashMap<>();
-		for (String section : iniConfiguration.getSections()) {
-			Map<String,String> subMap = new HashMap<>();
-			SubnodeConfiguration confSection = iniConfiguration.getSection(section);
-			Iterator<String> keyIlerator = confSection.getKeys();
-			while(keyIlerator.hasNext()) {
-				String key = keyIlerator.next();
-				String value = confSection.getProperty(key)+"";
-				subMap.put(key,value);
-			}
-			map.put(section, subMap);
-		}
-		Map<String, String> rowMap = map.get("main");
-		Map<String, String> rowMap2 = map.get("branch1");
-		
-		System.out.println("ini맵 : " + rowMap);
-		System.out.println("ini맵2 : " + rowMap2);
-	}
+	//@Scheduled(cron = "10 55 8 * * *")
+//	public void sampleIni() throws Exception{
+//		String fileName = "C:\\test\\sample.ini";
+//		File fileToParse = new File(fileName);
+//		
+//		INIConfiguration iniConfiguration = new INIConfiguration();
+//		try (FileReader fileReader = new FileReader(fileToParse)) {
+//		    iniConfiguration.read(fileReader);
+//		}
+//		
+//		Map<String, Map<String,String>> map =  new HashMap<>();
+//		for (String section : iniConfiguration.getSections()) {
+//			Map<String,String> subMap = new HashMap<>();
+//			SubnodeConfiguration confSection = iniConfiguration.getSection(section);
+//			Iterator<String> keyIlerator = confSection.getKeys();
+//			while(keyIlerator.hasNext()) {
+//				String key = keyIlerator.next();
+//				String value = confSection.getProperty(key)+"";
+//				subMap.put(key,value);
+//			}
+//			map.put(section, subMap);
+//		}
+//		Map<String, String> rowMap = map.get("main");
+//		Map<String, String> rowMap2 = map.get("branch1");
+//		
+//		System.out.println("ini맵 : " + rowMap);
+//		System.out.println("ini맵2 : " + rowMap2);
+//	}
 	
 
 	
@@ -266,7 +268,7 @@ public class Scheduler {
 		//File file = new File(fileName);
 		//EgovFileUtil.delete(file);
 	}
-	@Scheduled(cron = "20 57 8 * * *")
+	//@Scheduled(cron = "20 57 8 * * *")
 	public void releaseUpdate() throws Exception{
 		
 		String fileName = "C:\\test\\release.xls";
@@ -352,50 +354,102 @@ public class Scheduler {
 		}catch (FileNotFoundException e) {
 		System.out.println("파일없음");	}
 		}
-	//@Scheduled(cron = "30 * * * * *")
-	public void testRead2() throws Exception{
-		File note = new File("C:\\test","Test2.txt");
-		int idx = 0; 
+	@Scheduled(cron = "40 00 21 * * *")
+	public void readSuju() throws Exception{
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+	    Date now = new Date();
+	    
+	    now =  new Date(now.getTime()+(1000*60*60*24*-1));
+	    
+		String edDate = format.format(now);
+		
+		File note = new File("C:\\test4\\suju-"+edDate+".txt");
 		Map<String,String> linee = new HashMap<String, String>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(note));
-			String inputString = "";
 			String line = "";
+			
+			
 			while ((line= br.readLine()) !=null) {
-			
-				String line1 = line.replace(" ", ",");
-				//System.out.println("렝쓰 : " + line1.length());
-				linee.put("항목"+idx,line);
-				idx++;
+				
+				String[] line2 = line.split(",");
+				linee.put("orId", line2[0].trim());
+				linee.put("orCompany", line2[1].trim());
+				linee.put("orProd", line2[2].trim());
+				linee.put("orFinDate", line2[16].trim());
+				linee.put("orOrType", line2[13].trim());
+				linee.put("orTexture", line2[3].trim());
+				linee.put("orThickness", line2[4].trim());
+				linee.put("orState", line2[5].trim());
+				linee.put("orStandard", line2[6].trim());
+				linee.put("orManager", line2[12].trim());
+				linee.put("orPrNo", line2[15].trim());
+				linee.put("orUnit", line2[8].trim());
+				linee.put("orMoney", line2[9].trim());
+				linee.put("orQty", line2[7].trim());
+				System.out.println("맵 : " + linee);
+				
+				excelReaderService.registOrder(linee);
 			}
-			String aa = linee.get("항목0");
-			String a2 = linee.get("항목1");
-			String a3 = linee.get("항목2");
-			String a4 = linee.get("항목3");
-			String a5 = linee.get("항목4");
-			String a6 = linee.get("항목5");
-			System.out.println(aa.substring(300,308));
-			System.out.println(a2.substring(300,308));
-			System.out.println(a3.substring(300,308));
-			System.out.println(a4.substring(300,308));
-			System.out.println(a5.substring(300,308));
-			System.out.println(a6.substring(300,308));
+			br.close();
+			EgovFileUtil.delete(note);
+		} catch (Exception e) {
+		}
+	}
+	
+	@Scheduled(cron = "40 01 21 * * *")
+	public void readPro() throws Exception{
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+	    Date now = new Date();
+	    
+	    now =  new Date(now.getTime()+(1000*60*60*24*-1));
+	    
+		String edDate = format.format(now);
+		
+		File note = new File("C:\\test4\\pro-"+edDate+".txt");
+		Map<String,String> linee = new HashMap<String, String>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(note));
+			String line = "";
 			
-//			System.out.println("확인 : " + linee.get("항목0").length());
-//			System.out.println("확인 : " + linee.get("항목1").length());
-//			System.out.println("확인 : " + linee.get("항목2").length());
-//			System.out.println("확인 : " + linee.get("항목3").length());
-//			System.out.println("확인 : " + linee.get("항목4").length());
-//			System.out.println("확인 : " + linee.get("항목5").length());
+			
+			while ((line= br.readLine()) !=null) {
+				
+				String[] line2 = line.split(",");
+				linee.put("mpMfno", line2[16].trim());
+				linee.put("orId", line2[11].trim());
+				linee.put("mpProdName", line2[3].trim());
+				linee.put("mpTexture", line2[4].trim());
+				linee.put("mpThickness", line2[5].trim());
+				linee.put("mpState", line2[6].trim());
+				linee.put("mpStandard", line2[7].trim());
+				linee.put("poLotno", line2[19].trim());
+				linee.put("mpQty", line2[8].trim());
+				linee.put("mpNote", line2[20].trim());
+				
+				System.out.println("맵 : " + linee);
+				
+			}
+			br.close();
+			//EgovFileUtil.delete(note);
 		} catch (Exception e) {
 		}
 	}
 	
 	
-	//@Scheduled(cron = "30 * * * * *")
+	//@Scheduled(cron = "35 00 21 * * *")
 	public void testRead() throws Exception {
 		
-		File note = new File("C:\\test","testDown.txt");
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+	    Date now = new Date();
+	    
+	    now =  new Date(now.getTime()+(1000*60*60*24*-1));
+	    
+		String edDate = format.format(now);
+		
+		File note = new File("C:\\test4\\suju-"+edDate+".txt");
 		
 		
 		
@@ -483,6 +537,182 @@ public class Scheduler {
 	
 	
 	
+	@Scheduled(cron = "20 00 21 * * *")
+	public void openSuju() {
+		  ftp = new FTPClient();
+		    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
+		    //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
+		    ftp.setControlEncoding("UTF-8");
+		    //PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
+		    ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
+
+		    try {
+		        //ftp 서버 연결
+		        ftp.connect("dkbend.iptime.org", 30431);
+
+		        //ftp 서버에 정상적으로 연결되었는지 확인
+		        int reply = ftp.getReplyCode();
+		        if (!FTPReply.isPositiveCompletion(reply)) {
+		            ftp.disconnect();
+		            System.out.println("에러");
+		        }
+
+		        //socketTimeout 값 설정
+		        ftp.setSoTimeout(1000);
+		        //ftp 서버 로그인
+		        ftp.login("signlab", "dk304316@");
+		        //file type 설정 (default FTP.ASCII_FILE_TYPE)
+		        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+		        //ftp Active모드 설정
+		        ftp.enterLocalPassiveMode(); 
+		            
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        System.out.println("에러");
+		    }
+		    
+		    
+		    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		    Date now = new Date();
+		    
+		    now =  new Date(now.getTime()+(1000*60*60*24*-1));
+		    
+			String edDate = format.format(now);
+			String fileName = "/up-data/suju-"+edDate;
+			File get_file = new File("C:\\test4","suju-"+edDate+"row.txt");
+			
+			
+		    try {
+		    	FileOutputStream outputstream = new FileOutputStream(get_file);
+		    	boolean result = ftp.retrieveFile(fileName, outputstream);
+
+		    	if(result) {
+		    		System.out.println("파일다운성공");
+		    	}else {
+		    		System.out.println("파일없음");
+		    	}
+		    	
+		    	FileInputStream fis = new FileInputStream(get_file);
+		    	InputStreamReader isr = new InputStreamReader(fis,"euc-kr");
+		    	
+		    	
+		    	FileOutputStream fos1 = new FileOutputStream("C:\\test4\\suju-"+edDate+".txt");
+		    	OutputStreamWriter osw1 = new OutputStreamWriter(fos1,"utf-8");
+		    	int c ;
+				while ((c=isr.read())!=-1) {
+					osw1.write(c);
+				}
+				
+		    	isr.close();
+		    	osw1.close();
+		    	outputstream.close();
+		    	EgovFileUtil.delete(get_file);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    } finally {
+		    	try {
+		    		//ftp.deleteFile(fileName);
+			        ftp.logout();
+			        ftp.disconnect();
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			        System.out.println("에러");
+			    }
+		    }
+		
+		
+	}
+	
+	@Scheduled(cron = "20 01 21 * * *")
+	public void openPro() {
+		  ftp = new FTPClient();
+		    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
+		    //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
+		    ftp.setControlEncoding("UTF-8");
+		    //PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
+		    ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
+
+		    try {
+		        //ftp 서버 연결
+		        ftp.connect("dkbend.iptime.org", 30431);
+
+		        //ftp 서버에 정상적으로 연결되었는지 확인
+		        int reply = ftp.getReplyCode();
+		        if (!FTPReply.isPositiveCompletion(reply)) {
+		            ftp.disconnect();
+		            System.out.println("에러");
+		        }
+
+		        //socketTimeout 값 설정
+		        ftp.setSoTimeout(1000);
+		        //ftp 서버 로그인
+		        ftp.login("signlab", "dk304316@");
+		        //file type 설정 (default FTP.ASCII_FILE_TYPE)
+		        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+		        //ftp Active모드 설정
+		        ftp.enterLocalPassiveMode(); 
+		            
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		        System.out.println("에러");
+		    }
+		    
+		    
+		    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		    Date now = new Date();
+		    
+		    now =  new Date(now.getTime()+(1000*60*60*24*-1));
+		    
+			String edDate = format.format(now);
+			String fileName = "/up-data/pro-"+edDate;
+			File get_file = new File("C:\\test4","pro-"+edDate+"row.txt");
+			
+			
+		    try {
+		    	FileOutputStream outputstream = new FileOutputStream(get_file);
+		    	boolean result = ftp.retrieveFile(fileName, outputstream);
+
+		    	if(result) {
+		    		System.out.println("파일다운성공");
+		    	}else {
+		    		System.out.println("파일없음");
+		    	}
+		    	
+		    	FileInputStream fis = new FileInputStream(get_file);
+		    	InputStreamReader isr = new InputStreamReader(fis,"euc-kr");
+		    	
+		    	
+		    	FileOutputStream fos1 = new FileOutputStream("C:\\test4\\pro-"+edDate+".txt");
+		    	OutputStreamWriter osw1 = new OutputStreamWriter(fos1,"utf-8");
+		    	int c ;
+				while ((c=isr.read())!=-1) {
+					osw1.write(c);
+				}
+				
+		    	isr.close();
+		    	osw1.close();
+		    	outputstream.close();
+		    	EgovFileUtil.delete(get_file);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    } finally {
+		    	try {
+		    		//ftp.deleteFile(fileName);
+			        ftp.logout();
+			        ftp.disconnect();
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			        System.out.println("에러");
+			    }
+		    }
+		
+		
+	}
+	
+	
+	
+	
+	
 	//@Scheduled(cron = "20 * * * * *")
 	public void open() {
 		
@@ -551,7 +781,7 @@ public class Scheduler {
 	    
 	}
 	
-	@Scheduled(cron = "20 30 20 * * *")
+	//@Scheduled(cron = "20 30 20 * * *")
 	public void insdataUpdate() {
 		
 		 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

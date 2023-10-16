@@ -199,7 +199,7 @@ public class InspectController {
 		
 		String[] beFileName = itemName.split("-");
 		
-		String afterFileName = "C:\\test4\\" + beFileName[0]+"-"+Lotno + infoData.get("isiId")+""+".xlsx";
+		String afterFileName = "C:\\test4\\" + beFileName[0]+"-"+Lotno +"-" +infoData.get("isiId")+""+".xlsx";
 		String fileName = "C:\\test\\insEx.xlsx";
 		
 		String itemType = infoData.get("isiItemName")+"";
@@ -473,7 +473,7 @@ public class InspectController {
         
         Map<String, Object> upMap = new HashMap<String, Object>();
         
-        String afterFileImg = beFileName[0]+"-"+Lotno + infoData.get("isiId")+""+".pdf";
+        String afterFileImg = beFileName[0]+"-"+Lotno +"-"+infoData.get("isiId")+""+".pdf";
         
         upMap.put("isiId", infoData.get("isiId"));
         upMap.put("isiReportFile", afterFileName);

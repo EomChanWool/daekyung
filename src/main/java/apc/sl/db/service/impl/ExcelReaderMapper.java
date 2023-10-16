@@ -12,7 +12,7 @@ public interface ExcelReaderMapper {
 	
 	void registMm(Map<String,Object> map);
 	
-	void registOrder(Map<String, Object> map);
+	void registOrder(Map<String, String> map);
 	
 	void registRelease(Map<String,Object> map);
 	

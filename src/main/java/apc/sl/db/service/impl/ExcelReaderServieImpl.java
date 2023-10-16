@@ -36,7 +36,7 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 	}
 
 	@Override
-	public void registOrder(Map<String, Object> map) {
+	public void registOrder(Map<String, String> map) {
 		excelReaderMapper.registOrder(map);
 	}
 

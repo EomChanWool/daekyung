@@ -84,44 +84,40 @@ WHERE PO_LOTNO = #{str}
 
 	<insert id="registOrder">
 		INSERT INTO sm_orders(
-		or_date,
-		or_company,
-		or_or_type,
-		or_due_date,
-		or_qty,
-		or_unit,
-		or_money,
-		or_fin_date,
-		or_report,
-		or_manager,
 		or_id,
+		or_company,
 		or_prod,
+		or_date,
+		<if test="orFinDate !='00000000'">or_fin_date,</if>
+		or_or_type,
 		or_texture,
 		or_thickness,
 		or_standard,
 		or_state,
+		or_manager,
+		or_pr_no,
+		or_unit,
+		or_money,
+		or_qty,
 		or_process
 		) VALUES
 		(
-		CONVERT(varchar ,CONVERT(DATE, #{orDate})),
-		#{orCompany},
-		#{orOrType},
-		CONVERT(varchar ,CONVERT(DATE, #{orDueDate})),
-		CONVERT(INT,CONVERT(float,#{orQty})),
-		#{orUnit},
-		#{orMoney},
-		CASE WHEN
-		TRIM(#{orFinDate}) = '' THEN NULL ELSE CONVERT(varchar, convert(DATE,
-		#{orFinDate})) END ,
-		#{orReport},
-		#{orManager},
 		#{orId},
+		#{orCompany},
 		#{orProd},
+		GETDATE(),
+		<if test="orFinDate !='00000000'">#{orFinDate},</if>
+		#{orOrType},
 		#{orTexture},
 		#{orThickness},
 		#{orStandard},
 		#{orState},
-		#{orProcess}
+		#{orManager},
+		#{orPrNo},
+		#{orUnit},
+		#{orMoney},
+		#{orQty},
+		0
 		)
 	</insert>
 	<insert id="registRelease">

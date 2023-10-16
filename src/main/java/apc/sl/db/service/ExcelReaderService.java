@@ -7,7 +7,7 @@ public interface ExcelReaderService {
 
 	void registdb(Map<String, Object> map);
 	
-	void registOrder(Map<String, Object> map);
+	void registOrder(Map<String, String> map);
 	
 	void registMm(Map<String,Object> map);
 	
