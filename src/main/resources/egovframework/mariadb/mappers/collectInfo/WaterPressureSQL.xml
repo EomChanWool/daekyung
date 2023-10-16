@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.collectInfo.waterPressure.service.impl.WaterPressureMapper">
+	<select id="selectWaterPressureListToCnt" resultType="int">
+		SELECT
+			COUNT(*) 
+		FROM sm_collect
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND co_state = #{searchCondition}
+		</if>
+		<if test="searchStDate != ''">
+			AND co_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND co_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectWaterPressureList" resultType="egovMap">
+		SELECT
+			a.co_idx,
+			a.or_idx,
+			a.co_state,
+			a.co_dte,
+			FORMAT(a.co_tot_price,0) AS co_tot_price,
+			b.a_idx,
+			b.a_name,
+			b.a_tel,
+			c.de_idx,
+			d.or_name
+		FROM sm_collect a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		JOIN sm_delivery c
+		ON a.or_idx = c.or_idx
+		JOIN sm_orders d
+		ON a.or_idx = d.or_idx
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND co_state = #{searchCondition}
+		</if>
+		<if test="searchStDate != ''">
+			AND co_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND co_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY or_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectDeliveryList" resultType="egovMap">
+		SELECT
+			a.or_idx,
+			b.a_name,
+			c.or_name
+		FROM sm_delivery a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		JOIN sm_orders c
+		ON a.or_idx = c.or_idx
+		WHERE de_state = '1'
+	</select>
+	
+	<select id="selectDeliveryInfo" resultType="egovMap">
+		SELECT 
+			a.a_idx, 
+			a.de_money,
+			b.a_name 
+		FROM sm_delivery a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		WHERE or_idx = #{orIdx}
+	</select>
+	
+	<select id="selectExistsDeliveryIdx" resultType="int">
+		SELECT COUNT(*) FROM sm_delivery WHERE de_idx = #{deIdx}
+	</select>
+	
+	<select id="selectAlreadyRegistDeIdx" resultType="int">
+		SELECT COUNT(*) FROM sm_collect WHERE or_idx = #{orIdx}
+	</select>
+	
+<!-- 	<insert id="registWaterPressure"> -->
+<!-- 		INSERT INTO sm_collect -->
+<!-- 			( -->
+<!-- 			or_idx, -->
+<!-- 			a_idx, -->
+<!-- 			co_state, -->
+<!-- 			<if test="coDueDte != ''">co_due_dte,</if> -->
+<!-- 			<if test="coDte != ''">co_dte,</if> -->
+<!-- 			<if test="coComManager != ''">co_com_manager,</if> -->
+<!-- 			co_tot, -->
+<!-- 			co_vat, -->
+<!-- 			co_tot_price, -->
+<!-- 			co_tax_use, -->
+<!-- 			<if test="coNote != ''">co_note,</if> -->
+<!-- 			co_reg_dte, -->
+<!-- 			co_reg_mem -->
+<!-- 			) -->
+<!-- 		VALUES -->
+<!-- 			( -->
+<!-- 			#{orIdx}, -->
+<!-- 			#{aIdx}, -->
+<!-- 			#{coState}, -->
+<!-- 			<if test="coDueDte != ''">#{coDueDte},</if> -->
+<!-- 			<if test="coDte != ''">#{coDte},</if> -->
+<!-- 			<if test="coComManager != ''">#{coComManager},</if> -->
+<!-- 			#{coTot}, -->
+<!-- 			#{coVat}, -->
+<!-- 			#{coTotPrice}, -->
+<!-- 			#{coTaxUse}, -->
+<!-- 			<if test="coNote != ''">#{coNote},</if> -->
+<!-- 			NOW(), -->
+<!-- 			#{userId}			 -->
+<!-- 			) -->
+<!-- 	</insert> -->
+	
+<!-- 	<update id="updateDelivery"> -->
+<!-- 		UPDATE sm_delivery SET -->
+<!-- 			de_state = #{state} -->
+<!-- 		WHERE or_idx = #{orIdx} -->
+<!-- 	</update> -->
+	
+	<select id="selectCollectInfo" resultType="egovMap">
+		SELECT
+			a.co_idx,
+			a.or_idx,
+			a.a_idx,
+			a.co_state,
+			a.co_due_dte,
+			a.co_dte,
+			a.co_com_manager,
+			a.co_tot,
+			a.co_vat,
+			a.co_tot_price,
+			a.co_tax_use,
+			a.co_note,
+			b.a_name,
+			b.a_manager,
+			c.or_name
+		FROM sm_collect a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		JOIN sm_orders c
+		ON a.or_idx = c.or_idx
+		WHERE co_idx = #{coIdx}
+	</select>
+	
+<!-- 	<update id="modifyWaterPressure"> -->
+<!-- 		UPDATE sm_collect SET -->
+<!-- 			a_idx = #{aIdx}, -->
+<!-- 			co_state = #{coState}, -->
+<!-- 			<if test="coDte != ''">co_dte = #{coDte},</if> -->
+<!-- 			<if test="coComManager != ''">co_com_manager = #{coComManager},</if> -->
+<!-- 			co_tot = #{coTot}, -->
+<!-- 			co_vat = #{coVat}, -->
+<!-- 			co_tot_price = #{coTotPrice}, -->
+<!-- 			co_tax_use = #{coTaxUse}, -->
+<!-- 			co_note = #{coNote}, -->
+<!-- 			co_edt_dte = NOW(), -->
+<!-- 			co_edt_mem = #{userId} -->
+<!-- 		WHERE co_idx = #{coIdx} -->
+<!-- 	</update> -->
+	
+<!-- 	<delete id="deleteCollect"> -->
+<!-- 		DELETE FROM sm_collect WHERE co_idx = #{coIdx} -->
+<!-- 	</delete> -->
+</mapper>

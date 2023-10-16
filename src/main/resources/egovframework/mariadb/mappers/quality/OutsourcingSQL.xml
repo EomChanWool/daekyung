@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.material.outsourcing.service.impl.OutsourcingMapper">
+	<select id="selectOutsourcingListToCnt" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM sm_outso_info a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND or_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND DATE_FORMAT(oi_out_dte, '%Y-%m-%d') >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND DATE_FORMAT(oi_in_dte, '%Y-%m-%d') <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	<select id="selectOutsourcingList" resultType="egovMap">
+		SELECT
+			oi_idx,
+			a.or_idx,
+			or_name,
+			DATE_FORMAT(oi_out_dte, '%Y-%m-%d') AS oi_out_dte,
+			DATE_FORMAT(oi_in_dte, '%Y-%m-%d') AS oi_in_dte,
+			oi_manager
+		FROM sm_outso_info a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND or_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND oi_out_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND oi_out_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY oi_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectOrdersList" resultType="egovMap">
+		SELECT or_idx, or_name FROM sm_orders WHERE or_state IN ('3','4')
+	</select>
+	
+	<select id="selectOrdersInfo" resultType="egovMap">
+		SELECT or_name FROM sm_orders WHERE or_idx = #{orIdx}
+	</select>
+	
+	<select id="selectExistsOrIdx" resultType="int">
+		SELECT COUNT(*) FROM sm_orders WHERE or_idx = #{orIdx}
+	</select>
+	
+	<select id="selectExistsShipment" resultType="int">
+		SELECT COUNT(*) FROM sm_shipment WHERE or_idx = #{orIdx}
+	</select>
+	
+	<insert id="registOutSourcing">
+		INSERT INTO sm_outso_info
+			(
+			or_idx,
+			oi_out_dte,
+			<if test="oiInDte != ''">oi_in_dte,</if>
+			<if test="oiIspDte != ''">oi_isp_dte,</if>
+			<if test="oiManager != ''">oi_manager,</if>
+			oi_reg_dte,
+			oi_reg_mem
+			)
+		VALUES
+			(
+			#{orIdx},
+			#{oiOutDte},
+			<if test="oiInDte != ''">#{oiInDte},</if>
+			<if test="oiIspDte != ''">#{oiIspDte},</if>
+			<if test="oiManager != ''">#{oiManager},</if>
+			NOW(),
+			#{userId}
+			)
+	</insert>
+	
+	<update id="updateOrders">
+		UPDATE sm_orders SET
+			or_state = #{state}
+		WHERE or_idx = #{orIdx}
+	</update>
+	
+	<select id="selectOutsourcingInfo" resultType="egovMap">
+		SELECT
+			oi_idx,
+			a.or_idx,
+			or_name,
+			oi_out_dte,
+			oi_in_dte,
+			oi_isp_dte,
+			oi_manager
+		FROM sm_outso_info a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE oi_idx = #{oiIdx}
+	</select>
+	
+	<update id="modifyOutsourcing">
+		UPDATE sm_outso_info SET
+			oi_out_dte = #{oiOutDte},
+			<if test="oiInDte != ''">oi_in_dte = #{oiInDte},</if>
+			<if test="oiIspDte != ''">oi_isp_dte = #{oiIspDte},</if>
+			<if test="oiManager != ''">oi_manager = #{oiManager},</if>
+			oi_edt_dte = NOW(),
+			oi_edt_mem = #{userId}
+		WHERE oi_idx = #{oiIdx}
+	</update>
+	
+	<delete id="deleteOutsourcing">
+		DELETE FROM sm_outso_info WHERE oi_idx = #{oiIdx}
+	</delete>
+</mapper>

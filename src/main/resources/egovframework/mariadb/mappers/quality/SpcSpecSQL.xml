@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.quality.spcSpec.service.impl.SpcSpecMapper">
+	<select id="selectSpcSpecListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_insert_info
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND wo_idx LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	
+	<select id="selectSpcSpecList" resultType="egovMap">
+		SELECT
+			in_idx,
+			wo_idx,
+			in_dte,
+			in_com_manager
+		FROM sm_insert_info
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND wo_idx LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY in_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectWorkOrderList" resultType="egovMap">
+		SELECT wo_idx, wo_name FROM sm_work_order WHERE wo_state NOT IN('2','3')
+	</select>
+	
+	<select id="selectMaterialList" resultType="egovMap">
+		SELECT item_cd, item_name FROM sm_item WHERE item_type LIKE CONCAT('%자재%')
+	</select>
+	
+	<select id="selectMaterialStock" resultType="int">
+		SELECT COUNT(*) FROM sm_item WHERE item_cd = #{itemCd} AND item_cnt >= #{cnt}
+	</select>
+	
+	<select id="selectExistsInsertInfo" resultType="int">
+		SELECT COUNT(*) FROM sm_insert_info WHERE wo_idx = #{woIdx}
+	</select>
+	
+<!-- 	<insert id="registSpcSpec"> -->
+<!-- 		INSERT INTO sm_insert_info -->
+<!-- 			( -->
+<!-- 			wo_idx, -->
+<!-- 			in_dte, -->
+<!-- 			in_com_manager, -->
+<!-- 			in_reg_dte, -->
+<!-- 			in_reg_mem -->
+<!-- 			) -->
+<!-- 		VALUES -->
+<!-- 			( -->
+<!-- 			#{woIdx}, -->
+<!-- 			#{inDte}, -->
+<!-- 			#{inComManager}, -->
+<!-- 			NOW(), -->
+<!-- 			#{userId} -->
+<!-- 			) -->
+<!-- 	</insert> -->
+	
+<!-- 	<update id="updateMaterialStock"> -->
+<!-- 		UPDATE sm_item SET -->
+<!-- 			item_cnt = (item_cnt + #{cnt}) -->
+<!-- 		WHERE item_cd = #{itemCd} -->
+<!-- 	</update> -->
+	
+<!-- 	<update id="updateWorkOrder"> -->
+<!-- 		UPDATE sm_work_order SET -->
+<!-- 			wo_state = #{state} -->
+<!-- 		WHERE wo_idx = #{woIdx} -->
+<!-- 	</update> -->
+	
+<!-- 	<update id="updateOrders"> -->
+<!-- 		UPDATE sm_orders SET -->
+<!-- 			or_state = #{state} -->
+<!-- 		WHERE or_idx = (SELECT or_idx FROM sm_work_order WHERE wo_idx = #{woIdx}) -->
+<!-- 	</update> -->
+	
+	<select id="selectSpcSpecWorkOrder" resultType="int">
+		SELECT COUNT(*) FROM sm_insert_info WHERE wo_idx = #{curWoIdx}
+	</select>
+	
+	<select id="selectSpcSpecInfo" resultType="egovMap">
+		SELECT
+			a.in_idx,
+			a.wo_idx,
+			(SELECT wo_name FROM sm_work_order WHERE wo_idx = #{woIdx}) AS wo_name,
+			in_dte,
+			a.in_com_manager
+		FROM sm_insert_info a
+		WHERE in_idx = #{inIdx}
+	</select>
+	
+<!-- 	<update id="modifySpcSpec"> -->
+<!-- 		UPDATE sm_insert_info SET -->
+<!-- 			wo_idx = #{woIdx}, -->
+<!-- 			in_dte = #{inDte}, -->
+<!-- 			in_com_manager = #{inComManager}, -->
+<!-- 			in_edt_dte = NOW(), -->
+<!-- 			in_edt_mem = #{userId} -->
+<!-- 		WHERE in_idx = #{inIdx} -->
+<!-- 	</update> -->
+	
+<!-- 	<delete id="deleteSpcSpec"> -->
+<!-- 		DELETE FROM sm_insert_info WHERE in_idx = #{inIdx} -->
+<!-- 	</delete> -->
+	
+	<select id="selectItemInfo" resultType="egovMap">
+		SELECT item_name FROM sm_item WHERE item_cd = #{itemCd}
+	</select>
+	
+	<select id="selectInMaterialsInfo" resultType="egovMap">
+		SELECT
+			item_cd1, item_name1, cnt1,
+			item_cd2, item_name2, cnt2,
+			item_cd3, item_name3, cnt3,
+			item_cd4, item_name4, cnt4,
+			item_cd5, item_name5, cnt5,
+			item_cd6, item_name6, cnt6,
+			item_cd7, item_name7, cnt7,
+			item_cd8, item_name8, cnt8,
+			item_cd9, item_name9, cnt9,
+			item_cd10, item_name10, cnt10,
+			item_cd11, item_name11, cnt11,
+			item_cd12, item_name12, cnt12,
+			item_cd13, item_name13, cnt13,
+			item_cd14, item_name14, cnt14,
+			item_cd15, item_name15, cnt15
+		FROM sm_in_material
+		WHERE wo_idx = #{woIdx}
+	</select>
+	
+<!-- 	<update id="updateInMaterial"> -->
+<!-- 		UPDATE sm_in_material SET -->
+<!-- 			<if test="itemCd2 != ''">item_cd2 = #{itemCd2}, item_name2 = #{itemName2}, cnt2 = #{cnt2},</if> -->
+<!-- 			<if test="itemCd3 != ''">item_cd3 = #{itemCd3}, item_name3 = #{itemName3}, cnt3 = #{cnt3},</if> -->
+<!-- 			<if test="itemCd4 != ''">item_cd4 = #{itemCd4}, item_name4 = #{itemName4}, cnt4 = #{cnt4},</if> -->
+<!-- 			<if test="itemCd5 != ''">item_cd5 = #{itemCd5}, item_name5 = #{itemName5}, cnt5 = #{cnt5},</if> -->
+<!-- 			<if test="itemCd6 != ''">item_cd6 = #{itemCd6}, item_name6 = #{itemName6}, cnt6 = #{cnt6},</if> -->
+<!-- 			<if test="itemCd7 != ''">item_cd7 = #{itemCd7}, item_name7 = #{itemName7}, cnt7 = #{cnt7},</if> -->
+<!-- 			<if test="itemCd8 != ''">item_cd8 = #{itemCd8}, item_name8 = #{itemName8}, cnt8 = #{cnt8},</if> -->
+<!-- 			<if test="itemCd9 != ''">item_cd9 = #{itemCd9}, item_name9 = #{itemName9}, cnt9 = #{cnt9},</if> -->
+<!-- 			<if test="itemCd10 != ''">item_cd10 = #{itemCd10}, item_name10 = #{itemName10}, cnt10 = #{cnt10},</if> -->
+<!-- 			<if test="itemCd11 != ''">item_cd11 = #{itemCd11}, item_name11 = #{itemName11}, cnt11 = #{cnt11},</if> -->
+<!-- 			<if test="itemCd12 != ''">item_cd12 = #{itemCd12}, item_name12 = #{itemName12}, cnt12 = #{cnt12},</if> -->
+<!-- 			<if test="itemCd13 != ''">item_cd13 = #{itemCd13}, item_name13 = #{itemName13}, cnt13 = #{cnt13},</if> -->
+<!-- 			<if test="itemCd14 != ''">item_cd14 = #{itemCd14}, item_name14 = #{itemName14}, cnt14 = #{cnt14},</if> -->
+<!-- 			<if test="itemCd15 != ''">item_cd15 = #{itemCd15}, item_name15 = #{itemName15}, cnt15 = #{cnt15},</if> -->
+<!-- 			item_cd1 = #{itemCd1}, item_name1 = #{itemName1}, cnt1 = #{cnt1} -->
+<!-- 		WHERE wo_idx = #{woIdx} -->
+<!-- 	</update> -->
+</mapper>

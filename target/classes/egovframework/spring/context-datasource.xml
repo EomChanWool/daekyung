@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+        
+	<!--로컬DB 접속정보 -->
+   	<bean id="dataSourceMaria" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+   		<property name="testWhileIdle" value="true"/>
+   		<property name="validationQuery" value="select 1"/>
+   		<property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver"/>
+        <property name="url" value="jdbc:jtds:sqlserver://192.168.0.250:1433/DEAKYUNG" />
+        <property name="username" value="sa"></property>
+        <property name="password" value="1234"></property>
+   </bean>
+</beans>

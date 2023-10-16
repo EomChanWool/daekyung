@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.monitoring.sysLog.service.impl.SysLogMapper">
+
+	<select id="selelctSysLogListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_ms_log
+		where 1=1
+		<if test="searchKeyword != ''">
+			AND ml_id = #{searchKeyword}
+		</if>
+	</select>
+
+	<select id="selelctSysLogList" resultType="egovMap">
+		SELECT ml_idx, ml_id, ml_ip, CONVERT(varchar(16), ml_date, 120) AS
+		ml_date, ml_comment
+		FROM sm_ms_log
+		where 1=1
+		<if test="searchKeyword != ''">
+			AND ml_id = #{searchKeyword}
+		</if>
+		ORDER BY ml_idx DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+</mapper>

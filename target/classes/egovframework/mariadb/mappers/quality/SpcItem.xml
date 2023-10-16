@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.quality.spcItem.service.impl.SpcItemMapper">
+	<select id="selectSpcItemListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_store
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND item_name = #{searchKeyword}
+		</if>
+		<if test="searchStDate != ''">
+			AND st_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND st_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectSpcItemList" resultType="egovMap">
+		SELECT
+			st_idx,
+			item_cd,
+			item_name,
+			item_std,
+			st_cnt,
+			DATE_FORMAT(st_dte, '%Y/%m/%d %H:%i') AS st_dte
+		FROM sm_store
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND item_name LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		<if test="searchStDate != ''">
+			AND st_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND st_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY st_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectAccountList" resultType="egovMap">
+		SELECT * FROM sm_account
+	</select>
+	
+	<select id="selectMaterialList" resultType="egovMap">
+		SELECT * FROM sm_item WHERE item_type = '자재'
+	</select>
+	
+	<select id="selectItemInfo" resultType="egovMap">
+		SELECT item_cd, item_name, item_std FROM sm_item WHERE item_cd = #{itemCd}
+	</select>
+	
+<!-- 	<insert id="registSpcItem"> -->
+<!-- 		INSERT INTO sm_store -->
+<!-- 			( -->
+<!-- 			st_idx, -->
+<!-- 			a_idx, -->
+<!-- 			item_cd, -->
+<!-- 			item_name, -->
+<!-- 			item_std, -->
+<!-- 			st_cnt, -->
+<!-- 			<if test="pInsPosition != ''">p_ins_position,</if> -->
+<!-- 			st_dte, -->
+<!-- 			st_ins_dte, -->
+<!-- 			st_tot_judge, -->
+<!-- 			<if test="stNote != ''">st_note,</if> -->
+<!-- 			st_reg_dte, -->
+<!-- 			st_reg_mem -->
+<!-- 			) -->
+<!-- 		VALUES -->
+<!-- 			( -->
+<!-- 			(SELECT CONCAT('ST', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.st_idx),0) FROM sm_store a),'[a-z]','')))+1,10,0))), -->
+<!-- 			#{aIdx}, -->
+<!-- 			#{itemCd}, -->
+<!-- 			#{itemName}, -->
+<!-- 			#{itemStd}, -->
+<!-- 			#{stCnt}, -->
+<!-- 			<if test="pInsPosition != ''">#{pInsPosition},</if> -->
+<!-- 			#{stDte}, -->
+<!-- 			#{stInsDte}, -->
+<!-- 			#{stTotJudge}, -->
+<!-- 			<if test="stNote != ''">#{stNote},</if> -->
+<!-- 			NOW(), -->
+<!-- 			#{userId} -->
+<!-- 			) -->
+<!-- 	</insert> -->
+	
+<!-- 	<update id="updateMaterialCnt"> -->
+<!-- 		UPDATE sm_item SET -->
+<!-- 			item_cnt = (item_cnt + #{cnt}) -->
+<!-- 		WHERE item_cd = #{itemCd} -->
+<!-- 	</update> -->
+	
+	<select id="selectSpcItemInfo" resultType="egovMap">
+		SELECT
+			a.st_idx,
+			a.a_idx,
+			a.item_cd,
+			a.item_name,
+			a.item_std,
+			a.st_cnt,
+			a.p_ins_position,
+			DATE_FORMAT(a.st_dte, '%Y-%m-%d %H:%i') AS st_dte,
+			DATE_FORMAT(a.st_ins_dte, '%Y-%m-%d %H:%i') AS st_ins_dte,
+			a.st_tot_judge,
+			a.st_note,
+			DATE_FORMAT(a.st_reg_dte, '%Y-%m-%d %H:%i') AS st_reg_dte,
+			a.st_reg_mem,
+			b.a_name,
+			b.a_tel,
+			(SELECT m_name FROM sm_member WHERE m_id = (SELECT st_reg_mem FROM sm_store WHERE st_idx = #{stIdx})) AS mName
+		FROM sm_store a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		WHERE st_idx = #{stIdx}
+	</select>
+	
+<!-- 	<update id="modifySpcItem"> -->
+<!-- 		UPDATE sm_store SET -->
+<!-- 			a_idx = #{aIdx}, -->
+<!-- 			item_cd = #{itemCd}, -->
+<!-- 			item_name = #{itemName}, -->
+<!-- 			item_std = #{itemStd}, -->
+<!-- 			st_cnt = #{stCnt}, -->
+<!-- 			p_ins_position = #{pInsPosition}, -->
+<!-- 			st_dte = #{stDte}, -->
+<!-- 			st_ins_dte = #{stInsDte}, -->
+<!-- 			st_tot_judge = #{stTotJudge}, -->
+<!-- 			st_note = #{stNote}, -->
+<!-- 			st_edt_dte = NOW(), -->
+<!-- 			st_edt_mem = #{userId} -->
+<!-- 		WHERE st_idx = #{stIdx} -->
+<!-- 	</update> -->
+	
+<!-- 	<delete id="deleteSpcItem"> -->
+<!-- 		DELETE FROM sm_store WHERE st_idx = #{stIdx} -->
+<!-- 	</delete> -->
+</mapper>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.basicInfo.qualityInfo.service.impl.QualityInfoMapper">
+	<select id="selectQualityInfoToCnt" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM sm_quality_info
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+
+	<select id="selectQualityInfoList" resultType="egovMap">
+		SELECT qi_code, gi_groupcode, qi_name, qi_trust_type, qi_type,
+		qi_isuse FROM
+		sm_quality_info
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY qi_code DESC
+		OFFSET (#{firstIndex}) ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectExistsQualInfo" resultType="int">
+		SELECT COUNT(*) FROM sm_quality_info
+		WHERE GI_GROUPCODE = #{giGroupcode}
+	</select>
+
+	<select id="selectStandard" resultType="egovMap">
+		SELECT * FROM
+		sm_standard_info
+	</select>
+
+	<insert id="registQualityInfo">
+		DECLARE @str NVARCHAR(50) = 'QI'
+		DECLARE @seq INT
+		DECLARE @padding INT =
+		5;
+
+		SET @seq = NEXT VALUE FOR qi_seq
+
+		INSERT INTO sm_quality_info
+		(
+		qi_code,
+		gi_groupcode,
+		qi_name,
+		qi_trust_type,
+		qi_type,
+		<if test="qiComment !=''">qi_comment,</if>
+
+		qi_isuse,
+		<if test="qiRemark !=''">qi_remark,</if>
+
+		qi_reg_id,
+		qi_reg_date
+		)
+		VALUES
+		(
+		@str + RIGHT('00000' + CAST(@seq AS
+		VARCHAR(10)), @padding),
+		#{giGroupcode},
+		#{qiName},
+		#{qiTrustType},
+		#{qiType},
+		<if test="qiComment !=''">#{qiComment},</if>
+
+		#{qiIsuse},
+		<if test="qiRemark !=''">#{qiRemark},</if>
+
+		#{userId},
+		GETDATE()
+		)
+	</insert>
+
+	<insert id="registStandard">
+		INSERT INTO sm_standard_info (
+		si_type,
+		si_name)
+		VALUES
+		(#{siType},
+		#{siName}
+		)
+	</insert>
+
+	<select id="selectQualityInfoInfo" resultType="egovMap">
+		SELECT qi_code,
+		gi_groupcode, qi_name, qi_trust_type, qi_type,
+		qi_isuse, qi_comment,
+		qi_remark FROM
+		sm_quality_info
+		WHERE 1=1
+		and qi_code
+		= #{qiCode}
+	</select>
+
+	<select id="selectStandardInfoToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_standard_info
+		where 1=1
+		<if test="searchKeyword != ''">
+			AND si_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+
+	<select id="selectStandardInfo" resultType="egovMap">
+		SELECT * FROM sm_standard_info
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND si_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY si_id DESC
+		OFFSET (#{firstIndex}) ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectStandardList" resultType="egovMap">
+		SELECT * FROM
+		sm_standard_info
+
+	</select>
+
+	<select id="selectStandardAjaxInfo" resultType="egovMap">
+		SELECT si_id,
+		si_type, si_name FROM sm_standard_info
+		WHERE si_id = #{giGroupcode}
+	</select>
+
+	<update id="modifyQualityInfo">
+		UPDATE sm_quality_info SET
+		qi_type = #{qiType},
+		qi_isuse = #{qiIsuse}
+		<if test="qiComment != ''">,qi_comment = #{qiComment}</if>
+		<if test="qiRemark != ''">,qi_remark = #{qiRemark}</if>
+		,qi_edt_id = #{userId},
+		qi_edt_date = getdate()
+		WHERE qi_code =
+		#{qiCode}
+	</update>
+
+	<delete id="deleteQualityInfo">
+		DELETE FROM sm_quality_info WHERE qi_code = #{qiCode}
+	</delete>
+
+	<delete id="deleteStandardInfo">
+		delete from sm_standard_info where si_id =#{siId}
+	</delete>
+
+	<select id="selectDetailQualInfo" resultType="egovMap">
+		SELECT * FROM
+		sm_quality_info
+		WHERE qi_code = #{qiCode}
+	</select>
+
+	<select id="selectAccessLevel" resultType="int">
+		SELECT
+		a.a_lev
+		FROM
+		sm_authority a
+		JOIN sm_program b
+		ON a.p_idx = b.p_idx
+		WHERE 1=1
+		AND
+		p_url
+		LIKE CONCAT('%',#{str},'%')
+	</select>
+</mapper>

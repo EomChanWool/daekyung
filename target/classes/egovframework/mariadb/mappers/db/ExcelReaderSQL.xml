@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.db.service.impl.ExcelReaderMapper">
+
+
+
+	<select id="inspCount" resultType="egovMap">
+		SELECT
+		(SELECT COUNT(*) FROM sm_inspection_excel_history WHERE id_test_time =
+		#{edDate}) AS COUNT1,
+		(SELECT COUNT(*) FROM sm_inspection_data WHERE id_test_time = #{edDate}) AS
+		COUNT2
+	</select>
+
+	<select id="noUpList" resultType="egovMap">
+		SELECT a.id_doc, a.IEH_LOTNO
+		FROM sm_inspection_excel_history a
+		LEFT JOIN sm_inspection_data b ON a.id_doc = b.id_doc
+		WHERE b.id_doc IS NULL
+		and a.id_test_time = #{edDate}
+
+	</select>
+	
+	<select id="mfProc" resultType="egovMap">
+	SELECT * FROM sm_mf_proc
+WHERE PO_LOTNO = #{str}
+	</select>
+	
+	<insert id="registinspData">
+	INSERT INTO sm_inspection_data
+	(id_doc,
+	 po_lotno,
+	 id_prod_name,
+	 id_name,
+	 mp_mfno,
+	 id_test_time) values(
+	 #{idDoc},
+	 #{poLotno},
+	 #{idProdName},
+	 #{idName},
+	 #{mpMfno},
+	 #{idTestTime}
+	 )
+	
+	</insert>
+
+	<insert id="registdb" parameterType="egovMap">
+		INSERT INTO sm_product_info
+		(
+		pi_id,
+		pi_item_type,
+		pi_item_code01,
+		pi_item_code02,
+		pi_item_code03,
+		pi_item_code04,
+		pi_item_state,
+		pi_item_name,
+		pi_cnt,
+		pi_item_remain,
+		pi_price,
+		pi_item_middle,
+		pi_heat,
+		mi_reg_id,
+		pi_reg_date) VALUES(
+		#{piId},
+		#{piItemType},
+		#{piItemCode1},
+		#{piItemCode2},
+		#{piItemCode3},
+		#{piItemCode4},
+		#{piItemState},
+		#{piItemName},
+		CONVERT(INT,CONVERT(float,#{piCnt})),
+		CONVERT(float,#{piItemRemain}),
+		CONVERT(INT,CONVERT(float,#{piPrice})),
+		CONVERT(float,#{piItemMiddle}),
+		#{piHeat},
+		#{miRegId},
+		GETDATE()
+		)
+
+	</insert>
+
+	<insert id="registOrder">
+		INSERT INTO sm_orders(
+		or_date,
+		or_company,
+		or_or_type,
+		or_due_date,
+		or_qty,
+		or_unit,
+		or_money,
+		or_fin_date,
+		or_report,
+		or_manager,
+		or_id,
+		or_prod,
+		or_texture,
+		or_thickness,
+		or_standard,
+		or_state,
+		or_process
+		) VALUES
+		(
+		CONVERT(varchar ,CONVERT(DATE, #{orDate})),
+		#{orCompany},
+		#{orOrType},
+		CONVERT(varchar ,CONVERT(DATE, #{orDueDate})),
+		CONVERT(INT,CONVERT(float,#{orQty})),
+		#{orUnit},
+		#{orMoney},
+		CASE WHEN
+		TRIM(#{orFinDate}) = '' THEN NULL ELSE CONVERT(varchar, convert(DATE,
+		#{orFinDate})) END ,
+		#{orReport},
+		#{orManager},
+		#{orId},
+		#{orProd},
+		#{orTexture},
+		#{orThickness},
+		#{orStandard},
+		#{orState},
+		#{orProcess}
+		)
+	</insert>
+	<insert id="registRelease">
+		insert into sm_release_info
+		(
+		po_lotno,
+		rel_date,
+		rel_compony,
+		rel_qty,
+		rel_nego,
+		rel_percent,
+		rel_unit,
+		rel_price,
+		rel_tax,
+		rel_total_price,
+		rel_note,
+		rel_del,
+		rel_esno,
+		rel_prno,
+		rel_heatno,
+		rel_sub,
+		rel_or_type,
+		or_id,
+		rel_report,
+		rel_bill,
+		rel_prod,
+		rel_texture,
+		rel_thickness,
+		rel_standard,
+		rel_state,
+		rel_reg_id,
+		rel_reg_date
+		) values
+		(
+		#{poLotno},
+		CONVERT(varchar ,CONVERT(DATE, #{relDate})),
+		#{relCompony},
+		CONVERT(INT,CONVERT(float,#{relQty})),
+		#{relNego},
+		CONVERT(float,#{relPercent}),
+		#{relUnit},
+		#{relPrice},
+		#{relTax},
+		#{relTotalPrice},
+		#{relNote},
+		#{relDel},
+		#{relEsno},
+		#{relPrno},
+		#{relHeatno},
+		#{relSub},
+		#{relOrType},
+		#{orId},
+		#{relReport},
+		#{relBill},
+		#{relProd},
+		#{relTexture},
+		#{relThickness},
+		#{relStandard},
+		#{relState},
+		#{relRegId},
+		GETDATE()
+		)
+
+	</insert>
+
+	<insert id="registMm">
+		<!-- INSERT INTO sm_material_move ( mm_id, pi_id, mm_in, mm_in_kg, mm_out, 
+			mm_out_kg, mm_cnt, mm_cnt_kg, mm_reg_id, mm_reg_date ) VALUES ( 'MM' + SUBSTRING(CONVERT(VARCHAR(8), 
+			GETDATE(), 112), 3, 6) + '-' + RIGHT('0000' + CAST(CAST( COALESCE(( SELECT 
+			MAX(CAST(SUBSTRING(a.mm_id, 10, 12) AS INT)) + 1 FROM sm_material_move a 
+			WHERE a.MM_ID LIKE CONCAT(CONCAT('MM', SUBSTRING(CONVERT(VARCHAR(8), GETDATE(), 
+			112), 3, 8)), '%') ), '0') AS VARCHAR(4)) AS INT), 4), #{piId}, CONVERT(INT,CONVERT(float,#{mmIn})), 
+			CONVERT(FLOAT,#{mmInKg}), CONVERT(INT,CONVERT(float,#{mmOut})), CONVERT(FLOAT,#{mmOutKg}), 
+			CONVERT(INT,CONVERT(float,#{piCnt})), CONVERT(FLOAT,#{piItemRemain}), #{mmRegId}, 
+			GETDATE() ) -->
+		DECLARE @CurrentDate VARCHAR(8) = CONVERT(VARCHAR(8), GETDATE(), 112)
+		DECLARE @MaxID INT
+
+		SELECT @MaxID = MAX(CAST(SUBSTRING(a.mm_id, 10, 4)
+		AS INT)) + 1
+		FROM sm_material_move a
+		WHERE a.mm_id LIKE 'MM' +
+		SUBSTRING(@CurrentDate, 3, 8) + '%'
+
+		SET @MaxID = ISNULL(@MaxID, 1)
+
+		INSERT INTO sm_material_move (
+		mm_id,
+		pi_id,
+		mm_in,
+		mm_in_kg,
+		mm_out,
+		mm_out_kg,
+		mm_cnt,
+		mm_cnt_kg,
+		mm_reg_id,
+		mm_reg_date,
+		pi_item_name
+		)
+		VALUES (
+		'MM' +
+		SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID
+		AS
+		VARCHAR(4)), 4),
+		#{piId},
+		CONVERT(INT, CONVERT(FLOAT, #{mmIn})),
+		CONVERT(FLOAT, #{mmInKg}),
+		CONVERT(INT, CONVERT(FLOAT, #{mmOut})),
+		CONVERT(FLOAT, #{mmOutKg}),
+		CONVERT(INT, CONVERT(FLOAT, #{piCnt})),
+		CONVERT(FLOAT, #{piItemRemain}),
+		#{mmRegId},
+		GETDATE(),
+		#{piItemName}
+		)
+
+
+
+
+	</insert>
+
+	<insert id="testRegist">
+		insert into sm_test(
+		te_idx,
+		te_name,
+		te_name2
+		) values
+		(
+		#{teIdx},
+		#{teName},
+		#{teName2}
+		)
+	</insert>
+
+	<delete id="deletedb">
+		DELETE FROM sm_product_info;
+	</delete>
+
+	<delete id="deleteMm">
+		DELETE FROM sm_material_move;
+	</delete>
+
+</mapper>

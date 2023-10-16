@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.facility.equipChk.service.impl.EquipChkMapper">
+	<select id="selectEquipChkListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_equip_checksheet_info
+		WHERE 1=1
+		<if test="searchStDate != ''">
+			AND pr_chk_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND pr_chk_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectEquipChkList" resultType="egovMap">
+		SELECT
+			a.eci_id,
+			b.eq_id,
+			a.eci_name,
+			a.eci_comment,
+			a.eci_manager,
+			a.eci_date
+		FROM sm_equip_checksheet_info a
+		JOIN sm_equipment b
+		ON a.eq_id = b.eq_id
+		WHERE 1=1
+		<if test="searchStDate != ''">
+			AND pr_chk_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND pr_chk_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY eci_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+	</select>
+	
+	<select id="selectEquipmentChkList" resultType="egovMap">
+		SELECT
+			eq_id
+		FROM sm_equipment;
+	</select>
+	
+	<select id="selectRegEquipmentChkList" resultType="egovMap">
+		SELECT
+			eq_id
+		FROM sm_equip_checksheet_info;
+	</select>
+		
+<!-- 	<select id="selectFacilityList" resultType="egovMap"> -->
+<!-- 		SELECT fa_cd, fa_name FROM sm_facility WHERE fa_ctl_val IS NOT NULL -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="selectEquipChkEquipInfo" resultType="egovMap"> -->
+<!-- 		SELECT fa_cd, fa_name FROM sm_facility WHERE fa_ctl_val = #{prListIdx} -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="selectExistsPrIdx" resultType="int"> -->
+<!-- 		SELECT -->
+<!-- 			COUNT(b.pr_list_idx) -->
+<!-- 		FROM sm_facility a -->
+<!-- 		JOIN sm_process_list b -->
+<!-- 		ON a.fa_ctl_val = b.pr_list_idx -->
+<!-- 		WHERE pr_list_idx = #{prListIdx} -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="selectExistsFaIdx" resultType="int"> -->
+<!-- 		SELECT COUNT(*) FROM sm_facility WHERE fa_cd = #{faCd} -->
+<!-- 	</select> -->
+	
+	<insert id="registEquipChk">
+		
+		DECLARE @str NVARCHAR(50) = 'ECI'
+		DECLARE @seq INT
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR eci_seq
+	
+		INSERT INTO sm_equip_checksheet_info
+			(
+			eci_id,
+			eq_id,
+			eci_name,
+			eci_comment,
+			eci_manager,
+			eci_date,
+			eci_note,
+			eci_reg_id,
+			eci_reg_date
+			)
+		VALUES
+			(
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
+			#{eqId},
+			#{eciName},
+			#{eciComment},
+			#{eciManager},
+			#{eciDate},
+			#{eciNote},
+			#{userId},
+			GETDATE()
+			)
+	</insert>
+	
+	<select id="selectEquipChkInfo" resultType="egovMap">
+		SELECT
+			eci_id,
+			eq_id,
+			eci_name,
+			eci_comment,
+			eci_manager,
+			eci_date,
+			eci_note,
+			eci_reg_id,
+			eci_reg_date,
+			eci_edt_id,
+			eci_edt_date
+		FROM sm_equip_checksheet_info
+		WHERE eci_id = #{eciId}
+	</select>
+	
+	<update id="modifyEquipChk">
+		UPDATE sm_equip_checksheet_info SET
+			eci_name = #{eciName},
+			eci_comment = #{eciComment},
+			eci_manager = #{eciManager},
+			eci_note = #{eciNote},
+			eci_date = #{eciDate},
+			eci_edt_id = #{userId},
+			eci_edt_date = GETDATE()
+		WHERE eci_id = #{eciId}
+	</update>
+	
+	<delete id="deleteEquipChk">
+		DELETE FROM sm_equip_checksheet_info WHERE eci_id = #{eciId}
+	</delete>
+</mapper>

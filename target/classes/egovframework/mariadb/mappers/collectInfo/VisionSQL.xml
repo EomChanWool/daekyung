@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.collectInfo.vision.service.impl.VisionMapper">
+	<select id="selectVisionListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_inspection_data
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		<if test="searchStDate != ''">
+			AND id_test_time >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND id_test_time <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+	</select>
+
+	<select id="selectVisionList" resultType="egovMap">
+		SELECT * from sm_inspection_data
+		where 1=1
+		<if test="searchKeyword != ''">
+			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		<if test="searchStDate != ''">
+			AND id_test_time >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND id_test_time <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+		ORDER BY id_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectShipmentList" resultType="egovMap">
+		SELECT
+		a.sh_idx,
+		b.or_name
+		FROM sm_shipment a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE sh_state
+		= #{state}
+	</select>
+
+	<select id="excelAjax" resultType="egovMap">
+		SELECT id_doc FROM
+		sm_inspection_excel_history
+		WHERE IEH_PRTYPE = #{poLotno}
+		AND id_reg_state = 0
+
+	</select>
+	
+	<select id="procAjax" resultType="egovMap">
+	SELECT MP_MFNO, MP_PROD_NAME, MP_TEXTURE, MP_THICKNESS, MP_STATE, MP_STANDARD FROM sm_mf_proc
+WHERE PO_LOTNO = #{poLotno}
+	
+	</select>
+
+	<select id="selectShipmentIdx" resultType="int">
+		SELECT COUNT(*) FROM
+		sm_shipment WHERE sh_idx = #{shIdx}
+	</select>
+
+	<select id="selectEstimateProdList" resultType="egovMap">
+		SELECT
+		es_prod1, es_cnt1,
+		es_prod2, es_cnt2,
+		es_prod3, es_cnt3,
+		es_prod4, es_cnt4,
+		es_prod5, es_cnt5,
+		es_prod6, es_cnt6,
+		es_prod7, es_cnt7,
+		es_prod8, es_cnt8,
+		es_prod9, es_cnt9,
+		es_prod10, es_cnt10
+		FROM sm_estimate a
+		JOIN sm_orders b
+		ON a.es_idx = b.es_idx
+		WHERE b.or_idx = #{orIdx}
+	</select>
+
+	<select id="selectExistsShipment" resultType="int">
+		SELECT COUNT(*)
+		FROM sm_shipment WHERE or_idx = #{orIdx}
+	</select>
+
+	<select id="selectStockOk" resultType="egovMap">
+		SELECT
+		(SELECT item_name FROM sm_item WHERE item_cd = #{itemCd}) AS itemName,
+		COUNT(*) AS count
+		FROM sm_item
+		WHERE 1=1
+		AND item_cd = #{itemCd}
+		AND
+		item_cnt > ABS(#{itemCnt})
+	</select>
+
+	<update id="updateItem">
+		UPDATE sm_item SET
+		item_cnt = (item_cnt + #{itemCnt})
+		WHERE item_cd = #{itemCd}
+	</update>
+
+	<insert id="registVision">
+		INSERT INTO sm_inspection_data
+	(id_doc,
+	 po_lotno,
+	 id_prod_name,
+	 id_name,
+	 mp_mfno,
+	 id_test_time,
+	 id_check_time,
+	 id_manager) values(
+	 #{idDoc},
+	 #{poLotno},
+	 #{idProdName},
+	 #{idName},
+	 #{mpMfno},
+	 #{idTestTime},
+	 #{idCheckTime},
+	 #{idManager}
+	 )
+	</insert>
+
+	<update id="updateShipment">
+		UPDATE sm_shipment SET
+		sh_state = #{state}
+		WHERE sh_idx = #{shIdx}
+	</update>
+
+	<update id="updateOrders">
+		UPDATE sm_orders SET
+		or_state = #{state}
+		WHERE or_idx = #{orIdx}
+	</update>
+
+	<select id="selectVisionInfo" resultType="egovMap">
+		select * from
+		sm_inspection_excel_history
+		where id_doc = #{idDoc}
+	</select>
+
+	<update id="modifyVision">
+		UPDATE sm_delivery SET
+		de_dte = #{deDte},
+		<if test="deChkManager != ''">de_chk_manager = #{deChkManager},</if>
+		<if test="deChkAcManager != ''">de_chk_ac_manager = #{deChkAcManager},</if>
+		<if test="deChkDte != ''">de_chk_dte = #{deChkDte},</if>
+		de_state = #{deState},
+		<if test="deNote != ''">de_note = #{deNote},</if>
+		de_edt_dte = NOW(),
+		de_edt_mem = #{userId}
+		WHERE de_idx = #{deIdx}
+	</update>
+
+	<delete id="deleteVision">
+		DELETE FROM sm_delivery WHERE de_idx = #{deIdx}
+	</delete>
+</mapper>
