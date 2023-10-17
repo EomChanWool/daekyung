@@ -61,12 +61,13 @@
 												<td><input type="text" class="form-control" name="isiLotno" id="isiLotno"/>
 												</td>
 												<th>수주번호  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="orId" id="orId" list="mfList" autocomplete="off">
+												<td><%-- <input type="text" class="form-control" name="orId" id="orId" list="mfList" autocomplete="off">
 													<datalist id="mfList">
 														<c:forEach var="list" items="${mfList}" varStatus="status">
 															<option value="${list.orId}"></option>
 														</c:forEach>
-													</datalist>
+													</datalist> --%>
+													<input type="text" class="form-control" name="orId" id="orId"/>
 												</td>
 											</tr>
 											<tr>
@@ -209,7 +210,7 @@
 			alert(msg);
 		}
 		
-		$('#orId').change(function(){
+		$('#isiLotno').change(function(){
 			inspectInfoAjax();
 		});
 		
@@ -225,11 +226,11 @@
 			  url:"<c:url value='${pageContext.request.contextPath}/sl/process/inspect/inspectInfoAjax.do'/>",	  		  			  
 			  dataType:"JSON",
 			  data:{
-				  'orId':$('#orId').val()
+				  'isiLotno':$('#isiLotno').val()
 			  },
 			  success:function(result){
 				  console.log(result);
-				  $('#isiLotno').val(result.inInfo.poLotno);
+				  $('#orId').val(result.inInfo.orId);
 				  $('#isiItemType').val(result.inInfo.mpProdName);
 			  },
 			  error:function(request,status,error){ 

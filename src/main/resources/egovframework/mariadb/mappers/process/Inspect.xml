@@ -64,7 +64,7 @@
 
 	<select id="selectInfo" resultType="egovMap">
 		select * FROM sm_mf_proc
-		WHERE or_id = #{orId}
+		WHERE po_lotno = #{isiLotno}
 	</select>
 
 	<select id="selectInfo2" resultType="egovMap">

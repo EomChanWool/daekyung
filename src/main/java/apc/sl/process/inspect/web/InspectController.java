@@ -162,6 +162,7 @@ public class InspectController {
 	@RequestMapping("/sl/process/inspect/detailInspect.do")
 	public String detailInspect(@RequestParam Map<String, Object> map,ModelMap model) {
 		String type = map.get("isiItemType")+"";
+		System.out.println(type);
 		if(type.equals("90E(L)") || type.equals("90E(S)") || type.equals("45E(L)")) {
 			Map<String, Object> detail = inspectService.detailInspec(map);
 			model.put("detail", detail);
