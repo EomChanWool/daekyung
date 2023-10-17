@@ -151,6 +151,7 @@
 	}
 	
 	function fn_search_equipChk(){
+		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	

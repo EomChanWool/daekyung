@@ -135,6 +135,7 @@
 	}
 	
 	function fn_search_sysLog(){
+		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	

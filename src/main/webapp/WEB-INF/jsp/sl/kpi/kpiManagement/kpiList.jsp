@@ -166,6 +166,7 @@
 		}
 		
 		function fn_search_kpi(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 		

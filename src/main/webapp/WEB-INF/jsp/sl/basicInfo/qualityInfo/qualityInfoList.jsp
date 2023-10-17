@@ -158,6 +158,7 @@
 		}
 	
 		function fn_search_qualityInfo(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	

@@ -159,6 +159,7 @@
 			alert("검색조건을 선택하세요.");
 			return;
 		}
+		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	

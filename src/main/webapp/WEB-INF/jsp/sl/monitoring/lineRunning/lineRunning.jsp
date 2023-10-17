@@ -161,7 +161,7 @@
 			alert("30일 단위로만 검색가능합니다.");
 			return;
 		} */
-		
+		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	

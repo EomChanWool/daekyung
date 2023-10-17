@@ -49,12 +49,10 @@ public class ManufactureController {
 			String searSpilt = searchVO.getSearchKeyword().substring(0,16);
 			searchVO.setSearchKeyword(searSpilt);
 		}
-		System.out.println("서치 : " + searchVO.getSearchKeyword());
 		if(model.get("sear") != null) {
 			Map<String, Object> temp = (Map<String, Object>) model.get("sear");
 			searchVO.setSearchKeyword(temp.get("searchKeyword")+"");	
 		}
-		System.out.println("확인");
 		int totCnt = manufactureService.selectManufactureListToCnt(searchVO);
 		/** pageing setting */
 		searchVO.setPageSize(10);
@@ -72,7 +70,6 @@ public class ManufactureController {
 		model.put("mfmList", mfmList);
 		model.put("manufactureList", manufactureList);
 		model.put("paginationInfo", paginationInfo);
-		System.out.println("mfmList : " + mfmList);
 		System.out.println("manu : " + manufactureList);
 		
 		return "sl/process/manufacture/manufactureList";

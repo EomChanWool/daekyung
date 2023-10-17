@@ -182,6 +182,34 @@ WHERE PO_LOTNO = #{str}
 		)
 
 	</insert>
+	
+	<insert id="registProc">
+	INSERT INTO sm_mf_proc(
+	mp_mfno,
+	or_id,
+	mp_prod_name,
+	mp_texture,
+	mp_thickness,
+	mp_state,
+	mp_standard,
+	po_lotno,
+	mp_qty,
+	mp_note,
+	mp_reg_date,
+	mp_pr_state) values(
+	#{mpMfno},
+	#{orId},
+	#{mpProdName},
+	#{mpTexture},
+	#{mpThickness},
+	#{mpState},
+	#{mpStandard},
+	#{poLotno},
+	#{mpQty},
+	#{mpNote},
+	GETDATE(),
+	0)	
+	</insert>
 
 	<insert id="registMm">
 		<!-- INSERT INTO sm_material_move ( mm_id, pi_id, mm_in, mm_in_kg, mm_out, 

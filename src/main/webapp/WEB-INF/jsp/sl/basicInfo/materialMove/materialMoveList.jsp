@@ -148,6 +148,7 @@
 	}
 	
 	function fn_search_materialMove(){
+		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	

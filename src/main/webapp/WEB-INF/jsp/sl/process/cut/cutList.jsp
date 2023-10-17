@@ -198,6 +198,7 @@
 	}
 	
 	function fn_search_cut(){
+		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	

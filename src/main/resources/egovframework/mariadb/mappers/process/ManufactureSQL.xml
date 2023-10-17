@@ -16,33 +16,31 @@
 	</select>
 
 	<select id="selectManufactureList" resultType="egovMap">
-		<!-- SELECT a.or_id ,MAX(a.or_prod) AS or_prod, MAX(a.or_qty) AS or_qty, 
-			MAX(a.or_process) AS or_process, ISNULL( ( SELECT TOP 1 mfs_state FROM sm_mf_process_stop 
-			WHERE OR_ID = a.OR_ID ORDER BY mfs_idx DESC ), 0 ) AS mfs_state , MAX(b.mfs_idx) 
-			AS mfs_idx , MAX(c.mfl_manager) AS mfl_manager, MAX(c.mfl_person) AS mfl_person 
-			FROM sm_orders a LEFT JOIN sm_mf_process_stop b ON a.OR_ID = b.OR_ID LEFT 
-			JOIN sm_mf_proc_log c ON a.or_id = c.or_id WHERE 1=1 AND or_process in (2,3) -->
-		SELECT a.or_id, MAX(a.MP_MFNO) AS mp_mfno ,MAX(a.MP_PROD_NAME) AS
-		mp_prod_name, MAX(a.MP_QTY) AS mp_qty , MAX(a.MP_PR_STATE) AS
-		mp_pr_state,
-		ISNULL(
-		(
-		SELECT TOP 1 mfs_state
-		FROM
-		sm_mf_process_stop
-		WHERE OR_ID = a.OR_ID
-		ORDER BY mfs_idx DESC
-		),
-		0
-		) AS
-		mfs_state,MAX(b.mfs_idx) AS
-		mfs_idx,MAX(c.MFL_MANAGER) AS mfl_manager
+		SELECT 
+			a.or_id
+			, MAX(a.MP_MFNO) AS mp_mfno
+			, MAX(a.MP_PROD_NAME) AS mp_prod_name
+			, MAX(a.MP_QTY) AS mp_qty , MAX(a.MP_PR_STATE) AS mp_pr_state
+			, ISNULL(
+				(
+					SELECT TOP 1 mfs_state
+					FROM
+					sm_mf_process_stop
+					WHERE OR_ID = a.OR_ID
+					ORDER BY mfs_idx DESC
+					),	
+				0) AS mfs_state
+			, MAX(b.mfs_idx) AS	mfs_idx
+			, MAX(c.MFL_MANAGER) AS mfl_manager
 		FROM sm_mf_proc a
-		LEFT JOIN sm_mf_process_stop b ON a.OR_ID = b.OR_ID LEFT
-		JOIN sm_mf_proc_log c ON a.or_id = c.or_id WHERE 1=1 AND a.mp_pr_state IN
-		(0,1)
+		LEFT JOIN sm_mf_process_stop b 
+		ON a.OR_ID = b.OR_ID LEFT
+		JOIN sm_mf_proc_log c 
+		ON a.or_id = c.or_id 
+		WHERE 1=1 
+		AND a.mp_pr_state IN (0,1)
 		<if test="searchKeyword != ''">
-			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
+			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		GROUP BY a.or_id
 		ORDER BY or_id DESC

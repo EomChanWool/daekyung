@@ -155,6 +155,7 @@
 		}
 	
 		function fn_search_vision(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	

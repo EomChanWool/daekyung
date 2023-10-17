@@ -161,6 +161,7 @@
 		}
 	
 		function fn_search_prPerformance(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	

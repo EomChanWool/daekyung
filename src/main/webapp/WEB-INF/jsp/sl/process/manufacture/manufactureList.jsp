@@ -190,7 +190,7 @@
 	}
 	
 	function fn_search_mf(){
-		
+		listForm.pageIndex.value = 1;
 		listForm.submit();
 	}
 	

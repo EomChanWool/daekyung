@@ -164,6 +164,7 @@
 		}
 		
 		function fn_search_cutting(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 		

@@ -70,4 +70,9 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		excelReaderMapper.registinspData(map);
 	}
 
+	@Override
+	public void registProc(Map<String, String> map) {
+		excelReaderMapper.registProc(map);
+	}
+
 }

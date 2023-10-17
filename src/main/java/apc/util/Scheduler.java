@@ -398,7 +398,7 @@ public class Scheduler {
 		}
 	}
 	
-	@Scheduled(cron = "40 01 21 * * *")
+	@Scheduled(cron = "40 02 21 * * *")
 	public void readPro() throws Exception{
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
@@ -429,11 +429,10 @@ public class Scheduler {
 				linee.put("mpQty", line2[8].trim());
 				linee.put("mpNote", line2[20].trim());
 				
-				System.out.println("맵 : " + linee);
-				
+				excelReaderService.registProc(linee);
 			}
 			br.close();
-			//EgovFileUtil.delete(note);
+			EgovFileUtil.delete(note);
 		} catch (Exception e) {
 		}
 	}
@@ -623,7 +622,7 @@ public class Scheduler {
 		
 	}
 	
-	@Scheduled(cron = "20 01 21 * * *")
+	@Scheduled(cron = "20 02 21 * * *")
 	public void openPro() {
 		  ftp = new FTPClient();
 		    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
@@ -664,7 +663,7 @@ public class Scheduler {
 		    now =  new Date(now.getTime()+(1000*60*60*24*-1));
 		    
 			String edDate = format.format(now);
-			String fileName = "/up-data/pro-"+edDate;
+			String fileName = "/textTest/pro-"+edDate;
 			File get_file = new File("C:\\test4","pro-"+edDate+"row.txt");
 			
 			

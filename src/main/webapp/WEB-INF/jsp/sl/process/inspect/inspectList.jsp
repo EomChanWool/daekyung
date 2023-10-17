@@ -162,6 +162,7 @@
 		}
 	
 		function fn_search_inspect(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	

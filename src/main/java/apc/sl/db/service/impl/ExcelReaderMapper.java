@@ -16,6 +16,8 @@ public interface ExcelReaderMapper {
 	
 	void registRelease(Map<String,Object> map);
 	
+	void registProc(Map<String, String> map);
+	
 	void deleteMm();
 	
 	void deletedb();

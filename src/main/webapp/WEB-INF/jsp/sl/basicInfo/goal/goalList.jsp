@@ -160,6 +160,7 @@
 		}
 	
 		function fn_search_goal(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	

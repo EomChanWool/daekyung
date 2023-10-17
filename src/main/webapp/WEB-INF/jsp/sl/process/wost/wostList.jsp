@@ -146,6 +146,7 @@
 		}
 	
 		function fn_search_document(){
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
 	

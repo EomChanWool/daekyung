@@ -179,6 +179,7 @@
 		var inputVal = $('#searchKeyword').val();
 		var length = inputVal.length;
 		if(length >= 16){
+		listForm.pageIndex.value = 1;	
 		listForm.submit();}
 	}
 	
