@@ -63,4 +63,9 @@ public class PerformanceServieImpl implements PerformanceService {
 	public int checkOrid(Map<String, Object> map) {
 		return performanceMapper.checkOrid(map);
 	}
+
+	@Override
+	public List<?> inspectList(Map<String, Object> map) {
+		return performanceMapper.inspectList(map);
+	}
 }

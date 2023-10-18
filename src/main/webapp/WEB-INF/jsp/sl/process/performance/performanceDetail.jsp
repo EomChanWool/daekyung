@@ -55,33 +55,54 @@
                                 <table class="table table-bordered" id="dataTable">
                                     <tbody>
 										<tr>
-											<th>문서명 <span class="req">*</span></th>
-											<td><span class="form-control val-area">${documentVO.doName}</span></td>
-											<th>작성자 <span class="req">*</span></th>
-											<td><span class="form-control val-area">${documentVO.doManager}</span></td>
-										</tr>
-										<tr>
-											<th>작성일 <span class="req">*</span></th>
-											<td><span class="form-control val-area">${documentVO.doDte}</span></td>
-										</tr>
-										<tr>
-											<th>비고</th>
-											<td colspan="3"><textArea name="doNote" id="doNote" disabled="disabled">${documentVO.doNote}</textArea></td>
-										</tr>
-										<tr>
-											<th>파일명</th>
-											<td colspan="3">
-												<span class="form-control val-area">
-													<a href="${pageContext.request.contextPath}/sl/quality/inst/downloadInst.do?fileName=${documentVO.doFilNm}">
-														<span>${documentVO.doOriginFilNm}</span>
-													</a>
-												</span>
-											</td>
-										</tr>
+												<th>로트번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptLotno" id="ptLotno" value="${detail.ptLotno}" readonly></td>
+												<th>수주번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="orId" id="orId" value="${detail.orId}" readonly></td>
+											</tr>
+											<tr>
+												<th>제품명 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptProdName" id="ptProdName" value="${detail.ptProdName}" readonly></td>
+												<th>검사일<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="ptInsDate" id="ptInsDate" value="${detail.ptInsDate}" readonly></td>
+											</tr>
+											<tr>
+												<th>가공수량 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptQty" id="ptQty" value="${detail.ptQty}" readonly></td>
+												<th>불량수량 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptBadQty" id="ptBadQty" value="${detail.ptBadQty}" readonly></td>
+											</tr>
+											<tr>
+												<th>등록자 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptRegId" id="ptRegId" value="${detail.ptRegId}" readonly></td>
+											</tr>
 									</tbody>
                                 </table>
+                                <table class="table table-bordered" id="dataTable"  >
+                                    <thead>
+                                        <tr>
+                                            <th>보고서번호</th>
+                                            <th>검사일</th>
+											<th>보고서 보기</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	<c:forEach var="result" items="${insList}" varStatus="status">
+	                                   		<tr>
+												<td>${result.isiLotno}-${result.isiId}</td>
+												<td>${result.isiDate}</td>
+	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_report('${result.isiReportImage}')">
+				                                        <span class="text">보고서 보기</span>
+				                                    </a>
+	                                            </td>
+	                                        </tr>
+                                    	</c:forEach>
+                                    	<c:if test="${empty insList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
+                                    </tbody>
+                                </table>
                                 <div class="btn_bottom_wrap">
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/quality/inst/instList.do'">목록</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/checkPr/performanceList.do'">목록</span>
 								</div>
                             </div>
                         </div>
@@ -118,15 +139,25 @@
 
 	<script>
 	$(function() {
-		$('#qualityMenu').addClass("active");
-		$('#quality').addClass("show");
-		$('#instList').addClass("active");
+		$('#processMenu').addClass("active");
+		$('#process').addClass("show");
+		$('#performanceList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 	});
+	
+	function fn_report(path) {
+		
+		var folderPath = /test/;
+		
+		var realPath = folderPath+path;
+		
+		window.open(realPath,'approval','scrollbars=yes,location=no,resizable=yes'); 
+		
+	}
 	</script>
 </body>
 

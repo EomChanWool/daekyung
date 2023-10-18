@@ -53,30 +53,31 @@
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/process/checkPr/modifyPerformanceOk.do" name="modifyForm" method="post">
-                            	<input type="hidden" name="ptPerfno" value="${detail.ptPerfno}">
+                            	<input type="hidden" name="ptId" value="${detail.ptId}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
+												<th>로트번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptLotno" id="ptLotno" value="${detail.ptLotno}" readonly></td>
 												<th>수주번호 <span class="req">*</span></th>
-												<td>
-												<input type="text" class="form-control" name="orId" id="orId" value="${detail.orId }" readonly>
-											</td>
-												<th>설비 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="eqId" id="eqId" value="${detail.eqId }" readonly></td>
+												<td><input type="text" class="form-control" name="orId" id="orId" value="${detail.orId}" readonly></td>
 											</tr>
 											<tr>
-												<th>가동시간 <span class="req">*</span></th>
-												<td><input type="datetime-local" class="form-control" name="ptStarttime" id="ptStarttime" value="${detail.ptStarttime}" readonly></td>
-												<th>종료시간 <span class="req">*</span></th>
-												<td><input type="datetime-local" class="form-control" name="ptEndtime" id="ptEndtime" value="${detail.ptEndtime }" readonly></td>
+												<th>제품명 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptProdName" id="ptProdName" value="${detail.ptProdName}" readonly></td>
+												<th>검사일<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="ptInsDate" id="ptInsDate" value="${detail.ptInsDate}"></td>
 											</tr>
 											<tr>
 												<th>가공수량 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="ptMfQty" id="ptMfQty" value="${detail.ptMfQty}" readonly></td>
+												<td><input type="text" class="form-control" name="ptQty" id="ptQty" value="${detail.ptQty}" readonly></td>
 												<th>불량수량 <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="ptBadQty" id="ptBadQty" value="${detail.ptBadQty}"></td>
 											</tr>
-											
+											<tr>
+												<th>등록자 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptRegId" id="ptRegId" value="${detail.ptRegId}"></td>
+											</tr>
 										</tbody>
 	                                </table>
                                 </form>
@@ -119,36 +120,15 @@
 
 	<script>
 	function fn_regist_document(){
-		
-		
 		if($('#ptBadQty').val() == ''){
 			alert("불량수량을 확인 바랍니다.");
 			return;
 		}
-		
 		modifyForm.submit();
 	}
 	
 	
-	function performanceInfoAjax(){
-		$.ajax({
-			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/process/checkPr/performanceInfoAjax.do'/>",	  		  			  
-			  dataType:"JSON",
-			  data:{
-				  'orId':$('#orId').val(),
-			  },
-			  success:function(result){
-				  $('#ptStarttime').val(result.perforList[0].mflStDate);
-				  $('#ptEndtime').val(result.perforList[0].mflEdDate);
-				  $('#ptMfQty').val(result.perforList[0].orQty);
-				  console.log(result);
-			  },
-			  error:function(request,status,error){ 
-				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-			  }
-		  });
-	}
+
 	
 	$(function() {
 		$('#processMenu').addClass("active");
@@ -160,9 +140,6 @@
 			alert(msg);
 		}
 		
-		$('#orId').change(function(){
-			performanceInfoAjax();
-		});
 	});
 	</script>
 </body>

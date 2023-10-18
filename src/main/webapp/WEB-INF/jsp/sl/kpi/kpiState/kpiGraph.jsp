@@ -200,11 +200,34 @@
 		}else if($('#searchCondition2').val() == "2"){
 			
 			<c:forEach items="${kpiGraphList}" var="list">
-			date.push('${list.kiYear}년 ' + '${list.kiMonth}월');
-			kpiOutputData.push('${list.kiBadQty}');
-			viewData.push('0');
+			years = ${list.kiYear};
+			maxMon = ${list.kiMonth};
+			</c:forEach>
+			for(var i=1;i<=maxMon;i++){
+				date.push(years+"년 "+i+"월");
+				kpiOutputData.push(0);
+				viewData.push(0);
+			}
+			<c:forEach items="${kpiGraphList}" var="list">
+			kpiOutputData[${list.kiMonth-1}] = ${list.kiBadQty};
+			
 		</c:forEach>
+		<c:forEach items="${inspecPer}" var="list">
+		var a1 = ${list.totalCnt};
+		var b1 = ${list.badCnt};
 		
+		
+		console.log(c1);
+		
+		var badPer = Math.round((b1/a1)*100);
+		if(manHour == Infinity){
+			badPer = 0;
+		}
+		
+		viewData[${list.months-1}] = badPer;
+		
+		
+		</c:forEach>
 		}else if($('#searchCondition2').val() == "3"){
 			
 			<c:forEach items="${kpiGraphList}" var="list">
@@ -368,7 +391,7 @@
 					    }
 					  },
 					  legend: {
-					    data: ['목표치', '생산량']
+					    data: ['목표치', '불량률']
 					  },
 					  xAxis: [
 					    {
@@ -382,14 +405,14 @@
 					  yAxis: [
 					    {
 					      type: 'value',
-					      name: '가공',
+					      name: '검사',
 					      axisLabel: {
 					        formatter: '{value} %'
 					      }
 					    },
 					    {
 			    		  type: 'value',
-				      	  name: '생산량',
+				      	  name: '불량률',
 				      	  axisLabel: {
 				            formatter: '{value} %'
 						  }
@@ -407,7 +430,7 @@
 					      data: kpiOutputData
 					    },
 					    {
-				    	name: '생산량',
+				    	name: '불량률',
 					    type: 'bar',
 					    tooltip: {
 					      valueFormatter: function (value) {

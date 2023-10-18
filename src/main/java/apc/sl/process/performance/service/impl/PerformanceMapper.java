@@ -20,6 +20,8 @@ public interface PerformanceMapper {
 	List<?> selectOrderList();
 	
 	List<?> performanceInfo(Map<String, Object> map);
+	
+	List<?> inspectList(Map<String, Object> map);
 
 	void registcheckPr(Map<String, Object> map);
 

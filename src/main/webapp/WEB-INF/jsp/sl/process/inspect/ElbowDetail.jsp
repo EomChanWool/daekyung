@@ -82,6 +82,8 @@
                                     	<tr>
                                     	<th>보고서 파일</th>
                                     	<td><span class="form-control val-area" id="isiFile">${cIsiFile}</span></td>
+                                    	<th>보고서 번호</th>
+                                    	<td><span class="form-control val-area" id="isiFile">${detail.isiLotno}-${detail.isiId}</span></td>
                                     	</tr>
                             </tbody>
                             </table>
@@ -350,7 +352,7 @@
 				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_Ok_ins('${detail.isiId}','2')">
 				                                        <span class="text">불합격</span>
 				                                    </a></c:if>
-                                <c:if test="${detail.isiCheck ==1}">
+                                <c:if test="${detail.isiCheck !=0}">
                                 <a href="#" class="btn btn-warning btn-icon-split" onclick="fn_view_report('${detail.isiReportImage}')">
 				                                        <span class="text">보고서 보기</span>
 				                                    </a>

@@ -19,6 +19,8 @@ public interface PerformanceService {
 	
 	List<?> performanceInfo(Map<String, Object> map);
 	
+	List<?> inspectList(Map<String, Object> map);
+	
 	void registcheckPr(Map<String, Object> map);
 
 	Map<String, Object> selectCheckPrInfo(Map<String, Object> map);

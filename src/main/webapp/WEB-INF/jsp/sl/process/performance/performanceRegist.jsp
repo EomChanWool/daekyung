@@ -56,37 +56,26 @@
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
+												<th>로트번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptLotno" id="ptLotno"></td>
 												<th>수주번호 <span class="req">*</span></th>
-												<td>
-												<input type="text" class="form-control" name="orId" id="orId" list="list" autocomplete="off">
-												<datalist id="list">
-													<option value="">선택</option>
-													<c:forEach var="list" items="${orderList}" varStatus="status">
-														<option value="${list.orId}">${list.orId}</option>
-													</c:forEach>
-												</datalist>
-											</td>
-												<th>설비 <span class="req">*</span></th>
-												<td>
-													<select class="form-control" name="eqId" id="eqId">
-														<option value="">선택</option>
-														<c:forEach var="list" items="${fmList}" varStatus="status">
-															<option value="${list.eqId}">${list.eqName}(${list.eqSensorid})</option>
-														</c:forEach>
-													</select>
-												</td>
+												<td><input type="text" class="form-control" name="orId" id="orId"></td>
 											</tr>
 											<tr>
-												<th>가동시간 <span class="req">*</span></th>
-												<td><input type="datetime-local" class="form-control" name="ptStarttime" id="ptStarttime" readonly></td>
-												<th>종료시간 <span class="req">*</span></th>
-												<td><input type="datetime-local" class="form-control" name="ptEndtime" id="ptEndtime" readonly></td>
+												<th>제품명 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptProdName" id="ptProdName" readonly></td>
+												<th>검사일<span class="req">*</span></th>
+												<td><input type="date" class="form-control" name="ptInsDate" id="ptInsDate"></td>
 											</tr>
 											<tr>
 												<th>가공수량 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="ptMfQty" id="ptMfQty" readonly></td>
+												<td><input type="text" class="form-control" name="ptQty" id="ptQty" readonly></td>
 												<th>불량수량 <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="ptBadQty" id="ptBadQty"></td>
+											</tr>
+											<tr>
+												<th>등록자 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="ptRegId" id="ptRegId"></td>
 											</tr>
 											
 										</tbody>
@@ -131,7 +120,7 @@
 
 	<script>
 	function fn_regist_document(){
-		if($('#orId').val() == ''){
+		/* if($('#orId').val() == ''){
 			alert("수주번호를 확인 바랍니다.");
 			return;
 		}
@@ -159,7 +148,7 @@
 		if($('#ptBadQty').val() == ''){
 			alert("불량수량을 확인 바랍니다.");
 			return;
-		}
+		} */
 		
 		registForm.submit();
 	}
@@ -171,12 +160,12 @@
 			  url:"<c:url value='${pageContext.request.contextPath}/sl/process/checkPr/performanceInfoAjax.do'/>",	  		  			  
 			  dataType:"JSON",
 			  data:{
-				  'orId':$('#orId').val(),
+				  'ptLotno':$('#ptLotno').val(),
 			  },
 			  success:function(result){
-				  $('#ptStarttime').val(result.perforList[0].mflStDate);
-				  $('#ptEndtime').val(result.perforList[0].mflEdDate);
-				  $('#ptMfQty').val(result.perforList[0].orQty);
+				  $('#orId').val(result.perforList[0].orId);
+				  $('#ptProdName').val(result.perforList[0].isiItemName);
+				  $('#ptQty').val(result.perforList[0].mpQty);
 				  console.log(result);
 			  },
 			  error:function(request,status,error){ 
@@ -195,7 +184,7 @@
 			alert(msg);
 		}
 		
-		$('#orId').change(function(){
+		$('#ptLotno').change(function(){
 			performanceInfoAjax();
 		});
 	});

@@ -89,4 +89,9 @@ public class KpiServieImpl implements KpiService {
 		return kpiMapper.selectLeadtime(searchVO);
 	}
 
+	@Override
+	public List<?> inspecPer(SearchVO searchVO) {
+		return kpiMapper.inspecPer(searchVO);
+	}
+
 }

@@ -37,8 +37,9 @@ public class PerformanceController {
 	private String filePath = "C:\\jnb\\report\\";
 	
 	@RequestMapping("/sl/process/checkPr/performanceList.do")
-	public String performanceList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session, MultipartFile multipart) throws Exception{
+	public String performanceList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session){
 		int totCnt = performanceService.selectPerformanceListToCnt(searchVO);
+		System.out.println("확인");
 		/** pageing setting */
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -58,14 +59,7 @@ public class PerformanceController {
 	
 	@RequestMapping("/sl/process/checkPr/registPerformance.do")
 	public String registPerformance(ModelMap model) {
-		//설비리스트
-		List<?> fmList = performanceService.selectFmList();
 		
-		model.put("fmList", fmList);
-		//수주번호 리스트
-		List<?> orderList = performanceService.selectOrderList();
-		
-		model.put("orderList", orderList);
 		
 		return "sl/process/performance/performanceRegist";
 	}
@@ -84,7 +78,7 @@ public class PerformanceController {
 																RedirectAttributes redirectAttributes, HttpSession session){
 		int checkOrid = performanceService.checkOrid(map);
 		if(checkOrid == 0) {
-			redirectAttributes.addFlashAttribute("msg","없거나 작업되지 않는 수주번호 입니다.");
+			redirectAttributes.addFlashAttribute("msg","없거나 검사하지 않은 제품 입니다.");
 			return "redirect:/sl/process/checkPr/registPerformance.do";
 		}
 		
@@ -104,7 +98,6 @@ public class PerformanceController {
 	@RequestMapping("/sl/process/checkPr/modifyPerformanceOk.do")
 	public String modifyPerformanceOk(@ModelAttribute("searchVO") SearchVO searchVO, @RequestParam Map<String, Object> map, 
 															RedirectAttributes redirectAttributes, HttpSession session){
-		System.out.println("수정맵 : " + map);
 		map.put("userId", session.getAttribute("user_id"));
 		performanceService.modifyCheckPr(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
@@ -113,8 +106,12 @@ public class PerformanceController {
 	
 	@RequestMapping("/sl/process/checkPr/detailPerformance.do")
 	public String detailPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
-//		Map<String, Object> detail = performanceService.selectDocumentInfo(map);
-//		model.put("documentVO", detail);
+		Map<String, Object> detail = performanceService.selectCheckPrInfo(map);
+		model.put("detail", detail);
+		List<?> insList = performanceService.inspectList(map);
+		model.put("insList", insList);
+		System.out.println("리스트 : " + insList);
+		
 		return "sl/process/performance/performanceDetail";
 	}
 	
@@ -166,11 +163,6 @@ public class PerformanceController {
 	
 	@RequestMapping("/sl/process/checkPr/deletePerformance.do")
 	public String deletePerformance(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		//기존 파일 삭제
-		File file = new File(filePath + map.get("doFilNm")+"");
-		if(file.exists()) {
-			file.delete();
-		}
 		
 		performanceService.deletePerformance(map);
 		redirectAttributes.addFlashAttribute("msg", "삭제 되었습니다.");

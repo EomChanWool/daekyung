@@ -163,7 +163,7 @@
 	</select>
 
 	<select id="selectWorkCnt" resultType="egovMap">
-		SELECT YEAR(mfl_ed_date)
+		<!-- SELECT YEAR(mfl_ed_date)
 		AS years, MONTH(mfl_ed_date) AS months,
 		ISNULL(SUM(or_qty), 0)AS
 		prod_cnt
@@ -174,6 +174,21 @@
 		YEAR(or_date) =
 		#{searchCondition}
 		and or_process = 4
+		GROUP BY
+		YEAR(mfl_ed_date),
+		MONTH(mfl_ed_date)
+		ORDER BY months -->
+		SELECT YEAR(mfl_ed_date)
+		AS years, MONTH(mfl_ed_date) AS months,
+		ISNULL(SUM(mp_qty), 0)AS
+		prod_cnt
+		FROM sm_mf_proc a
+		JOIN sm_mf_proc_log b
+		ON a.OR_ID = b.OR_ID
+		WHERE
+		YEAR(mp_reg_date) =
+		#{searchCondition}
+		and mp_pr_state = 2
 		GROUP BY
 		YEAR(mfl_ed_date),
 		MONTH(mfl_ed_date)
@@ -204,6 +219,23 @@
 		GROUP BY
 		month(cs_reg_date)
 		ORDER BY months asc
+	</select>
+	
+	<select id="inspecPer" resultType="egovMap">
+	SELECT YEAR(pt_ins_date)
+		AS years, MONTH(pt_ins_date) AS months,
+		ISNULL(SUM(pt_qty), 0)AS
+		total_cnt,
+		ISNULL(SUM(pt_bad_qty), 0)AS
+		bad_cnt
+		FROM sm_perf_test		
+		WHERE
+		YEAR(pt_ins_date) =
+		#{searchCondition}
+		GROUP BY
+		YEAR(pt_ins_date),
+		MONTH(pt_ins_date)
+		ORDER BY months
 	</select>
 
 	<select id="selectLeadtime" resultType="egovMap">

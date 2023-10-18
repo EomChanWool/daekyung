@@ -54,15 +54,14 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/checkPr/performanceList.do" method="post">
-									<input type="hidden" name="ptPerfno">
+									<input type="hidden" name="ptId">
+									<input type="hidden" name="ptLotno">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 					    			
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" id="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
-					    			<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
-									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
-									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
+					    			
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_checkPr()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
@@ -80,31 +79,39 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
+                                            <th>로트번호</th>
                                             <th>수주번호</th>
-                                            <th>설비</th>
+                                            <th>제품명</th>
                                             <th>생산수량</th>
                                             <th>불량수량</th>
+                                            <th>등록자</th>
+                                            <th>검사일</th>
+                                            <th>등록일</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${performanceList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_document('${result.ptPerfno}')" style="cursor: pointer;">
+	                                   		<tr onclick="fn_detail_document('${result.ptId}', '${result.ptLotno}')" style="cursor: pointer;">
+												<td>${result.ptLotno}</td>
 												<td>${result.orId}</td>
-												<td>${result.eqName}</td>
-												<td>${result.ptMfQty}</td>
+												<td>${result.ptProdName}</td>
+												<td>${result.ptQty}</td>
 												<td>${result.ptBadQty}</td>
+												<td>${result.ptRegId}</td>
+												<td>${result.ptInsDate}</td>
+												<td>${result.ptRegDate}</td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_checkPr_go('${result.ptPerfno}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_checkPr_go('${result.ptId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_document('${result.ptPerfno}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_document('${result.ptId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty performanceList}"><tr><td colspan='5'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty performanceList}"><tr><td colspan='9'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -168,21 +175,21 @@
 		}
 	
 		function fn_modify_checkPr_go(idx){
-			listForm.ptPerfno.value = idx;
+			listForm.ptId.value = idx;
 			listForm.action = "${pageContext.request.contextPath}/sl/process/checkPr/modifyPerformance.do";
 			listForm.submit();
 		}
 		
-		function fn_detail_document(doIdx){
-			listForm.doIdx.value = doIdx;
+		function fn_detail_document(doIdx,lotno){
+			listForm.ptId.value = doIdx;
+			listForm.ptLotno.value = lotno;
 			listForm.action = "${pageContext.request.contextPath}/sl/process/checkPr/detailPerformance.do";
 			listForm.submit();
 		}
 	
-		function fn_delete_document(doIdx, nm){
+		function fn_delete_document(doIdx){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.doIdx.value = doIdx;
-				listForm.doFilNm.value = nm;
+				listForm.ptId.value = doIdx;
 				listForm.action = "${pageContext.request.contextPath}/sl/process/checkPr/deletePerformance.do";
 				listForm.submit();
 			}

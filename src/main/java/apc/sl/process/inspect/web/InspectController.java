@@ -46,6 +46,7 @@ import com.spire.xls.Workbook;
 
 import apc.sl.process.inspect.service.InspectService;
 import apc.util.SearchVO;
+import egovframework.rte.fdl.filehandling.EgovFileUtil;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 
@@ -245,6 +246,9 @@ public class InspectController {
 		if(type.equals("90E(L)") || type.equals("90E(S)") || type.equals("45E(L)")) {
 		
 		setStyle2(form_wb, docNo ,2, 4);
+		if(map.get("stat").equals("2")) {
+			setStyle2(form_wb, "불합격" ,2, 14);
+		}
 		setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 		setStyle2(form_wb, itemType2[1] ,4, 4);
 		setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -502,6 +506,9 @@ public class InspectController {
 		if(type.equals("TEE")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
+			if(map.get("stat").equals("2")) {
+				setStyle2(form_wb, "불합격" ,2, 14);
+			}
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 			setStyle2(form_wb, itemType2[1] ,4, 4);
 			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -792,6 +799,9 @@ public class InspectController {
 		if(type.equals("CAP")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
+			if(map.get("stat").equals("2")) {
+				setStyle2(form_wb, "불합격" ,2, 14);
+			}
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 			setStyle2(form_wb, itemType2[1] ,4, 4);
 			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -860,7 +870,7 @@ public class InspectController {
 					setStyle(form_wb, BlMax+","+BlMin ,31, 11);
 					
 					
-					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 11);
+					setStyle(form_wb, exInfo.get("iehE")+"" ,38, 11);
 					
 					
 				}
@@ -887,7 +897,7 @@ public class InspectController {
 					setStyle(form_wb, BlMax+","+BlMin ,31, 13);
 					
 					
-					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 13);
+					setStyle(form_wb, exInfo.get("iehE")+"" ,38, 13);
 					
 					
 				}
@@ -914,7 +924,7 @@ public class InspectController {
 					setStyle(form_wb, BlMax+","+BlMin ,31, 15);
 					
 					
-					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 15);
+					setStyle(form_wb, exInfo.get("iehE")+"" ,38, 15);
 					
 				}
 				
@@ -940,7 +950,7 @@ public class InspectController {
 					setStyle(form_wb, BlMax+","+BlMin ,31, 17);
 					
 					
-					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 17);
+					setStyle(form_wb, exInfo.get("iehE")+"" ,38, 17);
 					
 					
 				}
@@ -968,7 +978,7 @@ public class InspectController {
 					setStyle(form_wb, BlMax+","+BlMin ,31, 19);
 					
 					
-					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 19);
+					setStyle(form_wb, exInfo.get("iehE")+"" ,38, 19);
 					
 				}
 				
@@ -988,9 +998,10 @@ public class InspectController {
         Map<String, Object> upMap = new HashMap<String, Object>();
         
         String afterFileImg = beFileName[0]+"-"+Lotno +"-"+infoData.get("isiId")+""+".pdf";
+        String dbFileName = beFileName[0]+"-"+Lotno +"-" +infoData.get("isiId")+""+".xlsx";
         
         upMap.put("isiId", infoData.get("isiId"));
-        upMap.put("isiReportFile", afterFileName);
+        upMap.put("isiReportFile", dbFileName);
         upMap.put("isiReportImage", afterFileImg);
         inspectService.updateReportFileName(upMap);
         
@@ -1011,7 +1022,26 @@ public class InspectController {
 		
 		inspectService.deleteInspect(map);
 		
-	
+		String fileName ="C:\\test4\\" + map.get("isiReportFile")+"";
+		System.out.println("경로 : " + fileName);
+		String fileImage = "C:\\test4\\" + map.get("isiReportImage")+"";
+		
+		File file = new File(fileName);
+		File file2 =new File(fileImage);
+		
+		try {
+			EgovFileUtil.delete(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			EgovFileUtil.delete(file2);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/process/inspect/inspectList.do";

@@ -36,4 +36,6 @@ public interface KpiService {
 	List<Map<String, Object>> selectWorkCnt(SearchVO searchVO);
 	
 	List<?> selectLeadtime(SearchVO searchVO);
+	
+	List<?> inspecPer(SearchVO searchVO);
 }

@@ -59,6 +59,8 @@
 									<input type="hidden" name="isiSpcSpec">
 									<input type="hidden" name="isiFile">
 									<input type="hidden" name="cFile">
+									<input type="hidden" name="isiReportFile">
+									<input type="hidden" name="isiReportImage">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="LOT번호를 입력해 주세요"
@@ -81,6 +83,7 @@
                                     <thead>
                                         <tr>
                                             <th>수주번호</th>
+                                            <th>보고서번호</th>
                                             <th>품목코드</th>
                                             <th>품목명</th>
                                             <th>검사방식</th>
@@ -96,6 +99,7 @@
                                     	<c:forEach var="result" items="${inspectList}" varStatus="status">
 	                                   	<tr onclick="fn_detail_inspect('${result.isiId}','${result.isiItemType}','${result.isiSpcSpec}','${result.isiFile1}','1')" style="cursor: pointer;">
 	                                            <td>${result.orId}</td>
+	                                            <td>${result.isiLotno}-${result.isiId}</td>
 	                                            <td>${result.isiItemType}</td>
 	                                            <td>${result.isiItemName}</td>
 	                                            <td>${result.isiWay}</td>
@@ -110,13 +114,13 @@
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_inspect_go('${result.isiId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_inspect('${result.isiId}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_inspect('${result.isiId}','${result.isiReportFile}','${result.isiReportImage}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty inspectList}"><tr><td colspan='10'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty inspectList}"><tr><td colspan='11'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -193,10 +197,11 @@
 			listForm.submit();
 		}
 	
-		function fn_delete_inspect(isiId){
+		function fn_delete_inspect(isiId,file,image){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
 				listForm.isiId.value = isiId;
-			
+				listForm.isiReportFile.value = file;
+				listForm.isiReportImage.value = image;
 				listForm.action = "${pageContext.request.contextPath}/sl/process/inspect/deleteInspect.do";
 				listForm.submit();
 			}
