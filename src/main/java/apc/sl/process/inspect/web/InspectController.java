@@ -190,6 +190,20 @@ public class InspectController {
 			model.put("cFile", map.get("cFile"));
 			return "sl/process/inspect/TeeDetail";
 		}
+		if(type.equals("CAP")) {
+			Map<String, Object> detail = inspectService.detailInspec(map);
+			model.put("detail", detail);
+			String spcSpect = map.get("isiSpcSpec")+"";
+			Map<String, Object> spcInfo = inspectService.spcInfo(spcSpect);
+			model.put("spcInfo",spcInfo);
+			String Edata = map.get("isiFile")+"";
+			Map<String, Object> eDataInfo = inspectService.eDataInfo(Edata);
+			System.out.println(eDataInfo);
+			model.put("eDataInfo", eDataInfo);
+			model.put("cIsiFile", Edata);
+			model.put("cFile", map.get("cFile"));
+			return "sl/process/inspect/CapDetail";
+		}
 		
 		Map<String, Object> detail = inspectService.detailInspec(map);
 		
@@ -228,7 +242,7 @@ public class InspectController {
 		
 		String docNo = infoData.get("isiLotno")+""+"-"+infoData.get("isiId")+"";
 		
-		if(type.equals("90E(L)") || type.equals("90E(S)")) {
+		if(type.equals("90E(L)") || type.equals("90E(S)") || type.equals("45E(L)")) {
 		
 		setStyle2(form_wb, docNo ,2, 4);
 		setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
@@ -262,10 +276,14 @@ public class InspectController {
 		setStyle(form_wb, specInfo.get("ssiBevelEnd")+"" ,31, 5);
 		setStyle(form_wb, specInfo.get("ssiBevelEndMax")+"" ,31, 8);
 		setStyle(form_wb, specInfo.get("ssiBevelEndMin")+"" ,31, 8);
-		
+		if(type.equals("45E(L)")) {
+			setStyle(form_wb, specInfo.get("ssiElbowA")+"" ,34, 5);
+			setStyle(form_wb, specInfo.get("ssiElbowAMax")+"" ,34, 8);
+			setStyle(form_wb, specInfo.get("ssiElbowAMin")+"" ,34, 10);
+		}else {
 		setStyle(form_wb, specInfo.get("ssiElbowA")+"" ,33, 5);
 		setStyle(form_wb, specInfo.get("ssiElbowAMax")+"" ,33, 8);
-		setStyle(form_wb, specInfo.get("ssiElbowAMin")+"" ,33, 10);
+		setStyle(form_wb, specInfo.get("ssiElbowAMin")+"" ,33, 10);}
 		
 		String isiFile;
 		Map<String,Object> exInfo = new HashMap<String, Object>();
@@ -287,11 +305,11 @@ public class InspectController {
 				setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 11);
 				setStyle(form_wb, exInfo.get("iehId3")+""+","+exInfo.get("iehId4")+""  ,20, 11);
 				
-				setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 13);
-				setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 13);
+				setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 11);
+				setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 11);
 				
-				setStyle(form_wb, exInfo.get("iehT21")+""+","+exInfo.get("iehT22")+"" ,27, 13);
-				setStyle(form_wb, exInfo.get("iehT23")+""+","+exInfo.get("iehT24")+"" ,28, 13);
+				setStyle(form_wb, exInfo.get("iehT21")+""+","+exInfo.get("iehT22")+"" ,27, 11);
+				setStyle(form_wb, exInfo.get("iehT23")+""+","+exInfo.get("iehT24")+"" ,28, 11);
 				
 				
 				float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
@@ -309,7 +327,10 @@ public class InspectController {
 				
 				setStyle(form_wb, BlMax+","+BlMin ,31, 13);
 				
-				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 13);
+				if(type.equals("45E(L)")) {
+					setStyle(form_wb, exInfo.get("iehA")+"" ,34, 11);
+				}else {
+				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 11);}
 				
 				
 			}
@@ -345,7 +366,10 @@ public class InspectController {
 				
 				setStyle(form_wb, BlMax+","+BlMin ,31, 13);
 				
-				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 13);
+				if(type.equals("45E(L)")) {
+					setStyle(form_wb, exInfo.get("iehA")+"" ,34, 13);
+				}else {
+				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 13);}
 				
 				
 			}
@@ -381,7 +405,10 @@ public class InspectController {
 				
 				setStyle(form_wb, BlMax+","+BlMin ,31, 15);
 				
-				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 15);
+				if(type.equals("45E(L)")) {
+					setStyle(form_wb, exInfo.get("iehA")+"" ,34, 15);
+				}else {
+				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 15);}
 				
 				
 			}
@@ -417,7 +444,10 @@ public class InspectController {
 				
 				setStyle(form_wb, BlMax+","+BlMin ,31, 17);
 				
-				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 17);
+				if(type.equals("45E(L)")) {
+					setStyle(form_wb, exInfo.get("iehA")+"" ,34, 17);
+				}else {
+				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 17);}
 				
 				
 			}
@@ -453,7 +483,10 @@ public class InspectController {
 				
 				setStyle(form_wb, BlMax+","+BlMin ,31, 19);
 				
-				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 19);
+				if(type.equals("45E(L)")) {
+					setStyle(form_wb, exInfo.get("iehA")+"" ,34, 19);
+				}else {
+				setStyle(form_wb, exInfo.get("iehA")+"" ,33, 19);}
 				
 				
 			}
@@ -747,6 +780,195 @@ public class InspectController {
 					setStyle(form_wb, exInfo.get("iehC1")+""+","+exInfo.get("iehC2")+"" ,36, 19);
 					setStyle(form_wb, exInfo.get("iehM1")+""+","+exInfo.get("iehM2")+"" ,37, 19);
 					
+					
+				}
+				
+				
+				
+				
+				
+			}}
+		
+		if(type.equals("CAP")) {
+			
+			setStyle2(form_wb, docNo ,2, 4);
+			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
+			setStyle2(form_wb, itemType2[1] ,4, 4);
+			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
+			setStyle2(form_wb, itemType2[2] ,3, 14);
+			setStyle2(form_wb, itemType2[3] ,3, 19);
+			setStyle2(form_wb, infoData.get("isiDate")+"" ,4, 14);
+			
+			setStyle2(form_wb, infoData.get("isiQty")+"" ,5, 14);
+			
+			Map<String,Object> specInfo = inspectService.spcInfo(itemType);
+			
+			setStyle(form_wb, specInfo.get("ssiOd01")+"" ,15, 5);
+			setStyle(form_wb, specInfo.get("ssiOd01Max")+"" ,15, 8);
+			setStyle(form_wb, specInfo.get("ssiOd01Min")+"" ,15, 10);
+			
+			
+			setStyle(form_wb, specInfo.get("ssiId01")+"" ,19, 5);
+			setStyle(form_wb, specInfo.get("ssiId01Max")+"" ,19, 8);
+			setStyle(form_wb, specInfo.get("ssiId01Min")+"" ,19, 10);
+			
+			
+			
+			setStyle(form_wb, specInfo.get("ssiT1Bevel")+"" ,23, 5);
+			setStyle(form_wb, specInfo.get("ssiT1BevelMin")+"" ,23, 10);
+			
+			
+			
+			setStyle(form_wb, specInfo.get("ssiBevelEnd")+"" ,31, 5);
+			setStyle(form_wb, specInfo.get("ssiBevelEndMax")+"" ,31, 8);
+			setStyle(form_wb, specInfo.get("ssiBevelEndMin")+"" ,31, 8);
+			
+			setStyle(form_wb, specInfo.get("ssiCapE")+"" ,38, 5);
+			setStyle(form_wb, specInfo.get("ssiCapEMax")+"" ,38, 8);
+			setStyle(form_wb, specInfo.get("ssiCapEMin")+"" ,38, 10);
+			
+			String isiFile;
+			Map<String,Object> exInfo = new HashMap<String, Object>();
+			for(int i =1; i<6; i++) {
+				
+				isiFile = infoData.get("isiFile"+i)+"";
+				exInfo = inspectService.eDataInfo(isiFile);
+				
+				if(exInfo == null) {
+					break;
+				}
+				
+				if(i ==1) {
+					
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 11);
+					
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 11);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 11);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 11);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 11);
+					
+					
+					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 11);
+					
+					
+				}
+				
+				if(i ==2) {
+					
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 13);
+					
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 13);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 13);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 13);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 13);
+					
+					
+					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 13);
+					
+					
+				}
+				
+				if(i ==3) {
+					
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 15);
+					
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 15);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 15);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 15);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 15);
+					
+					
+					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 15);
+					
+				}
+				
+				if(i ==4) {
+					
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 17);
+					
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 17);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 17);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 17);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 17);
+					
+					
+					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 17);
+					
+					
+				}
+				
+				if(i ==5) {
+					
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 19);
+					
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 19);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 19);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 19);
+					
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 19);
+					
+					
+					setStyle(form_wb, exInfo.get("iehE")+"" ,33, 19);
 					
 				}
 				

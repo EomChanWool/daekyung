@@ -79,12 +79,25 @@
 	</insert>
 
 	<insert id="registStandard">
-		INSERT INTO sm_standard_info (
-		si_type,
-		si_name)
+		INSERT INTO sm_spc_specinfo 
+		(
+		si_id, pi_id,
+		ssi_od01, ssi_od01_max, ssi_od01_min,
+		ssi_id01, ssi_id01_max, ssi_id01_min,
+		ssi_t1_bevel, ssi_t1_bevel_min,
+		ssi_bevel_end, ssi_bevel_end_max, ssi_bevel_end_min,
+		ssi_cap_e, ssi_cap_e_max, ssi_cap_e_min,
+		ssi_oa_q_max
+		)
 		VALUES
-		(#{siType},
-		#{siName}
+		(
+		#{siId}, #{piId},
+		#{ssiOd01}, #{ssiOd01Max}, #{ssiOd01Min},
+		#{ssiId01}, #{ssiId01Max}, #{ssiId01Min},
+		#{ssiT1Bevel}, #{ssiT1BevelMin},
+		#{ssiBevelEnd}, #{ssiBevelEndMax}, #{ssiBevelEndMin},
+		#{ssiCapE}, #{ssiCapEMax}, #{ssiCapEMin},
+		#{ssiOaQMax}
 		)
 	</insert>
 
