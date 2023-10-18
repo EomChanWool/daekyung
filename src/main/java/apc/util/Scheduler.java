@@ -388,7 +388,6 @@ public class Scheduler {
 				linee.put("orUnit", line2[8].trim());
 				linee.put("orMoney", line2[9].trim());
 				linee.put("orQty", line2[7].trim());
-				System.out.println("맵 : " + linee);
 				
 				excelReaderService.registOrder(linee);
 			}
@@ -398,7 +397,7 @@ public class Scheduler {
 		}
 	}
 	
-	@Scheduled(cron = "40 02 21 * * *")
+	@Scheduled(cron = "55 03 21 * * *")
 	public void readPro() throws Exception{
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
@@ -407,6 +406,7 @@ public class Scheduler {
 	    now =  new Date(now.getTime()+(1000*60*60*24*-1));
 	    
 		String edDate = format.format(now);
+		
 		
 		File note = new File("C:\\test4\\pro-"+edDate+".txt");
 		Map<String,String> linee = new HashMap<String, String>();
@@ -428,7 +428,6 @@ public class Scheduler {
 				linee.put("poLotno", line2[19].trim());
 				linee.put("mpQty", line2[8].trim());
 				linee.put("mpNote", line2[20].trim());
-				
 				excelReaderService.registProc(linee);
 			}
 			br.close();

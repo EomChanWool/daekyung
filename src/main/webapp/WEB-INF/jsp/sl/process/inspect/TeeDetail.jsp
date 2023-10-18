@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">엘보우 검사결과</h1>
+                    <h1 class="h3 mb-2 text-gray-800">TEE 검사결과</h1>
                     <form action="${pageContext.request.contextPath}/sl/process/inspect/detailInspect.do" name="detailForm" method="post">
                    					 <input type="hidden" name="isiId">
 									<input type="hidden" name="isiItemType">
