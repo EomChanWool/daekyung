@@ -521,6 +521,8 @@
 		
 		var realPath = folderPath+path;
 		
+		console.log(realPath);
+		
 		window.open(realPath,'approval','scrollbars=yes,location=no,resizable=yes'); 
 		
 	}
