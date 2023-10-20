@@ -88,8 +88,10 @@ WHERE PO_LOTNO = #{str}
 		or_company,
 		or_prod,
 		or_date,
+		or_due_date,
 		<if test="orFinDate !='00000000'">or_fin_date,</if>
 		or_or_type,
+		or_work_type,
 		or_texture,
 		or_thickness,
 		or_standard,
@@ -105,9 +107,11 @@ WHERE PO_LOTNO = #{str}
 		#{orId},
 		#{orCompany},
 		#{orProd},
-		GETDATE(),
+		#{orDate},
+		#{orDueDate},
 		<if test="orFinDate !='00000000'">#{orFinDate},</if>
 		#{orOrType},
+		#{orWorkType},
 		#{orTexture},
 		#{orThickness},
 		#{orStandard},
