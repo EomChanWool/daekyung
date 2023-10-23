@@ -16,16 +16,12 @@
 	</select>
 
 	<select id="selectManufactureList" resultType="egovMap">
-		<!-- SELECT a.or_id ,MAX(a.or_prod) AS or_prod, MAX(a.or_qty) AS or_qty, 
-			MAX(a.or_process) AS or_process, ISNULL( ( SELECT TOP 1 mfs_state FROM sm_mf_process_stop 
-			WHERE OR_ID = a.OR_ID ORDER BY mfs_idx DESC ), 0 ) AS mfs_state , MAX(b.mfs_idx) 
-			AS mfs_idx , MAX(c.mfl_manager) AS mfl_manager, MAX(c.mfl_person) AS mfl_person 
-			FROM sm_orders a LEFT JOIN sm_mf_process_stop b ON a.OR_ID = b.OR_ID LEFT 
-			JOIN sm_mf_proc_log c ON a.or_id = c.or_id WHERE 1=1 AND or_process in (2,3) -->
-		SELECT a.or_id, MAX(a.MP_MFNO) AS mp_mfno ,MAX(a.MP_PROD_NAME) AS
-		mp_prod_name, MAX(a.MP_QTY) AS mp_qty , MAX(a.MP_PR_STATE) AS
-		mp_pr_state,
-		ISNULL(
+		SELECT
+		a.or_id
+		, MAX(a.MP_MFNO) AS mp_mfno
+		, MAX(a.MP_PROD_NAME) AS mp_prod_name
+		, MAX(a.MP_QTY) AS mp_qty , MAX(a.MP_PR_STATE) AS mp_pr_state
+		, ISNULL(
 		(
 		SELECT TOP 1 mfs_state
 		FROM
@@ -33,16 +29,19 @@
 		WHERE OR_ID = a.OR_ID
 		ORDER BY mfs_idx DESC
 		),
-		0
-		) AS
-		mfs_state,MAX(b.mfs_idx) AS
-		mfs_idx,MAX(c.MFL_MANAGER) AS mfl_manager
+		0) AS mfs_state
+		, MAX(b.mfs_idx) AS mfs_idx
+		, MAX(c.MFL_MANAGER) AS mfl_manager
 		FROM sm_mf_proc a
-		LEFT JOIN sm_mf_process_stop b ON a.OR_ID = b.OR_ID LEFT
-		JOIN sm_mf_proc_log c ON a.or_id = c.or_id WHERE 1=1 AND a.mp_pr_state IN
-		(0,1)
+		LEFT JOIN
+		sm_mf_process_stop b
+		ON a.OR_ID = b.OR_ID LEFT
+		JOIN sm_mf_proc_log c
+		ON a.or_id = c.or_id
+		WHERE 1=1
+		AND a.mp_pr_state IN (0,1)
 		<if test="searchKeyword != ''">
-			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
+			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		GROUP BY a.or_id
 		ORDER BY or_id DESC
@@ -210,7 +209,8 @@
 		mp_mfno = #{mpMfno},
 		mp_prod_name = #{mpProdName},
 		mp_reg_date = #{mpRegDate},
-		mp_texture = #{mpTexture},
+		mp_texture =
+		#{mpTexture},
 		mp_thickness = #{mpThickness},
 		mp_state = #{mpState},
 		mp_standard =
@@ -255,12 +255,11 @@
 	</update>
 
 	<select id="outData" resultType="egovMap">
-		SELECT a.OR_ID, a.OR_MANAGER,
-		b.PO_LOTNO , CONVERT(VARCHAR(8), c.MFL_ED_DATE, 112) AS MFL_ED_DATE,
-		mfl_manager from sm_orders a JOIN
-		sm_release_info b ON a.OR_ID =
-		b.OR_ID JOIN sm_mf_proc_log c ON a.OR_ID = c.OR_ID
-		WHERE a.OR_ID =
+		SELECT a.OR_ID,
+		a.PO_LOTNO,a.mp_qty ,a.mp_prod_name,a.mp_mfno, CONVERT(VARCHAR(8),
+		c.MFL_ED_DATE, 112) AS MFL_ED_DATE, mfl_manager from sm_mf_proc a
+		JOIN sm_mf_proc_log c ON a.OR_ID = c.OR_ID
+		WHERE a.OR_ID=
 		#{orId}
 	</select>
 

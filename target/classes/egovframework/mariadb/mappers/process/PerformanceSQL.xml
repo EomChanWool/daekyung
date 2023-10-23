@@ -6,41 +6,21 @@
 		SELECT COUNT(*) FROM sm_perf_test
 		WHERE 1=1
 		<if test="searchKeyword">
-			AND or_id = #{searchKeyword}
+			AND pt_lotno = #{searchKeyword}
 		</if>
-		<if test="searchStDate != ''">
-			AND pt_starttime >= #{searchStDate}
-		</if>
-		<if test="searchEdDate !=''">
-			AND pt_starttime <![CDATA[<=]]>
-			#{searchEdDate}
-		</if>
+
 	</select>
 
 	<select id="selectPerformanceList" resultType="egovMap">
-		SELECT
-		pt_perfno,
-		a.eq_id,
-		b.EQ_NAME,
-		or_id,
-		pt_mf_qty,
-		pt_bad_qty
+		SELECT *
 		FROM
-		sm_perf_test a
-		JOIN sm_equipment b
-		ON a.EQ_ID = b.EQ_ID
+		sm_perf_test
 		WHERE 1=1
 		<if test="searchKeyword !=''">
-			AND or_id = #{searchKeyword}
+			AND pt_lotno = #{searchKeyword}
 		</if>
-		<if test="searchStDate != ''">
-			AND pt_starttime >= #{searchStDate}
-		</if>
-		<if test="searchEdDate !=''">
-			AND pt_starttime <![CDATA[<=]]>
-			#{searchEdDate}
-		</if>
-		ORDER BY pt_perfno DESC
+
+		ORDER BY pt_id DESC
 		OFFSET #{firstIndex} ROWS
 		FETCH NEXT
 		#{recordCountPerPage} ROWS ONLY
@@ -82,22 +62,23 @@
 
 	<insert id="registcheckPr">
 		INSERT INTO sm_perf_test(
-		eq_id,
+		pt_lotno,
 		or_id,
-		pt_starttime,
-		pt_endtime,
-		pt_mf_qty,
+		pt_prod_name,
+		pt_qty,
 		pt_bad_qty,
 		pt_reg_id,
+		pt_ins_date,
 		pt_reg_date
-		) VALUES (
-		#{eqId},
+		)
+		VALUES (
+		#{ptLotno},
 		#{orId},
-		#{ptStarttime},
-		#{ptEndtime},
-		#{ptMfQty},
+		#{ptProdName},
+		#{ptQty},
 		#{ptBadQty},
-		#{userId},
+		#{ptRegId},
+		#{ptInsDate},
 		GETDATE()
 		)
 
@@ -112,7 +93,8 @@
 
 	<select id="selectOrderList" resultType="egovMap">
 		SELECT a.or_id
-		FROM sm_mf_proc_log a
+		FROM
+		sm_mf_proc_log a
 		WHERE MFL_ED_DATE IS NOT NULL
 		AND NOT EXISTS (
 		SELECT 1
@@ -122,33 +104,39 @@
 	</select>
 
 	<select id="performanceInfo" resultType="egovMap">
-		SELECT convert(CHAR(19),
-		a.mfl_st_date,20) AS mfl_st_date, convert(CHAR(19),a.mfl_ed_date,20)
-		AS
-		mfl_ed_date, b.or_qty
-		FROM sm_mf_proc_log a JOIN
-		sm_orders b ON
-		a.OR_ID = b.OR_ID
-		WHERE a.or_id = #{orId}
+		SELECT DISTINCT
+		a.isi_lotno, a.or_id, a.isi_item_name, b.MP_QTY
+		FROM sm_inspection_info
+		a
+		JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+		WHERE a.isi_lotno = #{ptLotno}
 	</select>
 
 	<select id="checkOrid" resultType="int">
 		SELECT COUNT(*) FROM
-		sm_mf_proc_log WHERE or_id = #{orId}
+		sm_inspection_info WHERE or_id = #{orId}
 	</select>
 
 	<select id="selectCheckPrInfo" resultType="egovMap">
 		SELECT * FROM
 		sm_perf_test
-		WHERE pt_perfno = #{ptPerfno}
+		WHERE pt_id = #{ptId}
 	</select>
-	
+
+	<select id="inspectList" resultType="egovMap">
+		SELECT isi_id, isi_lotno, isi_date, isi_report_image FROM
+		sm_inspection_info
+		WHERE isi_lotno = #{ptLotno}
+	</select>
+
 	<update id="modifyCheckPr">
-	update sm_perf_test set
-	pt_bad_qty = #{ptBadQty},
-	pt_edt_id = #{userId},
-	pt_edt_date = GETDATE()
-	where pt_perfno = #{ptPerfno}
+		update sm_perf_test set
+		pt_bad_qty = #{ptBadQty},
+		pt_ins_date = #{ptInsDate},
+		pt_reg_id = #{ptRegId},
+		pt_reg_date =
+		GETDATE()
+		where pt_id = #{ptId}
 	</update>
 
 	<!-- <update id="modifyDocument"> -->
@@ -166,7 +154,7 @@
 	<!-- WHERE do_idx = #{doIdx} -->
 	<!-- </update> -->
 
-	<!-- <delete id="deletePerformance"> -->
-	<!-- DELETE FROM sm_document WHERE do_idx = #{doIdx} -->
-	<!-- </delete> -->
+	<delete id="deletePerformance">
+		DELETE FROM sm_perf_test WHERE pt_id = #{ptId}
+	</delete>
 </mapper>
