@@ -26,8 +26,13 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 	}
 
 	@Override
-	public void registMm(Map<String, Object> map) {
+	public void registMm(Map<String, String> map) {
 		excelReaderMapper.registMm(map);
+	}
+
+	@Override
+	public void updaeMm(Map<String, String> map) {
+		excelReaderMapper.updateMm(map);
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 	}
 
 	@Override
-	public void registRelease(Map<String, Object> map) {
+	public void registRelease(Map<String, String> map) {
 		excelReaderMapper.registRelease(map);
 	}
 

@@ -9,11 +9,13 @@ public interface ExcelReaderService {
 	
 	void registOrder(Map<String, String> map);
 	
-	void registMm(Map<String,Object> map);
+	void registMm(Map<String, String> map);
 	
-	void registRelease(Map<String,Object> map);
+	void registRelease(Map<String, String> map);
 	
 	void registProc(Map<String, String> map);
+	
+	void updateMm(Map<String, String> map);
 	
 	void deletedb();
 	

@@ -22,6 +22,7 @@
 	</select>
 	
 	<select id="mfProc" resultType="egovMap">
+	
 	SELECT * FROM sm_mf_proc
 WHERE PO_LOTNO = #{str}
 	</select>
@@ -83,44 +84,40 @@ WHERE PO_LOTNO = #{str}
 
 	<insert id="registOrder">
 		INSERT INTO sm_orders(
-		or_date,
-		or_company,
-		or_or_type,
-		or_due_date,
-		or_qty,
-		or_unit,
-		or_money,
-		or_fin_date,
-		or_report,
-		or_manager,
 		or_id,
+		or_company,
 		or_prod,
+		or_date,
+		<if test="orFinDate !='00000000'">or_fin_date,</if>
+		or_or_type,
 		or_texture,
 		or_thickness,
 		or_standard,
 		or_state,
+		or_manager,
+		or_pr_no,
+		or_unit,
+		or_money,
+		or_qty,
 		or_process
 		) VALUES
 		(
-		CONVERT(varchar ,CONVERT(DATE, #{orDate})),
-		#{orCompany},
-		#{orOrType},
-		CONVERT(varchar ,CONVERT(DATE, #{orDueDate})),
-		CONVERT(INT,CONVERT(float,#{orQty})),
-		#{orUnit},
-		#{orMoney},
-		CASE WHEN
-		TRIM(#{orFinDate}) = '' THEN NULL ELSE CONVERT(varchar, convert(DATE,
-		#{orFinDate})) END ,
-		#{orReport},
-		#{orManager},
 		#{orId},
+		#{orCompany},
 		#{orProd},
+		GETDATE(),
+		<if test="orFinDate !='00000000'">#{orFinDate},</if>
+		#{orOrType},
 		#{orTexture},
 		#{orThickness},
 		#{orStandard},
 		#{orState},
-		#{orProcess}
+		#{orManager},
+		#{orPrNo},
+		#{orUnit},
+		#{orMoney},
+		#{orQty},
+		0
 		)
 	</insert>
 	<insert id="registRelease">
@@ -185,6 +182,36 @@ WHERE PO_LOTNO = #{str}
 		)
 
 	</insert>
+	
+	<insert id="registProc">
+	INSERT INTO sm_mf_proc(
+	mp_mfno,
+	or_id,
+	mp_prod_name,
+	mp_texture,
+	mp_thickness,
+	mp_state,
+	mp_standard,
+	po_lotno,
+	mp_qty,
+	mp_note,
+	mp_reg_date,
+	mp_pr_state
+	) 
+	values(
+	#{mpMfno},
+	#{orId},
+	#{mpProdName},
+	#{mpTexture},
+	#{mpThickness},
+	#{mpState},
+	#{mpStandard},
+	#{poLotno},
+	#{mpQty},
+	#{mpNote},
+	GETDATE(),
+	0)
+	</insert>
 
 	<insert id="registMm">
 		<!-- INSERT INTO sm_material_move ( mm_id, pi_id, mm_in, mm_in_kg, mm_out, 
@@ -196,52 +223,81 @@ WHERE PO_LOTNO = #{str}
 			CONVERT(FLOAT,#{mmInKg}), CONVERT(INT,CONVERT(float,#{mmOut})), CONVERT(FLOAT,#{mmOutKg}), 
 			CONVERT(INT,CONVERT(float,#{piCnt})), CONVERT(FLOAT,#{piItemRemain}), #{mmRegId}, 
 			GETDATE() ) -->
-		DECLARE @CurrentDate VARCHAR(8) = CONVERT(VARCHAR(8), GETDATE(), 112)
-		DECLARE @MaxID INT
+<!-- 		DECLARE @CurrentDate VARCHAR(8) = CONVERT(VARCHAR(8), GETDATE(), 112) -->
+<!-- 		DECLARE @MaxID INT -->
 
-		SELECT @MaxID = MAX(CAST(SUBSTRING(a.mm_id, 10, 4)
-		AS INT)) + 1
-		FROM sm_material_move a
-		WHERE a.mm_id LIKE 'MM' +
-		SUBSTRING(@CurrentDate, 3, 8) + '%'
+<!-- 		SELECT @MaxID = MAX(CAST(SUBSTRING(a.pi_id, 10, 4) -->
+<!-- 		AS INT)) + 1 -->
+<!-- 		FROM sm_product_info a -->
+<!-- 		WHERE a.pi_id LIKE 'MM' + -->
+<!-- 		SUBSTRING(@CurrentDate, 3, 8) + '%' -->
 
-		SET @MaxID = ISNULL(@MaxID, 1)
+<!-- 		SET @MaxID = ISNULL(@MaxID, 1) -->
 
-		INSERT INTO sm_material_move (
-		mm_id,
-		pi_id,
-		mm_in,
-		mm_in_kg,
-		mm_out,
-		mm_out_kg,
-		mm_cnt,
-		mm_cnt_kg,
-		mm_reg_id,
-		mm_reg_date,
-		pi_item_name
-		)
-		VALUES (
-		'MM' +
-		SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID
-		AS
-		VARCHAR(4)), 4),
-		#{piId},
-		CONVERT(INT, CONVERT(FLOAT, #{mmIn})),
-		CONVERT(FLOAT, #{mmInKg}),
-		CONVERT(INT, CONVERT(FLOAT, #{mmOut})),
-		CONVERT(FLOAT, #{mmOutKg}),
-		CONVERT(INT, CONVERT(FLOAT, #{piCnt})),
-		CONVERT(FLOAT, #{piItemRemain}),
-		#{mmRegId},
-		GETDATE(),
-		#{piItemName}
-		)
-
-
-
-
+<!-- 		INSERT INTO sm_product_info ( -->
+<!-- 		pi_id, -->
+<!-- 		pi_item_type, -->
+<!-- 		pi_item_heat, -->
+<!-- 		pi_item_name, -->
+<!-- 		pi_item_texture, -->
+<!-- 		pi_item_standard, -->
+<!-- 		pi_item_thickness, -->
+<!-- 		pi_item_long, -->
+<!-- 		pi_middle, -->
+<!-- 		pi_item_unit, -->
+<!-- 		pi_remain_qty, -->
+<!-- 		pi_remain_kg, -->
+<!-- 		pi_reg_date -->
+<!-- 		) -->
+<!-- 		VALUES ( -->
+<!-- 		#{piId}, -->
+<!-- 		#{piItemType}, -->
+<!-- 		#{piItemHeat}, -->
+<!-- 		#{piItemName}, -->
+<!-- 		#{piItemTexture}, -->
+<!-- 		#{piItemStandard}, -->
+<!-- 		#{piItemThickness}, -->
+<!-- 		#{piItemLong}, -->
+<!-- 		#{piMiddle}, -->
+<!-- 		#{piItemUnit}, -->
+<!-- 		#{piRemainQty}, -->
+<!-- 		#{piRemainKg}, -->
+<!-- 		GETDATE() -->
+<!-- 		) -->
+<!-- 		ON DUPLICATE KEY UPDATE -->
+<!--     	pi_remain_qty = #{piRemainQty}; -->
+<!-- 		'MM' + -->
+<!-- 		SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID -->
+<!-- 		AS -->
+<!-- 		VARCHAR(4)), 4), -->
+	MERGE INTO sm_product_info AS target
+    USING (VALUES (
+        #{piId},
+        #{piItemType},
+        #{piItemHeat},
+        #{piItemName},
+        #{piItemTexture},
+        #{piItemStandard},
+        #{piItemThickness},
+        #{piItemLong},
+        #{piMiddle},
+        #{piItemUnit},
+        #{piRemainQty},
+        #{piRemainKg},
+        GETDATE()
+    )) AS source (piId, piItemType, piItemHeat, piItemName, piItemTexture, piItemStandard, piItemThickness, piItemLong, piMiddle, piItemUnit, piRemainQty, piRemainKg, piRegDate)
+    ON target.pi_id = source.piId
+    WHEN MATCHED THEN
+        UPDATE SET target.pi_remain_qty = source.piRemainQty
+    WHEN NOT MATCHED THEN
+        INSERT (pi_id, pi_item_type, pi_item_heat, pi_item_name, pi_item_texture, pi_item_standard, pi_item_thickness, pi_item_long, pi_middle, pi_item_unit, pi_remain_qty, pi_remain_kg, pi_reg_date)
+        VALUES (source.piId, source.piItemType, source.piItemHeat, source.piItemName, source.piItemTexture, source.piItemStandard, source.piItemThickness, source.piItemLong, source.piMiddle, source.piItemUnit, source.piRemainQty, source.piRemainKg, source.piRegDate);
 	</insert>
-
+	<update id="updateMm">
+		update sm_product_info
+		set pi_remain_qty = #{piRemainQty}
+		where pi_id = #{piId}
+	</update>
 	<insert id="testRegist">
 		insert into sm_test(
 		te_idx,

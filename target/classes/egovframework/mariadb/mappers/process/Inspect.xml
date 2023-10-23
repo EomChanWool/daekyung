@@ -25,9 +25,9 @@
 
 	<select id="selectInspectList" resultType="egovMap">
 		SELECT
-		isi_id,or_id,isi_item_name,isi_way,isi_date,isi_manager,isi_file1,isi_file2,isi_file3,isi_file4,
+		isi_id,isi_lotno,or_id,isi_item_name,isi_way,isi_date,isi_manager,isi_file1,isi_file2,isi_file3,isi_file4,
 		isi_file5, b.si_name, a.si_id, a.isi_item_type, a.isi_spc_spec,
-		a.isi_check,a.isi_file1
+		a.isi_check,a.isi_file1,a.isi_report_file,a.isi_report_image
 		FROM sm_inspection_info a
 		JOIN sm_standard_info
 		b
@@ -64,7 +64,7 @@
 
 	<select id="selectInfo" resultType="egovMap">
 		select * FROM sm_mf_proc
-		WHERE or_id = #{orId}
+		WHERE po_lotno = #{isiLotno}
 	</select>
 
 	<select id="selectInfo2" resultType="egovMap">
@@ -141,7 +141,7 @@
 		#{isiDate},
 		#{isiItemType},
 		#{isiItemName},
-		#{siType},
+		(SELECT si_id FROM sm_spc_specinfo WHERE pi_id = #{isiItemName}),
 		#{isiManager},
 		0,
 		#{isiFile1},
