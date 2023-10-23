@@ -1,15 +1,11 @@
 package apc.sl.process.inspect.web;
 
-import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,16 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.formula.functions.EDate;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -244,11 +233,9 @@ public class InspectController {
 		String docNo = infoData.get("isiLotno")+""+"-"+infoData.get("isiId")+"";
 		
 		if(type.equals("90E(L)") || type.equals("90E(S)") || type.equals("45E(L)")) {
-		
+			
 		setStyle2(form_wb, docNo ,2, 4);
-		if(map.get("stat").equals("2")) {
-			setStyle2(form_wb, "불합격" ,2, 14);
-		}
+		
 		setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 		setStyle2(form_wb, itemType2[1] ,4, 4);
 		setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -257,9 +244,7 @@ public class InspectController {
 		setStyle2(form_wb, infoData.get("isiDate")+"" ,4, 14);
 		
 		setStyle2(form_wb, infoData.get("isiQty")+"" ,5, 14);
-		
 		Map<String,Object> specInfo = inspectService.spcInfo(itemType);
-		
 		setStyle(form_wb, specInfo.get("ssiOd01")+"" ,15, 5);
 		setStyle(form_wb, specInfo.get("ssiOd01Max")+"" ,15, 8);
 		setStyle(form_wb, specInfo.get("ssiOd01Min")+"" ,15, 10);
@@ -280,14 +265,20 @@ public class InspectController {
 		setStyle(form_wb, specInfo.get("ssiBevelEnd")+"" ,31, 5);
 		setStyle(form_wb, specInfo.get("ssiBevelEndMax")+"" ,31, 8);
 		setStyle(form_wb, specInfo.get("ssiBevelEndMin")+"" ,31, 8);
+		setStyle2(form_wb,"■G □N", 15, 21);
+		setStyle2(form_wb,"■G □N", 19, 21);
+		setStyle2(form_wb,"■G □N", 23, 21);
+		setStyle2(form_wb,"■G □N", 31, 21);
 		if(type.equals("45E(L)")) {
 			setStyle(form_wb, specInfo.get("ssiElbowA")+"" ,34, 5);
 			setStyle(form_wb, specInfo.get("ssiElbowAMax")+"" ,34, 8);
 			setStyle(form_wb, specInfo.get("ssiElbowAMin")+"" ,34, 10);
+			setStyle2(form_wb,"■G □N", 34, 21);
 		}else {
 		setStyle(form_wb, specInfo.get("ssiElbowA")+"" ,33, 5);
 		setStyle(form_wb, specInfo.get("ssiElbowAMax")+"" ,33, 8);
-		setStyle(form_wb, specInfo.get("ssiElbowAMin")+"" ,33, 10);}
+		setStyle(form_wb, specInfo.get("ssiElbowAMin")+"" ,33, 10);
+		setStyle2(form_wb,"■G □N", 33, 21);}
 		
 		String isiFile;
 		Map<String,Object> exInfo = new HashMap<String, Object>();
@@ -299,6 +290,33 @@ public class InspectController {
 			if(exInfo == null) {
 				break;
 			}
+			String checkOd = noteGN(exInfo, specInfo, "iehOd", "ssiOd01");
+			String checkId = noteGN(exInfo, specInfo, "iehId", "ssiId01");
+			String checkT1 = noteGN(exInfo, specInfo, "iehT1", "ssiT1Bevel");
+			String checkT2 = noteGN(exInfo, specInfo, "iehT2", "ssiT1Bevel");
+			String checkBevel1 = noteGN(exInfo, specInfo, "iehBl1", "ssiBevelEnd");
+			String checkBevel2 = noteGN(exInfo, specInfo, "iehBl2", "ssiBevelEnd");
+			String checkEa = noteGN(exInfo, specInfo, "iehA", "ssiElbowA");
+			if(checkOd.equals("No")) {
+			setStyle2(form_wb, "□G ■N", 15, 21);
+			}
+			if(checkId.equals("No")) {
+				setStyle2(form_wb, "□G ■N", 19, 21);
+				}
+			if(checkT1.equals("No") || checkT2.equals("No")) {
+				setStyle2(form_wb, "□G ■N", 23, 21);
+				}
+			if(checkBevel1.equals("No") || checkBevel2.equals("No")) {
+				setStyle2(form_wb, "□G ■N", 31, 21);
+				}
+			if(type.equals("45E(L)")) {
+				if(checkEa.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 34, 21);
+					}
+			}else {
+			if(checkEa.equals("No")) {
+				setStyle2(form_wb, "□G ■N", 33, 21);
+				}}
 			
 			if(i ==1) {
 				
@@ -506,9 +524,7 @@ public class InspectController {
 		if(type.equals("TEE")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
-			if(map.get("stat").equals("2")) {
-				setStyle2(form_wb, "불합격" ,2, 14);
-			}
+			
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 			setStyle2(form_wb, itemType2[1] ,4, 4);
 			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -556,6 +572,13 @@ public class InspectController {
 			setStyle(form_wb, specInfo.get("ssiTeeMMax")+"" ,37, 8);
 			setStyle(form_wb, specInfo.get("ssiTeeMMin")+"" ,37, 10);
 			
+			setStyle2(form_wb,"■G □N", 15, 21);
+			setStyle2(form_wb,"■G □N", 19, 21);
+			setStyle2(form_wb,"■G □N", 23, 21);
+			setStyle2(form_wb,"■G □N", 31, 21);
+			setStyle2(form_wb,"■G □N", 36, 21);
+			setStyle2(form_wb,"■G □N", 37, 21);
+			
 			String isiFile;
 			Map<String,Object> exInfo = new HashMap<String, Object>();
 			for(int i =1; i<6; i++) {
@@ -566,6 +589,45 @@ public class InspectController {
 				if(exInfo == null) {
 					break;
 				}
+				String checkOd = noteGN(exInfo, specInfo, "iehOd", "ssiOd01");
+				String checkOd2 = noteGN(exInfo, specInfo, "iehOd", "ssiOd02");
+				String checkId = noteGN(exInfo, specInfo, "iehId", "ssiId01");
+				String checkId2 = noteGN(exInfo, specInfo, "iehId", "ssiId02");
+				String checkT1 = noteGN(exInfo, specInfo, "iehT1", "ssiT1Bevel");
+				String checkT2 = noteGN(exInfo, specInfo, "iehT2", "ssiT1Bevel");
+				String checkT3 = noteGN(exInfo, specInfo, "iehT3", "ssiT1Body");
+				String checkBevel1 = noteGN(exInfo, specInfo, "iehBl1", "ssiBevelEnd");
+				String checkBevel2 = noteGN(exInfo, specInfo, "iehBl2", "ssiBevelEnd");
+				String checkBevel3 = noteGN(exInfo, specInfo, "iehBl3", "ssiBevelEnd");
+				String checkEc1 = noteGN(exInfo, specInfo, "iehC1", "ssiTeeC");
+				String checkEc2 = noteGN(exInfo, specInfo, "iehC2", "ssiTeeC");
+				String checkMc1 = noteGN(exInfo, specInfo, "iehM1", "ssiTeeM");
+				String checkMc2 = noteGN(exInfo, specInfo, "iehM2", "ssiTeeM");
+				if(checkOd.equals("No")) {
+				setStyle2(form_wb, "□G ■N", 15, 21);
+				}
+				if(checkOd2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 15, 21);
+					}
+				if(checkId.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 19, 21);
+					}
+				if(checkId2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 19, 21);
+					}
+				if(checkT1.equals("No") || checkT2.equals("No") || checkT3.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 23, 21);
+					}
+				if(checkBevel1.equals("No") || checkBevel2.equals("No") || checkBevel3.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 31, 21);
+					}
+//				
+				if(checkEc1.equals("No") || checkEc2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 36, 21);
+					}
+				if(checkMc1.equals("No") || checkMc2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 37, 21);
+					}
 				
 				if(i ==1) {
 					
@@ -799,9 +861,7 @@ public class InspectController {
 		if(type.equals("CAP")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
-			if(map.get("stat").equals("2")) {
-				setStyle2(form_wb, "불합격" ,2, 14);
-			}
+			
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 			setStyle2(form_wb, itemType2[1] ,4, 4);
 			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -837,16 +897,45 @@ public class InspectController {
 			setStyle(form_wb, specInfo.get("ssiCapEMax")+"" ,38, 8);
 			setStyle(form_wb, specInfo.get("ssiCapEMin")+"" ,38, 10);
 			
+			setStyle2(form_wb,"■G □N", 15, 21);
+			setStyle2(form_wb,"■G □N", 19, 21);
+			setStyle2(form_wb,"■G □N", 23, 21);
+			setStyle2(form_wb,"■G □N", 31, 21);
+			setStyle2(form_wb,"■G □N", 38, 21);
+			
 			String isiFile;
 			Map<String,Object> exInfo = new HashMap<String, Object>();
 			for(int i =1; i<6; i++) {
-				
 				isiFile = infoData.get("isiFile"+i)+"";
 				exInfo = inspectService.eDataInfo(isiFile);
 				
 				if(exInfo == null) {
 					break;
 				}
+				String checkOd = noteGN(exInfo, specInfo, "iehOd", "ssiOd01");
+				String checkId = noteGN(exInfo, specInfo, "iehId", "ssiId01");
+				String checkT1 = noteGN(exInfo, specInfo, "iehT1", "ssiT1Bevel");
+				String checkBevel1 = noteGN(exInfo, specInfo, "iehBl1", "ssiBevelEnd");
+				String checkE1 = noteGN(exInfo, specInfo, "iehE", "ssiCapE");
+				
+				if(checkOd.equals("No")) {
+				setStyle2(form_wb, "□G ■N", 15, 21);
+				}
+				
+				if(checkId.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 19, 21);
+					}
+				if(checkT1.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 23, 21);
+					}
+				if(checkBevel1.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 31, 21);
+					}
+//				
+				if(checkE1.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 38, 21);
+					}
+				
 				
 				if(i ==1) {
 					
@@ -1084,7 +1173,9 @@ public void setStyle2(XSSFWorkbook form_wb, String str, int x, int y) throws Exc
         font.setFontHeight((short)220); //폰트 size -> 260 = 13point
         font.setBold(true); // Bold 설정
         cellStyle.setBorderBottom(XSSFCellStyle.BORDER_THIN);
-       
+        cellStyle.setBorderRight(XSSFCellStyle.BORDER_THICK);
+        cellStyle.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        cellStyle.setVerticalAlignment(XSSFCellStyle.VERTICAL_CENTER);
         cellStyle.setFont(font);
         
         form_sheet.getRow(x).getCell(y).setCellStyle(cellStyle);
@@ -1142,6 +1233,61 @@ public void downloadInspect(HttpServletRequest request, HttpServletResponse resp
         } catch (Exception e) {
             e.printStackTrace();
         }
+}
+
+public String noteGN(Map<String,Object> map, Map<String,Object>map2, String option, String option2) {
+	
+
+	
+	//값 비교 후 Y/N 체크메소드
+	
+	if(option.equals("iehA") || option.contains("iehC") || option.contains("iehM") || option.equals("iehE")) {
+		float value = Float.parseFloat(map.get(option)+"");
+		float maxV = Float.parseFloat(map2.get(option2+"Max")+"");
+		float minV = Float.parseFloat(map2.get(option2+"Min")+"");
+		if(value < minV || value > maxV) {
+			return "No";
+		}else {
+			return "Yes";
+		}
+	}
+	if(option2.equals("ssiOd02")||option2.equals("ssiId02")) {
+		System.out.println("이쪽");
+		for(int j=5; j<7; j++) {
+			float value = Float.parseFloat(map.get(option+j)+"");
+			float maxV = Float.parseFloat(map2.get(option2+"Max")+"");
+			float minV = Float.parseFloat(map2.get(option2+"Min")+"");
+			
+			if(value < minV || value > maxV) {
+				
+				 return "No";
+			}else {
+				return "Yes";
+			}
+		}
+		}
+		
+		for(int i=1; i<5; i++) {
+			if(map.get(option+i)==null) {
+				break;
+			}
+			
+			if(option.equals("iehT1")||option.equals("iehT2")||option.equals("iehT3")) {
+				float value = Float.parseFloat(map.get(option+i)+"");
+				float minV = Float.parseFloat(map2.get(option2+"Min")+"");
+				if(value < minV) {
+					 return "No";
+				}
+			}else{
+			float value = Float.parseFloat(map.get(option+i)+"");
+			float maxV = Float.parseFloat(map2.get(option2+"Max")+"");
+			float minV = Float.parseFloat(map2.get(option2+"Min")+"");
+			if(value < minV || value > maxV) {
+				 return "No";
+			}}
+			}
+		
+		return "Yes";
 }
 
 

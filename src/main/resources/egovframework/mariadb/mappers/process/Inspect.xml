@@ -11,15 +11,9 @@
 
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
+			AND isi_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
-		<if test="searchStDate != ''">
-			AND id_test_time >= #{searchStDate}
-		</if>
-		<if test="searchEdDate !=''">
-			AND id_test_time <![CDATA[<=]]>
-			#{searchEdDate}
-		</if>
+		
 
 	</select>
 
@@ -35,15 +29,9 @@
 		= b.si_id
 		where 1=1
 		<if test="searchKeyword != ''">
-			AND po_lotno LIKE CONCAT('%',#{searchKeyword},'%')
+			AND isi_lotno LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
-		<if test="searchStDate != ''">
-			AND id_test_time >= #{searchStDate}
-		</if>
-		<if test="searchEdDate !=''">
-			AND id_test_time <![CDATA[<=]]>
-			#{searchEdDate}
-		</if>
+		
 		ORDER BY isi_id DESC
 		OFFSET #{firstIndex} ROWS
 		FETCH
