@@ -90,21 +90,18 @@
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>SPC항목  <span class="req">*</span></th>
-												<td>
-													<input type="text" class="form-control" name="siType" id="siType" list="siList" autocomplete="off">
-													<datalist id="siList">
-														<c:forEach var="list" items="${siList}" varStatus="status">
-															<option value="${list.siId}">${list.siName}</option>
-														</c:forEach>
-													</datalist>
-												</td>
+<!-- 												<th>SPC항목  <span class="req">*</span></th> -->
+<!-- 												<td> -->
+<!-- 													<input type="text" class="form-control" name="siType" id="siType" list="siList" autocomplete="off"> -->
+<!-- 													<datalist id="siList"> -->
+<%-- 														<c:forEach var="list" items="${siList}" varStatus="status"> --%>
+<%-- 															<option value="${list.siId}">${list.siName}</option> --%>
+<%-- 														</c:forEach> --%>
+<!-- 													</datalist> -->
+<!-- 												</td> -->
 												<th>SPC스펙  <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="isiSpcSpec" id="isiSpcSpec"/>
 												</td>
-											</tr>
-											<tr>
-												
 												<th>수량  <span class="req">*</span></th>
 												<td><input type="text" class="form-control" name="isiQty" id="isiQty"/>
 												</td>

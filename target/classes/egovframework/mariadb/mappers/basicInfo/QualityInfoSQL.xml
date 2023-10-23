@@ -83,21 +83,53 @@
 		(
 		si_id, pi_id,
 		ssi_od01, ssi_od01_max, ssi_od01_min,
+		ssi_od02, ssi_od02_max, ssi_od02_min,
 		ssi_id01, ssi_id01_max, ssi_id01_min,
-		ssi_t1_bevel, ssi_t1_bevel_min,
+		ssi_id02, ssi_id02_max, ssi_id02_min,
+		ssi_t1_bevel, ssi_t1_bevel_max, ssi_t1_bevel_min,
+		ssi_t1_body, ssi_t1_body_max, ssi_t1_body_min,
+		ssi_t2_bevel, ssi_t2_bevel_max, ssi_t2_bevel_min,
+		ssi_t2_body, ssi_t2_body_max, ssi_t2_body_min,
 		ssi_bevel_end, ssi_bevel_end_max, ssi_bevel_end_min,
+		ssi_root_face, ssi_root_face_max, ssi_root_face_min,
+		ssi_oa_q_max, ssi_op_p_max,
+		ssi_elbow_a, ssi_elbow_a_max, ssi_elbow_a_min,
+		ssi_tee_c, ssi_tee_c_max, ssi_tee_c_min,
+		ssi_tee_m, ssi_tee_m_max, ssi_tee_m_min,
+		ssi_reducer_h, ssi_redu_h_max, ssi_redu_h_min,
+		ssi_cap_limit_t,
 		ssi_cap_e, ssi_cap_e_max, ssi_cap_e_min,
-		ssi_oa_q_max
+		ssi_cap_e1, ssi_cap_e1_max, ssi_cap_e1_min,
+		ssi_stub_f, ssi_stub_f_max, ssi_stub_f_min,
+		ssi_stub_g, ssi_stub_g_max, ssi_stub_g_min,
+		ssi_stub_gt, ssi_stub_gt_max, ssi_stub_gt_min,
+		ssi_stub_r, ssi_stub_r_max, ssi_stub_r_min
 		)
 		VALUES
 		(
 		#{siId}, #{piId},
 		#{ssiOd01}, #{ssiOd01Max}, #{ssiOd01Min},
+		#{ssiOd02}, #{ssiOd02Max}, #{ssiOd02Min},
 		#{ssiId01}, #{ssiId01Max}, #{ssiId01Min},
-		#{ssiT1Bevel}, #{ssiT1BevelMin},
+		#{ssiId02}, #{ssiId02Max}, #{ssiId02Min},
+		#{ssiT1Bevel}, #{ssiT1BevelMax}, #{ssiT1BevelMin},
+		#{ssiT1Body}, #{ssiT1BodyMax}, #{ssiT1BodyMin},
+		#{ssiT2Bevel}, #{ssiT2BevelMax}, #{ssiT2BevelMin},
+		#{ssiT2Body}, #{ssiT2BodyMax}, #{ssiT2BodyMin},
 		#{ssiBevelEnd}, #{ssiBevelEndMax}, #{ssiBevelEndMin},
+		#{ssiRootFace}, #{ssiRootFaceMax}, #{ssiRootFaceMin},
+		#{ssiOaQMax}, #{ssiOpPMax},
+		#{ssiElbowA}, #{ssiElbowAMax}, #{ssiElbowAMin},
+		#{ssiTeeC}, #{ssiTeeCMax}, #{ssiTeeCMin},
+		#{ssiTeeM}, #{ssiTeeMMax}, #{ssiTeeMMin},
+		#{ssiReducerH}, #{ssiReduHMax}, #{ssiReduHMin},
+		#{ssiCapLimitT},
 		#{ssiCapE}, #{ssiCapEMax}, #{ssiCapEMin},
-		#{ssiOaQMax}
+		#{ssiCapE1}, #{ssiCapE1Max}, #{ssiCapE1Min},
+		#{ssiStubF}, #{ssiStubFMax}, #{ssiStubFMin},
+		#{ssiStubG}, #{ssiStubGMax}, #{ssiStubGMin},
+		#{ssiStubGt}, #{ssiStubGtMax}, #{ssiStubGtMin},
+		#{ssiStubR}, #{ssiStubRMax}, #{ssiStubRMin}
 		)
 	</insert>
 

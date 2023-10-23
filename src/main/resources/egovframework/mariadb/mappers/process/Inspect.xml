@@ -129,7 +129,7 @@
 		#{isiDate},
 		#{isiItemType},
 		#{isiItemName},
-		#{siType},
+		(SELECT si_id FROM sm_spc_specinfo WHERE pi_id = #{isiItemName}),
 		#{isiManager},
 		0,
 		#{isiFile1},
