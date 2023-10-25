@@ -33,4 +33,6 @@ public interface ExcelReaderService {
 
 	void updaeMm(Map<String, String> map);
 	
+	int checkjungbok(Map<String,String> map);
+	
 }

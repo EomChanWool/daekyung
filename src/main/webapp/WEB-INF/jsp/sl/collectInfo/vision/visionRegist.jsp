@@ -48,7 +48,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/process/inspect/registInspect.do" name="registForm" method="post">
+                            	<form action="${pageContext.request.contextPath}/sl/collectInfo/vision/registVisionOk.do" name="registForm" method="post">
                             		<input type="hidden" name="orIdx" id="orIdx">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>

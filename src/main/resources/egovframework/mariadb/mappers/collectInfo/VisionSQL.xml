@@ -51,7 +51,7 @@
 	<select id="excelAjax" resultType="egovMap">
 		SELECT id_doc FROM
 		sm_inspection_excel_history
-		WHERE IEH_PRTYPE = #{poLotno}
+		WHERE IEH_lotno = #{poLotno}
 		AND id_reg_state = 0
 
 	</select>

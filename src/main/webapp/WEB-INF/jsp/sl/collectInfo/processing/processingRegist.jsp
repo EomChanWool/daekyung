@@ -56,77 +56,42 @@
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/sales/ordersManage/registOrdersOk.do" name="registForm" method="post">
+                            	<form action="${pageContext.request.contextPath}/sl/collectInfo/processing/registProcessingOk.do" name="registForm" method="post">
+                            	<input type="hidden" name="mflIdx">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>수주명  <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="orName" id="orName" value="${ordersVO.orName}"/></td>
-												<th>수주일  <span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="orDte" id="orDte" value="${ordersVO.orDte}"/></td>
+												<th>수주번호  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="orId" id="orId" list="list" autocomplete="off">
+												<datalist id="list">
+													<option value="">선택</option>
+													<c:forEach var="list" items="${prodList}" varStatus="status">
+														<option value="${list.orId}">${list.orId} / ${list.poLotno}</option>
+													</c:forEach>
+												</datalist></td>
+												<th>로트번호</th>
+                                    		<td><span class="form-control val-area" id="poLotno"></span></td>
 											</tr>
 											<tr>
-												<th>사업장  <span class="req">*</span></th>
-												<td>
-													<select class="form-control" name="cIdx" id="cIdx">
-														<c:forEach var="list" items="${companyList}" varStatus="statue">
-															<option value="${list.cIdx}" <c:if test="${list.cIdx eq '1'}">selected="selected"</c:if>>${list.cName}</option>
-														</c:forEach>
-													</select>
-												</td>
-												<th>거래처  <span class="req">*</span></th>
-												<td>
-													<select class="form-control" name="aIdx" id="aIdx">
-														<c:forEach var="list" items="${accountList}" varStatus="statue">
-															<option value="${list.aIdx}" <c:if test="${list.aIdx eq 'A0005'}">selected="selected"</c:if>>${list.aName}</option>
-														</c:forEach>
-													</select>
-												</td>
+												<th>품목</th>
+												<td><span class="form-control val-area" id="mpProdName"></span></td>
+												<th>생산량</th>
+												<td><span class="form-control val-area" id="mpQty"></span></td>
 											</tr>
 											<tr>
-												<th>납기일  <span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="orDueDte" id="orDueDte" value="${ordersVO.orDueDte}"/></td>
+												<th>작업자</th>
+												<td><span class="form-control val-area" id="mflManager"></span></td>
+												<th>시작시간</th>
+												<td><span class="form-control val-area" id="mflStDate"></span></td>
 											</tr>
-											<tr>
-												<th>납품지 <span class="req">*</span></th>
-												<td colspan="3"><input type="text" class="form-control" name="orDuePlace" id="orDuePlace" value="${ordersVO.orDuePlace}"/></td>
-											</tr>
-											<tr>
-												<th>비고</th>
-												<td colspan="3"><textarea name="orNote">${ordersVO.orNote}</textarea></td>
-											</tr>
+											
 										</tbody>
 	                                </table>
-	                                <table class="table table-bordered" id="dataTable">
-	                                	<tbody class="prodList">
-	                                		<tr>
-	                                			<th style="text-align: center;">제품</th>
-												<th style="text-align: center;">수량(EA)</th>
-												<th style="text-align: center;">단가(원)</th>
-												<th style="text-align: center;">제품총합(원)</th>
-	                                		</tr>
-	                                		<c:forEach var="list" items="${prodList}" varStatus="state">
-	                                			<input type="hidden" name="itemCd${state.count}" value="${list.itemCd}">
-	                                			<tr>
-		                                			<td><span class="form-control val-area">${list.itemName}</span><input type="hidden" name="prod${state.count}" value="${list.itemName}"></td>
-		                                			<td><input type="text" class="form-control cnt" name="cnt${state.count}" id="cnt${state.count}" value="0"></td>
-		                                			<td><input type="text" class="form-control perPrice" name="perPrice${state.count}" id="perPrice${state.count}" value="${list.itemPerPrice}"></td>
-		                                			<td><span class="form-control" id="itemTotal${state.count}" style="text-align: right;"></span></td>
-	                                			</tr>
-	                                		</c:forEach>
-	                                		<tr>
-												<th colspan="3">합계(원)</th>
-												<td style="text-align: right; padding-top: 1.1rem;">
-													<span id="total">0</span>
-													<input type="hidden" name="orMoney" id="orMoney" value="0">
-												</td>	
-											</tr>
-	                                	</tbody>
-	                                </table>
+	                               
                                 </form>
                                 <div class="btn_bottom_wrap">
-									<button type="submit" class="btn_ok" onclick="fn_regist_orders()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/sales/ordersManage/ordersList.do'">취소</span>
+									<button type="submit" class="btn_ok" onclick="fn_regist_pro()" style="border:none;">확인</button>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/collectInfo/processing/processingList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -162,75 +127,52 @@
     <script src="/resources/js/sb-admin-2.min.js"></script>
 
 	<script>
-	function fn_regist_orders(){
-		const num = /^\d+$/;
-		if($('#orName').val() == ''){
-			alert("수주명을 확인 바랍니다.");
-			return;
-		}
+	function fn_regist_pro(){
 		
-		if($('#orDte').val() == ''){
-			alert("수주일을 확인 바랍니다.");
-			return;
-		}
-	
-		if($('#orDueDte').val() == ''){
-			alert("납기일을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#orDuePlace').val() == ''){
-			alert("납품지를 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#orMoney').val() == 0 || $('#orMoney').val() == "NaN"){
-			alert("수량 및 단가를 확인 바랍니다.");
-			return;
-		}
 		registForm.submit();
 	}
 	
 	$(function() {
-		$('#salesMenu').addClass("active");
-		$('#sales').addClass("show");
-		$('#ordersList').addClass("active");
+		$('#collectInfoMenu').addClass("active");
+		$('#collectInfo').addClass("show");
+		$('#processingList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 		
-		calcTotalPrice();
-		
-		$('#orDte').val(new Date().toISOString().slice(0,10));
-		
-		$('.perPrice').focusout(function(){
-			calcTotalPrice();
+		$('#orId').change(function(){
+			processingAjax();
 		});
 		
-		$('.cnt').focusout(function(){
-			calcTotalPrice();
-		});
+	
 	});
 	
-	function calcTotalPrice(){
-		var perPrice = document.getElementsByClassName('perPrice');
-		var cnt = document.getElementsByClassName('cnt');
-		var total = 0;
-		for(var i=0;i<perPrice.length;i++){
-			if(perPrice[i].value != ''){
-				var itemTotal = "#itemTotal"+(i+1);
-				let result = (perPrice[i].value*cnt[i].value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-				$(itemTotal).text(result);
-				total += (perPrice[i].value*cnt[i].value);
-			}
-		}
+	function processingAjax(){
+		$.ajax({
+			  type:"POST",
+			  url:"<c:url value='${pageContext.request.contextPath}/sl/collectInfo/processing/processingAjax.do'/>",	  		  			  
+			  dataType:"JSON",
+			  data:{
+				  'orId':$('#orId').val()
+			  },
+			  success:function(result){
+				  console.log(result);
+				  registForm.mflIdx.value = result.mfProc.mflIdx;
+				  $('#poLotno').text(result.mfProc.poLotno);
+				  $('#mpProdName').text(result.mfProc.mpProdName + ',' + result.mfProc.mpTexture + ',' + result.mfProc.mpThickness + ',' + result.mfProc.mpState + ',' + result.mfProc.mpStandard);
+				  $('#mpQty').text(result.mfProc.mpQty);
+				  $('#mflManager').text(result.mfProc.mflManager);
+				  $('#mflStDate').text(result.mfProc.mflStDate);
+			  },
+			  error:function(request,status,error){ 
+				  alert('수주번호를 확인하시고 새로고침 해주세요');		  
+			  }
+		  });
+	}	
+	
 
-		$('#orMoney').val(total);
-		let result = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-		$('#total').text(result);
-	}
 	</script>
 </body>
 

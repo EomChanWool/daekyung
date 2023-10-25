@@ -61,36 +61,39 @@
 													</c:forEach>
 												</datalist></td>
 											<th>품명</th>
-											<td><input type="text" class="form-control" name="csData01" value="${cuttingVO.csData01}"/></td>
+											<td><input type="text" class="form-control" name="csProdName" value="${cuttingVO.csProdName}"/></td>
 										</tr>
 										<tr>
-											<th>DATA1  </th>
+											<th>모델  </th>
 											
-											<td><input type="text" class="form-control" name="csData02" value="${cuttingVO.csData02}"/></td>
+											<td><input type="text" class="form-control" name="csModel" value="${cuttingVO.csModel}"/></td>
 											
-											<th>DATA2  </th>
+											<th>반경  </th>
 											
-											<td><input type="text" class="form-control" name="csData03" value="${cuttingVO.csData03}"/></td>
+											<td><input type="text" class="form-control" name="csRadius" value="${cuttingVO.csRadius}"/></td>
 										</tr>
 										<tr>
-											<th>DATA3</th>
-											<td><input type="text" class="form-control" name="csData04" value="${cuttingVO.csData04}"></td>
-											<th>DATA4</th>
-											<td><input type="text" class="form-control" name="csData05" value="${cuttingVO.csData05}"></td>
+											<th>두께</th>
+											<td><input type="text" class="form-control" name="csThickness" value="${cuttingVO.csThickness}"></td>
+											<th>갭</th>
+											<td><input type="text" class="form-control" name="csGap" value="${cuttingVO.csGap}"></td>
 										</tr>
 										<tr>
-											<th>DATA5</th>
-											<td><input type="text" class="form-control" name="csData06" value="${cuttingVO.csData06}"></td>
-											<th>DATA6</th>
-											<td><input type="text" class="form-control" name="csData07" value="${cuttingVO.csData07}"></td>
+											<th>생산량</th>
+											<td><input type="text" class="form-control" name="csQty" value="${cuttingVO.csQty}"></td>
+											<th>배길이</th>
+											<td><input type="text" class="form-control" name="csLong" value="${cuttingVO.csLong}"></td>
 										</tr>
 										<tr>
 											<th>시작시간</th>
 											<td><input type="datetime-local" class="form-control" name="csRegDate"  value="${curTime}"></td>
 											<th>종료시간</th>
-											<td><input type="datetime-local" class="form-control" name="csRegDate2" value="${curTime }"></td>
+											<td><input type="datetime-local" class="form-control" name="csEdDate" value="${curTime}"></td>
 										</tr>
 										<tr>
+											<th>작업시간</th>
+											<td><input type="text" class="form-control" name="csWorkTime" value="${cuttingVO.csWorkTime}"></td>
+										</tr>
 										
 									</tbody>
 	                                </table>
@@ -141,10 +144,7 @@
 			return;
 		}
 		
-		if(registForm.csRegDate2.value == ''){
-			alert("종료시간을 확인 바랍니다.");
-			return;
-		}
+	
 		
 		registForm.submit();
 	}

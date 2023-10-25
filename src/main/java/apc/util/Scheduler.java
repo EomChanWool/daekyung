@@ -78,7 +78,7 @@ public class Scheduler {
 	
 	
 	
-	@Scheduled(cron = "40 00 21 * * *")
+	@Scheduled(cron = "40 32 20 * * *")
 	public void readSuju() throws Exception{
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
@@ -115,6 +115,19 @@ public class Scheduler {
 				linee.put("orUnit", line2[9].trim());
 				linee.put("orMoney", line2[10].trim());
 				linee.put("orQty", line2[8].trim());
+				
+				int jungbok = excelReaderService.checkjungbok(linee);
+				
+				if(jungbok == 1) {
+					linee.clear();
+				}
+				
+				if(line2[7].equals("00000000")) {
+					linee.remove("orDueDate");
+				}
+				if(line2[17].equals("00000000")) {
+					linee.remove("orFinDate");
+				}
 				System.out.println(linee);
 				excelReaderService.registOrder(linee);
 			}
@@ -125,7 +138,7 @@ public class Scheduler {
 		}
 	}
 	
-	@Scheduled(cron = "30 02 21 * * *")
+	@Scheduled(cron = "50 34 20 * * *")
 	public void readPro() throws Exception{
 		
 		
@@ -137,6 +150,7 @@ public class Scheduler {
 	    
 		String edDate = format.format(now);
 		
+		System.out.println("들어옴 : " + now);
 		
 		File note = new File("C:\\test4\\pro-"+edDate+".txt");
 		
@@ -169,7 +183,7 @@ public class Scheduler {
 		}
 	}
 	
-	@Scheduled(cron = "30 02 21 * * *")
+//	@Scheduled(cron = "50 04 21 * * *")
 //	@Scheduled(cron = "25 * * * * *")
 	public void readSubl() throws Exception{
 		
@@ -218,7 +232,7 @@ public class Scheduler {
 
 	
 	
-	@Scheduled(cron = "20 00 21 * * *")
+	@Scheduled(cron = "20 32 20 * * *")
 	public void openSuju() {
 		  ftp = new FTPClient();
 		    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
@@ -268,6 +282,7 @@ public class Scheduler {
 		    	boolean result = ftp.retrieveFile(fileName, outputstream);
 
 		    	if(result) {
+		    		System.out.println("ftp들어옴 : " + now);
 		    		System.out.println("파일다운성공");
 		    	}else {
 		    		System.out.println("파일없음");
@@ -304,7 +319,7 @@ public class Scheduler {
 		
 	}
 	
-	@Scheduled(cron = "20 02 21 * * *")
+	@Scheduled(cron = "20 34 20 * * *")
 	public void openPro() {
 		  ftp = new FTPClient();
 		    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
@@ -354,6 +369,7 @@ public class Scheduler {
 		    	boolean result = ftp.retrieveFile(fileName, outputstream);
 
 		    	if(result) {
+		    		System.out.println("ftp들어옴2 : " + now);
 		    		System.out.println("파일다운성공");
 		    	}else {
 		    		System.out.println("파일없음");
@@ -390,7 +406,7 @@ public class Scheduler {
 		
 	}
 	
-	@Scheduled(cron = "20 02 21 * * *")
+//	@Scheduled(cron = "20 04 21 * * *")
 //	@Scheduled(cron = "20 * * * * *")
 	public void openSubl() {
 		  ftp = new FTPClient();
@@ -479,73 +495,73 @@ public class Scheduler {
 	
 	
 	
-	//@Scheduled(cron = "20 * * * * *")
-	public void open() {
-		
-	    ftp = new FTPClient();
-	    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
-	    //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
-	    ftp.setControlEncoding("UTF-8");
-	    //PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
-	    ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
-
-	    try {
-	        //ftp 서버 연결
-	        ftp.connect("dkbend.iptime.org", 30431);
-
-	        //ftp 서버에 정상적으로 연결되었는지 확인
-	        int reply = ftp.getReplyCode();
-	        if (!FTPReply.isPositiveCompletion(reply)) {
-	            ftp.disconnect();
-	            System.out.println("에러");
-	        }
-
-	        //socketTimeout 값 설정
-	        ftp.setSoTimeout(1000);
-	        //ftp 서버 로그인
-	        ftp.login("signlab", "dk304316@");
-	        //file type 설정 (default FTP.ASCII_FILE_TYPE)
-	        ftp.setFileType(FTP.BINARY_FILE_TYPE);
-	        //ftp Active모드 설정
-	        ftp.enterLocalPassiveMode(); 
-	            
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        System.out.println("에러");
-	    }
-	    File get_file = new File("C:\\test","testDown.txt");
-	    
-	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-	    Date now = new Date();
-		String edDate = format.format(now);
-		
-		String fileName = "/up-data/prot"+edDate+".txt";
-		
-	    try {
-	    	FileOutputStream outputstream = new FileOutputStream(get_file);
-	    	boolean result = ftp.retrieveFile(fileName, outputstream);
-
-	    	if(result) {
-	    		System.out.println("파일다운성공");
-	    	}else {
-	    		System.out.println("파일없음");
-	    	}
-	    	
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    } finally {
-	    	try {
-	    		//ftp.deleteFile(fileName);
-		        ftp.logout();
-		        ftp.disconnect();
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		        System.out.println("에러");
-		    }
-	    }
-	    
-	    
-	}
+//	//@Scheduled(cron = "20 * * * * *")
+//	public void open() {
+//		
+//	    ftp = new FTPClient();
+//	    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
+//	    //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
+//	    ftp.setControlEncoding("UTF-8");
+//	    //PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
+//	    ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
+//
+//	    try {
+//	        //ftp 서버 연결
+//	        ftp.connect("dkbend.iptime.org", 30431);
+//
+//	        //ftp 서버에 정상적으로 연결되었는지 확인
+//	        int reply = ftp.getReplyCode();
+//	        if (!FTPReply.isPositiveCompletion(reply)) {
+//	            ftp.disconnect();
+//	            System.out.println("에러");
+//	        }
+//
+//	        //socketTimeout 값 설정
+//	        ftp.setSoTimeout(1000);
+//	        //ftp 서버 로그인
+//	        ftp.login("signlab", "dk304316@");
+//	        //file type 설정 (default FTP.ASCII_FILE_TYPE)
+//	        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+//	        //ftp Active모드 설정
+//	        ftp.enterLocalPassiveMode(); 
+//	            
+//	    } catch (IOException e) {
+//	        e.printStackTrace();
+//	        System.out.println("에러");
+//	    }
+//	    File get_file = new File("C:\\test","testDown.txt");
+//	    
+//	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+//	    Date now = new Date();
+//		String edDate = format.format(now);
+//		
+//		String fileName = "/up-data/prot"+edDate+".txt";
+//		
+//	    try {
+//	    	FileOutputStream outputstream = new FileOutputStream(get_file);
+//	    	boolean result = ftp.retrieveFile(fileName, outputstream);
+//
+//	    	if(result) {
+//	    		System.out.println("파일다운성공");
+//	    	}else {
+//	    		System.out.println("파일없음");
+//	    	}
+//	    	
+//	    } catch (IOException e) {
+//	        e.printStackTrace();
+//	    } finally {
+//	    	try {
+//	    		//ftp.deleteFile(fileName);
+//		        ftp.logout();
+//		        ftp.disconnect();
+//		    } catch (IOException e) {
+//		        e.printStackTrace();
+//		        System.out.println("에러");
+//		    }
+//	    }
+//	    
+//	    
+//	}
 	
 	//@Scheduled(cron = "20 30 20 * * *")
 	public void insdataUpdate() {

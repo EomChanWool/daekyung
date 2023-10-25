@@ -54,7 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/collectInfo/cutting/cuttingList.do" method="post">
-									<input type="hidden" name="csData09">
+									<input type="hidden" name="csIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="품명을 입력해 주세요"
@@ -96,22 +96,22 @@
                                     	<c:forEach var="result" items="${cuttingList}" varStatus="status">
 	                                   		<tr>
 	                                            <td>${result.eqSensorid}</td>
-												<td>${result.csData01}</td>
-												<td>${result.csData02}</td>
-												<td>${result.csData03}</td>
-												<td>${result.csData04}</td>
-												<td>${result.csData05}</td>
-												<td>${result.csData06}</td>
-												<td>${result.csData07}</td>
+												<td>${result.csProdName}</td>
+												<td>${result.csModel}</td>
+												<td>${result.csRadius}</td>
+												<td>${result.csThickness}</td>
+												<td>${result.csGap}</td>
+												<td>${result.csQty}</td>
+												<td>${result.csLong}</td>
 												<c:if test="${empty result.csWorkTime}"><td>없음</td></c:if>
 												<c:if test="${not empty result.csWorkTime}"><td>${result.csWorkTime}분</td></c:if>
 												
 												<td><fmt:formatDate value="${result.csRegDate}" pattern="yyyy-MM-dd HH:mm"/></td>
 												<td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_cs_go('${result.csData09}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_cs_go('${result.csIdx}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_cs('${result.csData09}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_cs('${result.csIdx}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -181,8 +181,8 @@
 			listForm.submit();
 		}
 		
-		function fn_modify_cs_go(csData09){
-			listForm.csData09.value = csData09;
+		function fn_modify_cs_go(idx){
+			listForm.csIdx.value = idx;
 			listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/cutting/modifyCutting.do";
 			listForm.submit();
 		}

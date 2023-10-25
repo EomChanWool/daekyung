@@ -10,43 +10,25 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 public interface ProcessingMapper {
 
 	int selectProcessingListToCnt(SearchVO searchVO);
+	
+	int existPro(Map<String, Object> map);
 
 	List<?> selectProcessingList(SearchVO searchVO);
 
-	List<?> selectAccountList();
-
-	List<?> selectCompanyList();
-
-	List<?> selectProductList();
-
-	int selectProdStockChk(Map<String, Object> temp);
-
-	void registEstimate(Map<String, Object> map);
-
-	void registProcessing(Map<String, Object> map);
-
-	void registOutSourcing(Map<String, Object> map);
-
-	void registShipment(Map<String, Object> map);
-
-	void registDelivery(Map<String, Object> map);
-
-	void updateItemCnt(Map<String, Object> temp);
-
-	Map<String, Object> selectProcessingInfo(Map<String, Object> map);
-
-	void modifyProcessing(Map<String, Object> map);
-
-	void modifyEstimate(Map<String, Object> map);
-
-	void deleteDelivery(Map<String, Object> map);
-
-	void deleteShipment(Map<String, Object> map);
-
-	void deleteOutSourcing(Map<String, Object> map);
-
-	void deleteProcessing(Map<String, Object> map);
-
-	void deleteEstimate(Map<String, Object> map);
+	Map<String,Object> checkStop(Map<String, Object> map);
+	
+	Map<String,Object> processingAjax(Map<String,Object> map);
+	
+	Map<String, Object> processInfo(Map<String, Object> map);
+	
+	Map<String, Object> proState(Map<String, Object> map);
+	
+	List<?> prodList();
+	
+	void updatePro(Map<String,Object> map);
+	
+	void updateWorktime(Map<String,Object> map);
+	
+	void deletePro(Map<String, Object> map);
 
 }

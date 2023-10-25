@@ -97,21 +97,21 @@
                                     	<c:forEach var="result" items="${ordList}" varStatus="status">
 	                                   		<tr>
 	                                   			<td>${result.orId}</td>
-	                                   			<td>${result.orProd}</td>
-	                                   			<td>${result.orQty}</td>
+	                                   			<td>${result.mpProdName}</td>
+	                                   			<td>${result.mpQty}</td>
 	                                   			
 	                                   			
-	                                   			<c:if test="${result.orProcess eq 2}"><td>가공공정대기중</td></c:if>
-	                                   			<c:if test="${result.orProcess eq 3 and (result.mfsState eq 2 or result.mfsState eq 0)}"><td>가공공정중</td></c:if>
-	                                   			<c:if test="${result.mfsState eq 1 and result.orProcess eq 3}"><td>일시정지</td></c:if>
-	                                   			<c:if test="${result.mfsState eq 1 and result.orProcess eq 3}"><td><a href="#" class="btn btn-primary btn-icon-split" onclick="fn_re_mf_go('${result.orId}','${result.mfsIdx}')">
+	                                   			<c:if test="${result.mpPrState eq 0}"><td>가공공정대기중</td></c:if>
+	                                   			<c:if test="${result.mpPrState eq 1 and (result.mfsState eq 2 or result.mfsState eq 0)}"><td>가공공정중</td></c:if>
+	                                   			<c:if test="${result.mfsState eq 1 and result.mpPrState eq 1}"><td>일시정지</td></c:if>
+	                                   			<c:if test="${result.mfsState eq 1 and result.mpPrState eq 1}"><td><a href="#" class="btn btn-primary btn-icon-split" onclick="fn_re_mf_go('${result.orId}','${result.mfsIdx}')">
 				                                        <span class="text">재개</span>
 				                                    </a></td></c:if>
-				                                <c:if test="${result.orProcess eq 2}"><td><a href="#" class="btn btn-warning btn-icon-split" onclick="fn_goProcess('${result.orId}')">
+				                                <c:if test="${result.mpPrState eq 0}"><td><a href="#" class="btn btn-warning btn-icon-split" onclick="fn_goProcess('${result.orId}')">
 				                                        <span class="text">진행</span>
 				                                    </a></td>
 				                                    </c:if>
-				                                    <c:if test="${result.orProcess eq 3 and (result.mfsState eq 2 or result.mfsState eq 0)}"><td><a href="#" class="btn btn-danger btn-icon-split" onclick="fn_stop_mf('${result.orId}')">
+				                                    <c:if test="${result.mpPrState eq 1 and (result.mfsState eq 2 or result.mfsState eq 0)}"><td><a href="#" class="btn btn-danger btn-icon-split" onclick="fn_stop_mf('${result.orId}')">
 				                                        <span class="text">중단</span>
 				                                    </a></td>
 				                                    </c:if> 

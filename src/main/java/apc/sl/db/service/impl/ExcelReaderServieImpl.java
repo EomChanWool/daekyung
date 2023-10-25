@@ -86,4 +86,9 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		
 	}
 
+	@Override
+	public int checkjungbok(Map<String, String> map) {
+		return excelReaderMapper.checkjungbok(map);
+	}
+
 }

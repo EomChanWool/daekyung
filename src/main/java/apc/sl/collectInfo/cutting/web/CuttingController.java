@@ -69,11 +69,21 @@ public class CuttingController {
 	@RequestMapping("/sl/collectInfo/cutting/registCuttingOk.do")
 	public String registCuttingOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		
-		SimpleDateFormat format = new SimpleDateFormat("yyMMddHHmm");
+		String time1 = map.get("csRegDate")+"";
+		String[] time11 = time1.split("T");
 		
-		Date now = new Date();
-		String edDate = format.format(now);
-		map.put("csData09", edDate);
+		String time111 = time11[0]+" "+time11[1]+":00";
+		
+		
+		String time2 = map.get("csEdDate")+"";
+		
+		String[] time22 = time2.split("T");
+		
+		String time222 = time22[0] + " " + time22[1]+ ":00";
+		map.replace("csRegDate",time111);
+		map.replace("csEdDate", time222);
+		
+		
 		int checkEq = cuttingService.checkEq(map);
 		System.out.println("등록 맵 : " + map);
 		if(checkEq == 0) {
@@ -83,7 +93,6 @@ public class CuttingController {
 		}
 		
 		cuttingService.registCutting(map);
-		cuttingService.registCutting2(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/collectInfo/cutting/cuttingList.do";
 	}
@@ -101,10 +110,22 @@ public class CuttingController {
 	
 	@RequestMapping("/sl/collectInfo/cutting/modifyCuttingOk.do")
 	public String modifyCuttingOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		System.out.println("수정맵 : " + map);
-	
+		//mssql형식의 맞게 변환
+		String time1 = map.get("csRegDate")+"";
+		String[] time11 = time1.split("T");
+		
+		String time111 = time11[0]+" "+time11[1]+":00";
+		
+		
+		String time2 = map.get("csEdDate")+"";
+		
+		String[] time22 = time2.split("T");
+		
+		String time222 = time22[0] + " " + time22[1]+ ":00";
+		map.replace("csRegDate",time111);
+		map.replace("csEdDate", time222);
+		System.out.println(map);
 		cuttingService.modifyCutting(map);
-		cuttingService.modifyCutting2(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/collectInfo/cutting/cuttingList.do";
 	}

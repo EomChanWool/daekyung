@@ -194,7 +194,20 @@ public class InspectController {
 			model.put("cFile", map.get("cFile"));
 			return "sl/process/inspect/CapDetail";
 		}
-		
+		if(type.equals("R(C)")||type.equals("R(E)")) {
+			Map<String, Object> detail = inspectService.detailInspec(map);
+			model.put("detail", detail);
+			String spcSpect = map.get("isiSpcSpec")+"";
+			Map<String, Object> spcInfo = inspectService.spcInfo(spcSpect);
+			model.put("spcInfo",spcInfo);
+			String Edata = map.get("isiFile")+"";
+			Map<String, Object> eDataInfo = inspectService.eDataInfo(Edata);
+			System.out.println(eDataInfo);
+			model.put("eDataInfo", eDataInfo);
+			model.put("cIsiFile", Edata);
+			model.put("cFile", map.get("cFile"));
+			return "sl/process/inspect/ReduceDetail";
+		}
 		Map<String, Object> detail = inspectService.detailInspec(map);
 		
 		
@@ -858,7 +871,292 @@ public class InspectController {
 				
 			}}
 		
-		if(type.equals("CAP")) {
+		if(type.equals("R(C)")||type.equals("R(E)")) {
+			
+			setStyle2(form_wb, docNo ,2, 4);
+			
+			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
+			setStyle2(form_wb, itemType2[1] ,4, 4);
+			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
+			setStyle2(form_wb, itemType2[2] ,3, 14);
+			setStyle2(form_wb, itemType2[3] ,3, 19);
+			setStyle2(form_wb, infoData.get("isiDate")+"" ,4, 14);
+			
+			setStyle2(form_wb, infoData.get("isiQty")+"" ,5, 14);
+			
+			Map<String,Object> specInfo = inspectService.spcInfo(itemType);
+			
+			setStyle(form_wb, specInfo.get("ssiOd01")+"" ,15, 5);
+			setStyle(form_wb, specInfo.get("ssiOd01Max")+"" ,15, 8);
+			setStyle(form_wb, specInfo.get("ssiOd01Min")+"" ,15, 10);
+			
+			setStyle(form_wb, specInfo.get("ssiOd02")+"" ,17, 5);
+			setStyle(form_wb, specInfo.get("ssiOd02Max")+"" ,17, 8);
+			setStyle(form_wb, specInfo.get("ssiOd02Min")+"" ,17, 10);
+			
+			
+			setStyle(form_wb, specInfo.get("ssiId01")+"" ,19, 5);
+			setStyle(form_wb, specInfo.get("ssiId01Max")+"" ,19, 8);
+			setStyle(form_wb, specInfo.get("ssiId01Min")+"" ,19, 10);
+			
+			setStyle(form_wb, specInfo.get("ssiId02")+"" ,21, 5);
+			setStyle(form_wb, specInfo.get("ssiId02Max")+"" ,21, 8);
+			setStyle(form_wb, specInfo.get("ssiId02Min")+"" ,21, 10);
+			
+			
+			setStyle(form_wb, specInfo.get("ssiT1Bevel")+"" ,23, 5);
+			setStyle(form_wb, specInfo.get("ssiT1BevelMin")+"" ,23, 10);
+			
+			setStyle(form_wb, specInfo.get("ssiT1Body")+"" ,25, 5);
+			setStyle(form_wb, specInfo.get("ssiT1BodyMin")+"" ,25, 10);
+			
+			
+			
+			setStyle(form_wb, specInfo.get("ssiBevelEnd")+"" ,31, 5);
+			setStyle(form_wb, specInfo.get("ssiBevelEndMax")+"" ,31, 8);
+			setStyle(form_wb, specInfo.get("ssiBevelEndMin")+"" ,31, 8);
+			
+			setStyle(form_wb, specInfo.get("ssiReduH")+"" ,35, 5);
+			setStyle(form_wb, specInfo.get("ssiReduHMax")+"" ,35, 8);
+			setStyle(form_wb, specInfo.get("ssiReduHMin")+"" ,35, 10);
+			
+			setStyle2(form_wb,"■G □N", 15, 21);
+			setStyle2(form_wb,"■G □N", 19, 21);
+			setStyle2(form_wb,"■G □N", 23, 21);
+			setStyle2(form_wb,"■G □N", 31, 21);
+			setStyle2(form_wb,"■G □N", 35, 21);
+			
+			String isiFile;
+			Map<String,Object> exInfo = new HashMap<String, Object>();
+			for(int i =1; i<6; i++) {
+				isiFile = infoData.get("isiFile"+i)+"";
+				exInfo = inspectService.eDataInfo(isiFile);
+				
+				if(exInfo == null) {
+					break;
+				}
+				String checkOd1 = noteGNRedu(exInfo, specInfo, "iehOd", "ssiOd02");
+				String checkOd2 = noteGNRedu(exInfo, specInfo, "iehOd", "ssiOd01");
+				String checkId1 = noteGNRedu(exInfo, specInfo, "iehId", "ssiId02");
+				String checkId2 = noteGNRedu(exInfo, specInfo, "iehId", "ssiId01");
+				String checkT1 = noteGN(exInfo, specInfo, "iehT1", "ssiT1Bevel");
+				String checkT2 = noteGN(exInfo, specInfo, "iehT2", "ssiT1Bevel");
+				String checkBevel1 = noteGN(exInfo, specInfo, "iehBl1", "ssiBevelEnd");
+				String checkBevel2 = noteGN(exInfo, specInfo, "iehBl2", "ssiBevelEnd");
+				String checkH1 = noteGN(exInfo, specInfo, "iehH", "ssiReduH");
+				
+				if(checkOd1.equals("No")) {
+				setStyle2(form_wb, "□G ■N", 15, 21);
+				}
+				if(checkOd2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 15, 21);
+					}
+					
+				if(checkId1.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 19, 21);
+					}
+				if(checkId2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 19, 21);
+					}
+				if(checkT1.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 23, 21);
+					}
+				if(checkT2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 23, 21);
+					}
+				if(checkBevel1.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 31, 21);
+					}
+				if(checkBevel2.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 31, 21);
+					}
+//				
+				if(checkH1.equals("No")) {
+					setStyle2(form_wb, "□G ■N", 35, 21);
+					}
+				
+				
+				if(i ==1) {
+					
+					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 11);
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 11);
+					
+					setStyle(form_wb, exInfo.get("iehId3")+""+","+exInfo.get("iehId4")+"" ,19, 11);
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,21, 11);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 11);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 11);
+					setStyle(form_wb, exInfo.get("iehT21")+""+","+exInfo.get("iehT22")+"" ,25, 11);
+					setStyle(form_wb, exInfo.get("iehT23")+""+","+exInfo.get("iehT24")+"" ,26, 11);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+""),
+							Float.parseFloat(exInfo.get("iehBl21")+""),
+							Float.parseFloat(exInfo.get("iehBl22")+""),
+							Float.parseFloat(exInfo.get("iehBl23")+""),
+							Float.parseFloat(exInfo.get("iehBl24")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 11);
+					
+					
+					setStyle(form_wb, exInfo.get("iehH")+"" ,35, 11);
+					
+					
+				}
+				
+				if(i ==2) {
+					
+					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 13);
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 13);
+					
+					setStyle(form_wb, exInfo.get("iehId3")+""+","+exInfo.get("iehId4")+"" ,19, 13);
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,21, 13);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 13);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 13);
+					setStyle(form_wb, exInfo.get("iehT21")+""+","+exInfo.get("iehT22")+"" ,27, 13);
+					setStyle(form_wb, exInfo.get("iehT23")+""+","+exInfo.get("iehT24")+"" ,28, 13);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+""),
+							Float.parseFloat(exInfo.get("iehBl21")+""),
+							Float.parseFloat(exInfo.get("iehBl22")+""),
+							Float.parseFloat(exInfo.get("iehBl23")+""),
+							Float.parseFloat(exInfo.get("iehBl24")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 13);
+					
+					
+					setStyle(form_wb, exInfo.get("iehH")+"" ,35, 13);
+					
+					
+				}
+				
+				if(i ==3) {
+					
+					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 15);
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 15);
+					
+					setStyle(form_wb, exInfo.get("iehId3")+""+","+exInfo.get("iehId4")+"" ,19, 15);
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,21, 15);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 15);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 15);
+					setStyle(form_wb, exInfo.get("iehT21")+""+","+exInfo.get("iehT22")+"" ,27, 15);
+					setStyle(form_wb, exInfo.get("iehT23")+""+","+exInfo.get("iehT24")+"" ,28, 15);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+""),
+							Float.parseFloat(exInfo.get("iehBl21")+""),
+							Float.parseFloat(exInfo.get("iehBl22")+""),
+							Float.parseFloat(exInfo.get("iehBl23")+""),
+							Float.parseFloat(exInfo.get("iehBl24")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 15);
+					
+					
+					setStyle(form_wb, exInfo.get("iehH")+"" ,35, 15);
+					
+				}
+				
+				if(i ==4) {
+					
+					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 17);
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 17);
+					
+					setStyle(form_wb, exInfo.get("iehId3")+""+","+exInfo.get("iehId4")+"" ,19, 17);
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,21, 17);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 17);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 17);
+					setStyle(form_wb, exInfo.get("iehT21")+""+","+exInfo.get("iehT22")+"" ,27, 17);
+					setStyle(form_wb, exInfo.get("iehT23")+""+","+exInfo.get("iehT24")+"" ,28, 17);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+""),
+							Float.parseFloat(exInfo.get("iehBl21")+""),
+							Float.parseFloat(exInfo.get("iehBl22")+""),
+							Float.parseFloat(exInfo.get("iehBl23")+""),
+							Float.parseFloat(exInfo.get("iehBl24")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 17);
+					
+					
+					setStyle(form_wb, exInfo.get("iehH")+"" ,35, 17);
+					
+					
+				}
+				
+				if(i ==5) {
+					
+					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 19);
+					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 19);
+					
+					setStyle(form_wb, exInfo.get("iehId3")+""+","+exInfo.get("iehId4")+"" ,19, 19);
+					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,21, 19);
+					
+					setStyle(form_wb, exInfo.get("iehT11")+""+","+exInfo.get("iehT12")+"" ,23, 19);
+					setStyle(form_wb, exInfo.get("iehT13")+""+","+exInfo.get("iehT14")+"" ,24, 19);
+					setStyle(form_wb, exInfo.get("iehT21")+""+","+exInfo.get("iehT22")+"" ,27, 19);
+					setStyle(form_wb, exInfo.get("iehT23")+""+","+exInfo.get("iehT24")+"" ,28, 19);
+					
+					float arr[] = { Float.parseFloat(exInfo.get("iehBl11")+""),
+							Float.parseFloat(exInfo.get("iehBl12")+""),
+							Float.parseFloat(exInfo.get("iehBl13")+""),
+							Float.parseFloat(exInfo.get("iehBl14")+""),
+							Float.parseFloat(exInfo.get("iehBl21")+""),
+							Float.parseFloat(exInfo.get("iehBl22")+""),
+							Float.parseFloat(exInfo.get("iehBl23")+""),
+							Float.parseFloat(exInfo.get("iehBl24")+"")
+							};
+					
+					Arrays.sort(arr);
+					float BlMax = arr[arr.length-1];
+					float BlMin = arr[0];
+					
+					setStyle(form_wb, BlMax+","+BlMin ,31, 19);
+					
+					
+					setStyle(form_wb, exInfo.get("iehH")+"" ,35, 19);
+					
+				}
+				
+				
+				
+				
+				
+			}}
+		
+		
+if(type.equals("CAP")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
 			
@@ -1235,13 +1533,49 @@ public void downloadInspect(HttpServletRequest request, HttpServletResponse resp
         }
 }
 
+
+public String noteGNRedu(Map<String,Object> map, Map<String,Object>map2, String option, String option2) {
+	//REDUCE만 따로 체크 메소드
+	
+	if(option2.equals("ssiOd02") || option2.equals("ssiId02")) {
+		for(int j=1; j<3; j++) {
+			float value = Float.parseFloat(map.get(option+j)+"");
+			float maxV = Float.parseFloat(map2.get(option2+"Max")+"");
+			float minV = Float.parseFloat(map2.get(option2+"Min")+"");
+			
+			if(value < minV || value > maxV) {
+				
+				 return "No";
+			}else {
+				return "Yes";
+			}
+	}
+	}
+	if(option2.equals("ssiOd1") || option2.equals("ssiId02")) {
+		for(int i=3; i<5; i++) {
+			float value = Float.parseFloat(map.get(option+i)+"");
+			float maxV = Float.parseFloat(map2.get(option2+"Max")+"");
+			float minV = Float.parseFloat(map2.get(option2+"Min")+"");
+			
+			if(value < minV || value > maxV) {
+				
+				 return "No";
+			}else {
+				return "Yes";
+			}
+	}
+	}
+	return "Yes";
+}
+
+
 public String noteGN(Map<String,Object> map, Map<String,Object>map2, String option, String option2) {
 	
 
 	
 	//값 비교 후 Y/N 체크메소드
 	
-	if(option.equals("iehA") || option.contains("iehC") || option.contains("iehM") || option.equals("iehE")) {
+	if(option.equals("iehA") || option.contains("iehC") || option.contains("iehM") || option.equals("iehE") || option.equals("iehH")) {
 		float value = Float.parseFloat(map.get(option)+"");
 		float maxV = Float.parseFloat(map2.get(option2+"Max")+"");
 		float minV = Float.parseFloat(map2.get(option2+"Min")+"");

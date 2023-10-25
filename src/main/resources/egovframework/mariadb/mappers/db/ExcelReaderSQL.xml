@@ -27,6 +27,11 @@
 WHERE PO_LOTNO = #{str}
 	</select>
 	
+	<select id="checkjungbok" resultType="int">
+	SELECT COUNT(*) FROM sm_orders
+	WHERE or_id = #{orId}
+	</select>
+	
 	<insert id="registinspData">
 	INSERT INTO sm_inspection_data
 	(id_doc,

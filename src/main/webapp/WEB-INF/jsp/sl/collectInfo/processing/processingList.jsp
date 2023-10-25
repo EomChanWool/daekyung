@@ -54,11 +54,18 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/collectInfo/processing/processingList.do" method="post">
-									<input type="hidden" name="woIdx">
-									<input type="hidden" name="orIdx">
+									<input type="hidden" name="mflIdx">
+									<input type="hidden" name="orId">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-									
-						    		
+									<select class="btn btn-secondary dropdown-toggle searchCondition" name="searchCondition" id="searchCondition">
+							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
+							    		<option value="1" <c:if test="${searchVO.searchCondition eq '1'}">selected="selected"</c:if>>수주번호</option>
+							    		<option value="2" <c:if test="${searchVO.searchCondition eq '2'}">selected="selected"</c:if>>작업자</option>
+							    		<option value="3" <c:if test="${searchVO.searchCondition eq '3'}">selected="selected"</c:if>>로트번호</option>
+						    		</select>
+									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
+						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
+						    									style="background-color:#eaecf4; width: 25%; float: left;">
 						    		
 						    		<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
 									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
@@ -70,55 +77,51 @@
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_workOrder()">
 	                                <span class="text">전체목록</span>
 	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_workOrder()" style="float: right;">
+	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_pro()" style="float: right;">
 	                                <span class="text">등록</span>
 	                            </a>
 							</div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<div id="graph" style="width: 100%; height:300px;"></div>
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>등록일</th>
-											<th>설비명</th>
-											<th>센서명</th>
+                                            <th>수주번호</th>
+											<th>로트번호</th>
+											<th>품목</th>
+											<th>생산량</th>
+											<th>작업자</th>
 											<th>시작시간</th>
 											<th>종료시간</th>
-											<th>입력방식(자동/수동)</th>
-											<th>다운로드</th>
+											<th>걸린시간</th>
+											<th>실작업시간</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${kpiList}" varStatus="status">
+                                    	<c:forEach var="result" items="${processingList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.exYear}년</td>
-												<td>${result.exMonth}월</td>
-												<td>${result.exTrgError}%</td>
-												<td>${result.totalCnt}</td>
-												<td>${result.exTrgSales}</td>
-												<td>${result.exTrgSales}</td>
-												<td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_kpi_go('${result.exIdx}')">
-				                                        <span class="text">수정</span>
-				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_kpi('${result.exIdx}')">
-				                                        <span class="text">삭제</span>
-				                                    </a>
-	                                            </td>
+	                                            <td>${result.orId}</td>
+												<td>${result.poLotno}</td>
+												<td>${result.mpProdName},${result.mpTexture},${result.mpThickness},,${result.mpState},${result.mpStandard}</td>
+												<td>${result.mpQty}</td>
+												<td>${result.mflManager}</td>
+												<td><fmt:formatDate value="${result.mflStDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+												<td><fmt:formatDate value="${result.mflEdDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+												<td>${result.mflWorkTime}분</td>
+												<td>${result.realTime}분</td>
 	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_kpi_go('${result.exIdx}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_pro_go('${result.mflIdx}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_kpi('${result.exIdx}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_pro('${result.orId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty kpiList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty processingList}"><tr><td colspan='10'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -175,21 +178,21 @@
 			listForm.submit();
 		}
 		
-		function fn_regist_kpi(){
-			listForm.action = "${pageContext.request.contextPath}/sl/production/kpi/registKpi.do";
+		function fn_regist_pro(){
+			listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/processing/registProcessing.do";
 			listForm.submit();
 		}
 		
-		function fn_modify_kpi_go(exIdx){
-			listForm.exIdx.value = exIdx;
-			listForm.action = "${pageContext.request.contextPath}/sl/production/kpi/modifyKpi.do";
+		function fn_modify_pro_go(idx){
+			listForm.mflIdx.value = idx;
+			listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/processing/modifyProcessing.do";
 			listForm.submit();
 		}
 		
-		function fn_delete_kpi(exIdx){
+		function fn_delete_pro(Idx){
 			if(confirm('해당 내역을 삭제하시겠습니까?')) {
-				listForm.exIdx.value = exIdx;
-				listForm.action = "${pageContext.request.contextPath}/sl/production/kpi/deleteKpi.do";
+				listForm.orId.value = Idx;
+				listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/processing/deleteProcessing.do";
 				listForm.submit();
 			}
 		}
@@ -204,318 +207,13 @@
 				alert(msg);
 			}
 			
-			$('#searchCondition').change(function(){
-				listForm.submit();
-			});
-			$('#searchCondition2').change(function(){
-				listForm.submit();
-			});
-			$('#searchCondition3').change(function(){
-				listForm.submit();
+			
 			});
 			
-			window.onresize = function() {
-				location.reload();
-			}
-		});
 			
-		//그래프
-		var chartDom = document.getElementById('graph');
-		var myChart = echarts.init(chartDom);
-		var option;
-		let date = [];
-		let year = [];
 		
-		let kpiErrorData = [];
-		let kpiOutputData = [];
-		let kpiSalesData = [];
-		
-		let viewData = [];
+			
 	
-		const errorMin = 0;
-		const errorMax = 10;
-		const errorInterval = 2;
-		const outputMin = 0;
-		const outputMax = 5000;
-		const outputInterval = 1000;
-		const salesMin = 0;
-		const salesMax = 50000;
-		const salesInterval = 10000;
-			
-		<c:forEach items="${kpiGraphList}" var="list">
-			date.push('${list.exYear}년 ' + '${list.exMonth}월');
-			kpiErrorData.push('${list.exTrgError}');
-			kpiOutputData.push('${list.totalCnt}');
-			kpiSalesData.push('${list.exTrgSales}');
-			viewData.push('0');
-		</c:forEach>
-		
-		if($('#searchCondition').val() == "불량률"){
-			<c:forEach items="${dataList}" var="list">
-				var index1 = ${list.month};
-				if($('#searchCondition3').val() != ''){
-					viewData[0] = ${list.percent};
-				}else{
-					viewData[index1-1] = ${list.percent};
-				}
-			</c:forEach>
-		}else if($('#searchCondition').val() == "생산량"){
-			<c:forEach items="${dataList}" var="list">
-				var index2 = ${list.month};
-				if($('#searchCondition3').val() != ''){
-					viewData[0] = ${list.prodCnt};
-				}else{
-					viewData[index2-1] = ${list.prodCnt};
-				}
-			</c:forEach>
-		}else if($('#searchCondition').val() == "매출액"){
-			<c:forEach items="${dataList}" var="list">
-				var index3 = ${list.month};
-				if($('#searchCondition3').val() != ''){
-					viewData[0] = ${list.money};	
-				}else{
-					viewData[index3-1] = ${list.money};	
-				}
-			</c:forEach>
-		}
-		
-		if($('#searchCondition').val() == "불량률"){
-			option = {
-					  tooltip: {
-					    trigger: 'axis',
-//	 				    formatter: '{b0}<br>{a0} : {c0} %<br>{a1} : {c1} %',
-					    axisPointer: {
-					    	type: 'cross',
-					    	axis: "auto",
-					    	crossStyle: {
-					        	color: '#999'
-					    	}
-					    }
-					  },
-					  toolbox: {
-					    feature: {
-					      dataView: { show: false, readOnly: false },
-					      magicType: { show: false, type: ['line', 'bar'] },
-					      restore: { show: false },
-					      saveAsImage: { show: true }
-					    }
-					  },
-					  legend: {
-					    data: ['목표치', '불량률']
-					  },
-					  xAxis: [
-					    {
-					      type: 'category',
-					      data: date,
-					      axisPointer: {
-					        type: 'shadow'
-					      }
-					    }
-					  ],
-					  yAxis: [
-					    {
-					      type: 'value',
-					      name: '목표치',
-					      min: errorMin,
-					      max: errorMax,
-					      interval: errorInterval,
-					      axisLabel: {
-					        formatter: '{value} %'
-					      }
-					    },
-					    {
-			    		  type: 'value',
-				      	  name: '불량률',
-				      	  min: errorMin,
-				     	  max: errorMax,
-				     	  interval: errorInterval,
-				      	  axisLabel: {
-				            formatter: '{value} %'
-						  }
-					    }
-					  ],
-					  series: [
-					    {
-					      name: '목표치',
-					      type: 'bar',
-					      tooltip: {
-					        valueFormatter: function (value) {
-					          return value + ' %';
-					        }
-					      },
-					      data: kpiErrorData
-					    },
-					    {
-				    	name: '불량률',
-					    type: 'bar',
-					    tooltip: {
-					      valueFormatter: function (value) {
-					        return value + ' %';
-					      }
-					    },
-					    data: viewData
-					    }
-					  ]
-					};
-		}else if($('#searchCondition').val() == "생산량"){
-			option = {
-					  tooltip: {
-					    trigger: 'axis',
-//	 				    formatter: '{b0}<br>{a0} : {c0} EA<br>{a1} : {c1} EA',
-					    axisPointer: {
-					    	type: 'cross',
-					    	axis: "auto",
-					    	crossStyle: {
-					        	color: '#999'
-					    	}
-					    }
-					  },
-					  toolbox: {
-					    feature: {
-					      dataView: { show: false, readOnly: false },
-					      magicType: { show: false, type: ['line', 'bar'] },
-					      restore: { show: false },
-					      saveAsImage: { show: true }
-					    }
-					  },
-					  legend: {
-					    data: ['목표치', '생산량']
-					  },
-					  xAxis: [
-					    {
-					      type: 'category',
-					      data: date,
-					      axisPointer: {
-					        type: 'shadow'
-					      }
-					    }
-					  ],
-					  yAxis: [
-					    {
-					      type: 'value',
-					      name: '목표치',
-					      min: outputMin,
-					      max: outputMax,
-					      interval: outputInterval,
-					      axisLabel: {
-					        formatter: '{value} EA'
-					      }
-					    },
-					    {
-			    		  type: 'value',
-				      	  name: '생산량',
-				      	  min: outputMin,
-				     	  max: outputMax,
-				     	  interval: outputInterval,
-				      	  axisLabel: {
-				            formatter: '{value} EA'
-						  }
-					    }
-					  ],
-					  series: [
-					    {
-					      name: '목표치',
-					      type: 'bar',
-					      tooltip: {
-					        valueFormatter: function (value) {
-					          return value + ' EA';
-					        }
-					      },
-					      data: kpiOutputData
-					    },
-					    {
-				    	name: '생산량',
-					    type: 'bar',
-					    tooltip: {
-					      valueFormatter: function (value) {
-					        return value + ' EA';
-					      }
-					    },
-					    data: viewData
-					    }
-					  ]
-					};
-		}else if($('#searchCondition').val() == "매출액"){
-			option = {
-					  tooltip: {
-					    trigger: 'axis',
-//	 				    formatter: '{b0}<br>{a0} : {c0} (만원)<br>{a1} : {c1} (만원)',
-					    axisPointer: {
-					    	type: 'cross',
-					    	axis: "auto",
-					    	crossStyle: {
-					        	color: '#999'
-					    	}
-					    }
-					  },
-					  toolbox: {
-					    feature: {
-					      dataView: { show: false, readOnly: false },
-					      magicType: { show: false, type: ['line', 'bar'] },
-					      restore: { show: false },
-					      saveAsImage: { show: true }
-					    }
-					  },
-					  legend: {
-					    data: ['KPI', '매출액']
-					  },
-					  xAxis: [
-					    {
-					      type: 'category',
-					      data: date,
-					      axisPointer: {
-					        type: 'shadow'
-					      }
-					    }
-					  ],
-					  yAxis: [
-					    {
-					      type: 'value',
-					      name: 'KPI',
-					      min: salesMin,
-					      max: salesMax,
-					      interval: salesInterval,
-					      axisLabel: {
-					        formatter: '{value} 만원'
-					      }
-					    },
-					    {
-			    		  type: 'value',
-				      	  name: '매출액',
-				      	  min: salesMin,
-				     	  max: salesMax,
-				     	  interval: salesInterval,
-				      	  axisLabel: {
-				            formatter: '{value} 만원'
-						  }
-					    }
-					  ],
-					  series: [
-					    {
-					      name: 'KPI',
-					      type: 'bar',
-					      tooltip: {
-					        valueFormatter: function (value) {
-					          return value + ' 만원';
-					        }
-					      },
-					      data: kpiSalesData
-					    },
-					    {
-				    	name: '매출액',
-					    type: 'bar',
-					    tooltip: {
-					      valueFormatter: function (value) {
-					        return value + ' 만원';
-					      }
-					    },
-					    data: viewData
-					    }
-					  ]
-					};
-		}
-		
-		option && myChart.setOption(option);
 	</script>
 </body>
 

@@ -5,8 +5,14 @@
 	<select id="selectUserListToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_member_info
 		WHERE 1=1
-		<if test="searchKeyword != ''">
+		<if test="searchCondition == '이름'">
 			AND mi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '아이디'">
+			AND mi_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '전화번호'">
+			AND mi_phone LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
 	</select>
 	
@@ -22,8 +28,14 @@
 			mi_login_cnt
 		FROM sm_member_info
 		WHERE 1=1
-		<if test="searchKeyword != ''">
+		<if test="searchCondition == '이름'">
 			AND mi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '아이디'">
+			AND mi_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '전화번호'">
+			AND mi_phone LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
 		ORDER BY mi_userid DESC
 <!-- 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} -->

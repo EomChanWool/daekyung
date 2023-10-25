@@ -25,93 +25,50 @@ public class ProcessingServieImpl implements ProcessingService {
 	}
 
 	@Override
-	public List<?> selectAccountList() {
-		return processingMapper.selectAccountList();
+	public Map<String, Object> checkStop(Map<String, Object> map) {
+		return processingMapper.checkStop(map);
 	}
 
 	@Override
-	public List<?> selectCompanyList() {
-		return processingMapper.selectCompanyList();
+	public Map<String, Object> processingAjax(Map<String, Object> map) {
+		return processingMapper.processingAjax(map);
 	}
 
 	@Override
-	public List<?> selectProductList() {
-		return processingMapper.selectProductList();
+	public int existPro(Map<String, Object> map) {
+		return processingMapper.existPro(map);
 	}
 
 	@Override
-	public int selectProdStockChk(Map<String, Object> temp) {
-		return processingMapper.selectProdStockChk(temp);
+	public Map<String, Object> processInfo(Map<String, Object> map) {
+		return processingMapper.processInfo(map);
 	}
 
 	@Override
-	public void registEstimate(Map<String, Object> map) {
-		processingMapper.registEstimate(map);
+	public void updatePro(Map<String, Object> map) {
+		processingMapper.updatePro(map);
 	}
 
 	@Override
-	public void registProcessing(Map<String, Object> map) {
-		processingMapper.registProcessing(map);
+	public void updateWorktime(Map<String, Object> map) {
+		processingMapper.updateWorktime(map);
 	}
 
 	@Override
-	public void registOutSourcing(Map<String, Object> map) {
-		processingMapper.registOutSourcing(map);
+	public void deletePro(Map<String, Object> map) {
+		processingMapper.deletePro(map);
 	}
 
 	@Override
-	public void registShipment(Map<String, Object> map) {
-		processingMapper.registShipment(map);
+	public Map<String, Object> proState(Map<String, Object> map) {
+		return processingMapper.proState(map);
 	}
 
 	@Override
-	public void registDelivery(Map<String, Object> map) {
-		processingMapper.registDelivery(map);
+	public List<?> prodList() {
+		return processingMapper.prodList();
 	}
 
-	@Override
-	public void updateItemCnt(Map<String, Object> temp) {
-		processingMapper.updateItemCnt(temp);
-	}
-
-	@Override
-	public Map<String, Object> selectProcessingInfo(Map<String, Object> map) {
-		return processingMapper.selectProcessingInfo(map);
-	}
-
-	@Override
-	public void modifyProcessing(Map<String, Object> map) {
-		processingMapper.modifyProcessing(map);
-	}
-
-	@Override
-	public void modifyEstimate(Map<String, Object> map) {
-		processingMapper.modifyEstimate(map);
-	}
-
-	@Override
-	public void deleteDelivery(Map<String, Object> map) {
-		processingMapper.deleteDelivery(map);
-	}
-
-	@Override
-	public void deleteShipment(Map<String, Object> map) {
-		processingMapper.deleteShipment(map);
-	}
-
-	@Override
-	public void deleteOutSourcing(Map<String, Object> map) {
-		processingMapper.deleteOutSourcing(map);
-	}
-
-	@Override
-	public void deleteProcessing(Map<String, Object> map) {
-		processingMapper.deleteProcessing(map);
-	}
-
-	@Override
-	public void deleteEstimate(Map<String, Object> map) {
-		processingMapper.deleteEstimate(map);
-	}
+	
 
 }

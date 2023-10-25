@@ -33,4 +33,6 @@ public interface ExcelReaderMapper {
 	Map<String, Object> mfProc(String str);
 	
 	void registinspData(Map<String,Object> map);
+	
+	int checkjungbok(Map<String,String> map);
 }
