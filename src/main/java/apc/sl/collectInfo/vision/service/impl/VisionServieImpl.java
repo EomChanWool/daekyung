@@ -24,10 +24,6 @@ public class VisionServieImpl implements VisionService {
 		return visionMapper.selectVisionList(searchVO);
 	}
 
-	@Override
-	public List<?> selectShipmentList(Map<String, Object> map) {
-		return visionMapper.selectShipmentList(map);
-	}
 
 	@Override
 	public List<?> excelAjax(Map<String, Object> map) {
@@ -50,11 +46,6 @@ public class VisionServieImpl implements VisionService {
 	}
 
 	@Override
-	public Map<String, Object> selectStockOk(Map<String, Object> map) {
-		return visionMapper.selectStockOk(map);
-	}
-
-	@Override
 	public void updateItem(Map<String, Object> tempMap) {
 		visionMapper.updateItem(tempMap);
 	}
@@ -62,11 +53,6 @@ public class VisionServieImpl implements VisionService {
 	@Override
 	public void registVision(Map<String, Object> map) {
 		visionMapper.registVision(map);
-	}
-
-	@Override
-	public void updateShipment(Map<String, Object> map) {
-		visionMapper.updateShipment(map);
 	}
 
 	@Override
@@ -92,6 +78,26 @@ public class VisionServieImpl implements VisionService {
 	@Override
 	public List<?> procAjax(Map<String, Object> map) {
 		return visionMapper.procAjax(map);
+	}
+
+	@Override
+	public Map<String, Object> idTestTime(Map<String, Object> map) {
+		return visionMapper.idTestTime(map);
+	}
+
+	@Override
+	public void updateFileState(Map<String, Object> map) {
+		visionMapper.updateFileState(map);
+	}
+
+	@Override
+	public Map<String, Object> selectData(Map<String, Object> map) {
+		return visionMapper.selectData(map);
+	}
+
+	@Override
+	public void updateState2(Map<String, Object> map) {
+		visionMapper.updateState2(map);
 	}
 
 }

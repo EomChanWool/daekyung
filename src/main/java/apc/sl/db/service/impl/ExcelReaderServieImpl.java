@@ -91,4 +91,14 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		return excelReaderMapper.checkjungbok(map);
 	}
 
+	@Override
+	public Map<String, Object> idTestTime(Map<String, Object> map) {
+		return excelReaderMapper.idTestTime(map);
+	}
+
+	@Override
+	public int checkVision(Map<String, Object> map) {
+		return excelReaderMapper.checkVision(map);
+	}
+
 }

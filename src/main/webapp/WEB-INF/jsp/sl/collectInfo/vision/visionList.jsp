@@ -78,13 +78,13 @@
                                     <thead>
                                         <tr>
                                             <th>문서이름</th>
+                                            <th>수주번호</th>
                                             <th>LOT번호</th>
                                             <th>품목코드</th>
                                             <th>품목명</th>
                                             <th>공정번호</th>
                                             <th>검사일</th>
                                             <th>확인일</th>
-                                            <th>검사자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
@@ -92,18 +92,19 @@
                                     	<c:forEach var="result" items="${visionList}" varStatus="status">
 	                                   	<tr onclick="fn_detail_vision('${result.idDoc}')" style="cursor: pointer;">
 	                                            <td>${result.idDoc}</td>
+	                                            <td>${result.orId}</td>
 	                                            <td>${result.poLotno}</td>
 	                                            <td>${result.idProdName}</td>
 	                                            <td>${result.idName}</td>
-	                                            <td>${result.mpMfno}</td>
+	                                            <td>${result.idMfno}</td>
 	                                            <td>${result.idTestTime}</td>
 	                                            <td>${result.idCheckTime}</td>
-	                                            <td>${result.idManager}</td>
+	                                           
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_inspect_go('${result.idId}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_vision_go('${result.idId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_inspect('${result.idId}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_vision('${result.idId}','${result.idDoc}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -171,7 +172,7 @@
 		}
 	
 		function fn_modify_vision_go(idx){
-			listForm.deIdx.value = idx;
+			listForm.idId.value = idx;
 			listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/vision/modifyVision.do";
 			listForm.submit();
 		}
@@ -182,11 +183,10 @@
 			listForm.submit();
 		}
 	
-		function fn_delete_vision(deIdx, orIdx, shIdx){
+		function fn_delete_vision(idx,idx2){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.deIdx.value = deIdx;
-				listForm.orIdx.value = orIdx;
-				listForm.shIdx.value = shIdx;
+				listForm.idId.value = idx;
+				listForm.idDoc.value = idx2;
 				listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/vision/deleteVision.do";
 				listForm.submit();
 			}

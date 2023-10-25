@@ -21,6 +21,11 @@
 
 	</select>
 	
+	<select id="idTestTime" resultType="egovMap">
+		SELECT id_test_time FROM sm_inspection_excel_history
+		WHERE id_doc = #{idDoc}
+	</select>
+	
 	<select id="mfProc" resultType="egovMap">
 	
 	SELECT * FROM sm_mf_proc
@@ -32,20 +37,29 @@ WHERE PO_LOTNO = #{str}
 	WHERE or_id = #{orId}
 	</select>
 	
+	<select id="checkVision" resultType="int">
+	SELECT COUNT(*) FROM sm_inspection_data
+WHERE id_doc = #{idDoc}
+	</select>
+	
 	<insert id="registinspData">
 	INSERT INTO sm_inspection_data
 	(id_doc,
 	 po_lotno,
 	 id_prod_name,
 	 id_name,
-	 mp_mfno,
-	 id_test_time) values(
+	 id_mfno,
+	 id_test_time,
+	 id_check_time,
+	 or_id) values(
 	 #{idDoc},
 	 #{poLotno},
 	 #{idProdName},
 	 #{idName},
 	 #{mpMfno},
-	 #{idTestTime}
+	 #{idTestTime},
+	 #{idCheckTime},
+	 #{orId}
 	 )
 	
 	</insert>

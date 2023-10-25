@@ -563,7 +563,7 @@ public class Scheduler {
 //	    
 //	}
 	
-	//@Scheduled(cron = "20 30 20 * * *")
+	@Scheduled(cron = "20 50 22 * * *")
 	public void insdataUpdate() {
 		
 		 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -584,13 +584,13 @@ public class Scheduler {
 				String lotNo = temp.get("iehLotno")+"";
 				Map<String, Object> proc = excelReaderService.mfProc(lotNo);
 				
-				
+				String prodName = proc.get("mpProdName")+"";
 				String mpTexture = proc.get("mpTexture") + "";
 				String mpThickness = proc.get("mpThickness")+"";
 				String mpState = proc.get("mpState")+"";
 				String mpStandard = proc.get("mpStandard")+"";
 				
-				String idName = mpTexture+" "+mpThickness+" "+ mpState+" "+mpStandard;
+				String idName = prodName+","+ mpTexture+","+mpThickness+","+ mpState+","+mpStandard;
 				
 				Map<String, Object> map = new HashMap<String, Object>();
 				
@@ -601,10 +601,18 @@ public class Scheduler {
 				map.put("mpMfno", proc.get("mpMfno"));
 				map.put("idTestTime",edDate);
 				map.put("idCheckTime",edDate);
+				map.put("orId",proc.get("orId"));
+				
+				Map<String,Object>time = excelReaderService.idTestTime(temp);
+				
+				map.put("idTestTime", time.get("idTestTime"+""));
+				
+				int exist = excelReaderService.checkVision(map);
+				if(exist == 0) {
+					excelReaderService.registinspData(map);
+				}
 				
 				
-				
-				excelReaderService.registinspData(map);
 			}
 			
 		}

@@ -35,4 +35,8 @@ public interface ExcelReaderMapper {
 	void registinspData(Map<String,Object> map);
 	
 	int checkjungbok(Map<String,String> map);
+	
+	Map<String,Object> idTestTime(Map<String,Object> map);
+	
+	int checkVision(Map<String,Object> map);
 }

@@ -52,54 +52,42 @@
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                            	<form action="${pageContext.request.contextPath}/sl/sales/delivery/modifyDeliveryOk.do" name="modifyForm" method="post">
-                            		<input type="hidden" name="deIdx" id="deIdx" value="${deliveryVO.deIdx}">
+                            	<form action="${pageContext.request.contextPath}/sl/collectInfo/vision/modifyVisionOk.do" name="modifyForm" method="post">
+                            		<input type="hidden" name="idId" id="idId" value="${visionVO.idId}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>수주명</th>
-												<td><span class="form-control val-area">${deliveryVO.orName}</span></td>
-												<th>납품일  <span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="deDte" id="deDte" value="${deliveryVO.deDte}"/></td>
-											</tr>
-											<tr>
-												<th>금액</th>
-												<td><span class="form-control val-area" id="deMoney">${deliveryVO.deMoney}</span></td>
-												<th>자사 담당자</th>
-												<td><input type="text" class="form-control" name="deChkManager" id="deChkManager" value="${deliveryVO.deChkManager}"/></td>
-											</tr>
-											<tr>
-												<th>납품확인 거래처 담당자</th>
-												<td><input type="text" class="form-control" name="deChkAcManager" id="deChkAcManager" value="${deliveryVO.deChkAcManager}"/></td>
-												<th>납품확인 일자</th>
-												<td><input type="date" class="form-control" name="deChkDte" id="deChkDte" value="${deliveryVO.deChkDte}"/></td>
-											</tr>
-											<tr>
-												<th>납품 상태</th>
-												<td>
-													<c:if test="${deliveryVO.deState eq '3'}">
-														<span class="form-control val-area">수금확인</span>
-														<input type="hidden" name="deState" value="${deliveryVO.deState}">
-													</c:if>
-													<c:if test="${deliveryVO.deState ne '3'}">
-														<select class="form-control" name="deState" id="deState">
-															<option value="0" <c:if test="${deliveryVO.deState eq '0'}">selected="selected"</c:if>>미확인</option>
-															<option value="1" <c:if test="${deliveryVO.deState eq '1'}">selected="selected"</c:if>>납품확인</option>
-															<option value="2" <c:if test="${deliveryVO.deState eq '2'}">selected="selected"</c:if>>납품불량</option>
-														</select>
-													</c:if>
+												<th>로트번호  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="poLotno" id="poLotno" value="${visionVO.poLotno}" readonly/>
 												</td>
+												<th>문서이름  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="idDoc" id="idDoc" value="${visionVO.idDoc}" readonly/></td>
 											</tr>
 											<tr>
-												<th>비고</th>
-												<td colspan="3"><textarea name="deNote">${deliveryVO.deNote}</textarea></td>
+												<th>품목코드  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="idProdName" id="idProdName" value="${visionVO.idProdName}" readonly/></td>
+												<th>품목명</th>
+												<td><input type="text" class="form-control" name="idName" id="idName" value="${visionVO.idName}" readonly/></td>
 											</tr>
+											<tr>
+												<th>수주번호</th>
+												<td><input type="text" class="form-control" name="orId" id="orId" value="${visionVO.orId}" readonly/></td>
+												<th>공정번호</th>
+												<td><input type="text" class="form-control" name="idMfno" id="idMfno" value="${visionVO.idMfno}" readonly/></td>
+											</tr>
+											<tr>
+												<th>검사일</th>
+												<td><input type="date" class="form-control" name="idTestTime" id="idTestTime" value="${visionVO.idTestTime}" readonly/></td>
+												<th>확인일</th>
+												<td><input type="date" class="form-control" name="idCheckTime" id="idCheckTime" value="${visionVO.idCheckTime}"/></td>
+											</tr>
+											
 										</tbody>
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
 									<button type="submit" class="btn_ok" onclick="fn_modify_delivery()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/sales/delivery/deliveryList.do'">취소</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/collectInfo/vision/visionList.do'">취소</span>
 								</div>
                             </div>
                         </div>
@@ -136,37 +124,22 @@
 
 	<script>
 	function fn_modify_delivery(){
-		var num = /^\d+$/;
-		if($('#deName').val() == ''){
-			alert("납품명을 확인 바랍니다.");
-			return;
-		}
 		
-		if($('#deDte').val() == ''){
-			alert("납품일을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#deState').val() == '1' && $('#deChkDte').val() == 0){
-			alert("납품 확인일을 확인 바랍니다.");
-			return;
-		}
 		
 		modifyForm.submit();
 	}
 	
 	$(function() {
-		$('#salesMenu').addClass("active");
-		$('#sales').addClass("show");
-		$('#deliveryList').addClass("active");
+		$('#collectInfoMenu').addClass("active");
+		$('#collectInfo').addClass("show");
+		$('#visionList').addClass("active");
 		
 		let msg = '${msg}';
 		if(msg) {
 			alert(msg);
 		}
 		
-		let result = $('#deMoney').text().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-		$('#deMoney').text(result);
+		
 	});
 	</script>
 </body>

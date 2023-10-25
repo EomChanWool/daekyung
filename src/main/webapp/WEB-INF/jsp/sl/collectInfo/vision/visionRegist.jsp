@@ -43,13 +43,12 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">납품 등록</h1>
+                    <h1 class="h3 mb-2 text-gray-800">비전검사 등록</h1>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/collectInfo/vision/registVisionOk.do" name="registForm" method="post">
-                            		<input type="hidden" name="orIdx" id="orIdx">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
@@ -68,10 +67,10 @@
 												<td><input type="text" class="form-control" name="idName" id="idName"/></td>
 											</tr>
 											<tr>
+												<th>수주번호</th>
+												<td><input type="text" class="form-control" name="orId" id="orId"/></td>
 												<th>공정번호</th>
-												<td><input type="text" class="form-control" name="mpMfno" id="mpMfno"/></td>
-												<th>검사자</th>
-												<td><input type="text" class="form-control" name="idManager" id="idManager"/></td>
+												<td><input type="text" class="form-control" name="idMfno" id="idMfno"/></td>
 											</tr>
 											<tr>
 												<th>검사일</th>
@@ -181,6 +180,11 @@
 			visionInfoAjax2();
 			
 		});
+		
+		$('#idDoc').change(function(){
+			visionInfoAjax3();
+			
+		});
 	});
 	
 	function excelInfoAjax(){
@@ -214,15 +218,36 @@
 			  },
 			  success:function(result){
 				  registForm.idProdName.value = result.ex_info2[0].mpProdName;
-				  registForm.mpMfno.value = result.ex_info2[0].mpMfno;
-				 var idName = result.ex_info2[0].mpTexture + " " + result.ex_info2[0].mpThickness + " " + result.ex_info2[0].mpState + " " + result.ex_info2[0].mpStandard;
+				  registForm.orId.value = result.ex_info2[0].orId;
+				 var idName = result.ex_info2[0].mpProdName+","+result.ex_info2[0].mpTexture + "," + result.ex_info2[0].mpThickness + "," + result.ex_info2[0].mpState + "," + result.ex_info2[0].mpStandard;
 				 registForm.idName.value = idName;
+				 registForm.idMfno.value =result.ex_info2[0].mpMfno;
 			  },
 			  error:function(request,status,error){ 
 				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
 			  }
-		  });
+		  });}
+		
+		function visionInfoAjax3(){
+			$.ajax({
+				  type:"POST",
+				  url:"<c:url value='${pageContext.request.contextPath}/sl/collectInfo/vision/visionInfoAjax3.do'/>",	  		  			  
+				  dataType:"JSON",
+				  data:{
+					  'idDoc': $('#idDoc').val(),
+					  
+				  },
+				  success:function(result){
+					  registForm.idTestTime.value = result.ex_info3.idTestTime;
+					  
+				  },
+				  error:function(request,status,error){ 
+					  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
+				  }
+			  });
 	}
+		
+		
 	</script>
 </body>
 
