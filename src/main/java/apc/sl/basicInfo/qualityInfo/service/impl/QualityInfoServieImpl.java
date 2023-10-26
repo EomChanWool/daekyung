@@ -94,6 +94,22 @@ public class QualityInfoServieImpl implements QualityInfoService {
 		return qualityInfoMapper.selectExistsQualInfo(map);
 	}
 
+	@Override
+	public int codeNum(String str) {
+		return qualityInfoMapper.codeNum(str);
+	}
+
+	@Override
+	public void spcCodeReg(Map<String, Object> map) {
+		qualityInfoMapper.spcCodeReg(map);
+	}
+
+	@Override
+	public void spcUpLowReg(Map<String, Object> map) {
+		qualityInfoMapper.spcUpLowReg(map);
+	}
+
+
 	
 
 }

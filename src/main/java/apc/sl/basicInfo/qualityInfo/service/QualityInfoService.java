@@ -29,6 +29,10 @@ public interface QualityInfoService {
 	
 	Map<String, Object> selectDetailQualInfo(Map<String, Object> map);
 	
+	void spcCodeReg(Map<String,Object> map);
+	
+	void spcUpLowReg(Map<String,Object> map);
+	
 	void registStandard(Map<String, Object> map);
 
 	void modifyQualityInfo(Map<String, Object> map);
@@ -38,4 +42,6 @@ public interface QualityInfoService {
 	void deleteStandardInfo(Map<String, Object> map);
 
 	int selectAccessLevel(String str);
+	
+	int codeNum(String str);
 }

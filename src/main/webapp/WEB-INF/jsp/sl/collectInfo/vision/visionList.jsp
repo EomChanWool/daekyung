@@ -90,7 +90,7 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${visionList}" varStatus="status">
-	                                   	<tr onclick="fn_detail_vision('${result.idDoc}')" style="cursor: pointer;">
+	                                   	<tr onclick="fn_detail_vision('${result.idDoc}')" style="cursor: pointer; font-size: 15px;">
 	                                            <td>${result.idDoc}</td>
 	                                            <td>${result.orId}</td>
 	                                            <td>${result.poLotno}</td>

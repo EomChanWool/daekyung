@@ -50,17 +50,26 @@
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/registStandardOk.do" name="registForm" method="post">
                             	<input type="hidden" name=qiTrustType id="qiTrustType"/>
+                            	<input type="hidden" name="ssiT1BevelMax" id="ssiT1BevelMax" value=""/>
+                            	<input type="hidden" name="ssiT2BevelMax" id="ssiT2BevelMax" value=""/>
+                            	<input type="hidden" name="ssiT1BodyMax" id="ssiT1BodyMax" value=""/>
+                            	<input type="hidden" name="ssiT2BodyMax" id="ssiT2BodyMax" value=""/>
+                            	<input type="hidden" name="ssiOaQ" id="ssiOaQ" value=""/>
+                            	<input type="hidden"  name="ssiOaQMin" id="ssiOaQMin" value=""/>
+                            	<input type="hidden" name="ssiOpP" id="ssiOpP" value=""/>
+                            	<input type="hidden" name="ssiOpPMin" id="ssiOpPMin" value=""/>
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
 												<th>규격구분<span class="req">*</span></th>
 												<td>
-													<select name="siId" id="siId" class="form-control">
-														<option value="">선택</option>
-														<option value="1">KS</option>
-														<option value="2">JIS</option>
-														<option value="3">ASME</option>
-													</select>
+													<input type="text" class="form-control" name="siId" id="siId" list="list" autocomplete="off">
+												<datalist id="list">
+													<option value="">선택</option>
+													<c:forEach var="list" items="${sList}" varStatus="status">
+														<option value="${list.qiName}">${list.qiName} / ${list.qiTrustType}</option>
+													</c:forEach>
+												</datalist>
 												</td>
 												<th>규격명</th>
 												<td><input type="text" class="form-control" name="piId" id="piId"/></td>
@@ -68,7 +77,7 @@
 											<tr>
 												<th>타입<span class="req">*</span></th>
 												<td>
-													<select name="" id="ithType" class="form-control">
+													<select name="ithType" id="ithType" class="form-control">
 														<option value="">선택</option>
 														<option value="90E(L)">90E(L)</option>
 														<option value="90E(S)">90E(S)</option>
@@ -107,6 +116,7 @@
 												<td><input type="text" class="form-control" name="ssiT1Bevel" id="ssiT1Bevel"/></td>
 												<th>T1 하한</th>
 												<td><input type="text" class="form-control" name="ssiT1BevelMin" id="ssiT1BevelMin"/></td>
+												
 											</tr>
 											<tr>
 												<th>BL1</th>
@@ -258,7 +268,7 @@
 											</tr>
 											<tr>
 												<th>H</th>
-												<td><input type="text" class="form-control" name="ssiReducerH" id="ssiReducerH"/></td>
+												<td><input type="text" class="form-control" name="ssiReduH" id="ssiReduH"/></td>
 												<th>H 상한</th>
 												<td><input type="text" class="form-control" name="ssiReduHMax" id="ssiReduHMax"/></td>
 												<th>H 하한</th>
@@ -387,6 +397,14 @@
 												<td><input type="text" class="form-control" name="ssiBevelEndMin" id="ssiBevelEndMin"/></td>
 											</tr>
 											<tr>
+												<th>R</th>
+												<td><input type="text" class="form-control" name="ssiRootFace" id="ssiRootFace"/></td>
+												<th>R 상한</th>
+												<td><input type="text" class="form-control" name="ssiRootFaceMax" id="ssiRootFaceMax"/></td>
+												<th>R 하한</th>
+												<td><input type="text" class="form-control" name="ssiRootFaceMin" id="ssiRootFaceMin"/></td>
+											</tr>
+											<tr>
 												<th>E</th>
 												<td><input type="text" class="form-control" name="ssiCapE" id="ssiCapE"/></td>
 												<th>E 상한</th>
@@ -436,32 +454,32 @@
 											<tr>
 												<th>T1</th>
 												<td><input type="text" class="form-control" name="ssiT1Bevel" id="ssiT1Bevel"/></td>
-												<th>T1 상한</th>
-												<td><input type="text" class="form-control" name="ssiT1BevelMax" id="ssiT1BevelMax"/></td>
+												<!-- <th>T1 상한</th>
+												<td><input type="text" class="form-control" name="ssiT1BevelMax" id="ssiT1BevelMax"/></td> -->
 												<th>T1 하한</th>
 												<td><input type="text" class="form-control" name="ssiT1BevelMin" id="ssiT1BevelMin"/></td>
 											</tr>
 											<tr>
 												<th>T2</th>
 												<td><input type="text" class="form-control" name="ssiT2Bevel" id="ssiT2Bevel"/></td>
-												<th>T2 상한</th>
-												<td><input type="text" class="form-control" name="ssiT2BevelMax" id="ssiT2BevelMax"/></td>
+												<!-- <th>T2 상한</th>
+												<td><input type="text" class="form-control" name="ssiT2BevelMax" id="ssiT2BevelMax"/></td> -->
 												<th>T2 하한</th>
 												<td><input type="text" class="form-control" name="ssiT2BevelMin" id="ssiT2BevelMin"/></td>
 											</tr>
 											<tr>
 												<th>T1</th>
 												<td><input type="text" class="form-control" name="ssiT1Body" id="ssiT1Body"/></td>
-												<th>T1 상한</th>
-												<td><input type="text" class="form-control" name="ssiT1BodyMax" id="ssiT1BodyMax"/></td>
+												<!-- <th>T1 상한</th>
+												<td><input type="text" class="form-control" name="ssiT1BodyMax" id="ssiT1BodyMax"/></td> -->
 												<th>T1 하한</th>
 												<td><input type="text" class="form-control" name="ssiT1BodyMin" id="ssiT1BodyMin"/></td>
 											</tr>
 											<tr>
 												<th>T2</th>
 												<td><input type="text" class="form-control" name="ssiT2Body" id="ssiT2Body"/></td>
-												<th>T2 상한</th>
-												<td><input type="text" class="form-control" name="ssiT2BodyMax" id="ssiT2BodyMax"/></td>
+												<!-- <th>T2 상한</th>
+												<td><input type="text" class="form-control" name="ssiT2BodyMax" id="ssiT2BodyMax"/></td> -->
 												<th>T2 하한</th>
 												<td><input type="text" class="form-control" name="ssiT2BodyMin" id="ssiT2BodyMin"/></td>
 											</tr>
@@ -481,54 +499,9 @@
 												<th>R 하한</th>
 												<td><input type="text" class="form-control" name="ssiRootFaceMin" id="ssiRootFaceMin"/></td>
 											</tr>
-											<tr>
-												<th>A</th>
-												<td><input type="text" class="form-control" name="ssiElbowA" id="ssiElbowA"/></td>
-												<th>A 상한</th>
-												<td><input type="text" class="form-control" name="ssiElbowAMax" id="ssiElbowAMax"/></td>
-												<th>A 하한</th>
-												<td><input type="text" class="form-control" name="ssiElbowAMin" id="ssiElbowAMin"/></td>
-											</tr>
-											<tr>
-												<th>C</th>
-												<td><input type="text" class="form-control" name="ssiTeeC" id="ssiTeeC"/></td>
-												<th>C 상한</th>
-												<td><input type="text" class="form-control" name="ssiTeeCMax" id="ssiTeeCMax"/></td>
-												<th>C 하한</th>
-												<td><input type="text" class="form-control" name="ssiTeeCMin" id="ssiTeeCMin"/></td>
-											</tr>
-											<tr>
-												<th>M</th>
-												<td><input type="text" class="form-control" name="ssiTeeM" id="ssiTeeM"/></td>
-												<th>M 상한</th>
-												<td><input type="text" class="form-control" name="ssiTeeMMax" id="ssiTeeMMax"/></td>
-												<th>M 하한</th>
-												<td><input type="text" class="form-control" name="ssiTeeMMin" id="ssiTeeMMin"/></td>
-											</tr>
-											<tr>
-												<th>H</th>
-												<td><input type="text" class="form-control" name="ssiReducerH" id="ssiReducerH"/></td>
-												<th>H 상한</th>
-												<td><input type="text" class="form-control" name="ssiReduHMax" id="ssiReduHMax"/></td>
-												<th>H 하한</th>
-												<td><input type="text" class="form-control" name="ssiReduHMin" id="ssiReduHMin"/></td>
-											</tr>
-											<tr>
-												<th>E</th>
-												<td><input type="text" class="form-control" name="ssiCapE" id="ssiCapE"/></td>
-												<th>E 상한</th>
-												<td><input type="text" class="form-control" name="ssiCapEMax" id="ssiCapEMax"/></td>
-												<th>E 하한</th>
-												<td><input type="text" class="form-control" name="ssiCapEMin" id="ssiCapEMin"/></td>
-											</tr>
-											<tr>
-												<th>E1</th>
-												<td><input type="text" class="form-control" name="ssiCapE1" id="ssiCapE1"/></td>
-												<th>E1 상한</th>
-												<td><input type="text" class="form-control" name="ssiCapE1Max" id="ssiCapE1Max"/></td>
-												<th>E1 하한</th>
-												<td><input type="text" class="form-control" name="ssiCapE1Min" id="ssiCapE1Min"/></td>
-											</tr>
+											
+											
+										
 											<tr>
 												<th>F</th>
 												<td><input type="text" class="form-control" name="ssiStubF" id="ssiStubF"/></td>
@@ -562,8 +535,8 @@
 												<td><input type="text" class="form-control" name="ssiStubRMin" id="ssiStubRMin"/></td>
 											</tr>
 											<tr>
-												<th>T</th>
-												<td><input type="text" class="form-control" name="ssiCapLimitT" id="ssiCapLimitT"/></td>
+												<!-- <th>T</th>
+												<td><input type="text" class="form-control" name="ssiCapLimitT" id="ssiCapLimitT"/></td> -->
 												<th>Q</th>
 												<td><input type="text" class="form-control" name="ssiOaQMax" id="ssiOaQMax"/></td>
 												<th>P</th>

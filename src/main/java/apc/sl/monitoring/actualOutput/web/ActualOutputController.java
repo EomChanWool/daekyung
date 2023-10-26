@@ -28,14 +28,15 @@ public class ActualOutputController {
 		if(searchVO.getSearchCondition().equals("")) {
 			  searchVO.setSearchCondition(getYears().get("kiYear")+""); }
 		model.put("date", getYears());
-		System.out.println("서치 : " + searchVO.getSearchCondition());
+		
 		
 		List<?> prodCntList = actualOutputService.selectProdCnt(searchVO);
 		model.put("prodCntList",prodCntList);
+		System.out.println("프로드1 : " + prodCntList);
 		
 		List<?> prodCntList2 = actualOutputService.selectProdCnt2(searchVO);
 		model.put("prodCntList2", prodCntList2);		
-				
+		System.out.println("프로드2 : " + prodCntList2);
 		return "sl/monitoring/actualOutput/actualOutput";
 	}
 //	

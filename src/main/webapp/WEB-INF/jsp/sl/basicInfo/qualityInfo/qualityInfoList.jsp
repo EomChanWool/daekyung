@@ -74,7 +74,7 @@
 	                                <span class="text">규격삭제</span>
 	                            </a>
 	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_standard()" style="float: right;">
-	                                <span class="text">규격등록</span>
+	                                <span class="text">품목등록</span>
 	                            </a>
 							</div>
                         </div>
@@ -84,7 +84,7 @@
                                     <thead>
                                         <tr>
 											<th>관리항목명</th>
-											<th>신뢰성구분</th>
+											<th>품명</th>
 											<th>정성/정량구분</th>
 											<th>사용여부</th>
 											<th>수정/삭제</th>
@@ -93,15 +93,11 @@
                                     <tbody>
                                     	<c:forEach var="result" items="${qualityInfoList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_qualityInfo('${result.qiCode}')" style="cursor: pointer;">
-	                                            <td>${result.qiName}</td>
-	                                            <c:if test="${result.qiTrustType eq '1'}"><td>KS</td></c:if>
-	                                            <c:if test="${result.qiTrustType eq '2'}"><td>JIS</td></c:if>
-	                                            <c:if test="${result.qiTrustType eq '3'}"><td>ASME</td></c:if>
+	                                            <td>${result.siId}</td>
+	                                            <td>${result.piId}</td>
+	                                            <td>${result.qiType}</td>
+	                                            <td>${result.qiIsuse}</td>
 	                                            
-	                                            <c:if test="${result.qiType eq 1}"><td>정성</td></c:if>
-	                                            <c:if test="${result.qiType eq 2}"><td>정량</td></c:if>
-	                                            <c:if test="${result.qiIsuse eq 0}"><td>X</td></c:if>
-	                                            <c:if test="${result.qiIsuse eq 1}"><td>O</td></c:if>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_qualityInfo_go('${result.qiCode}')">
 				                                        <span class="text">수정</span>

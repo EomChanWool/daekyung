@@ -5,22 +5,23 @@
 	<select id="selectQualityInfoToCnt" resultType="int">
 		SELECT
 		COUNT(*)
-		FROM sm_quality_info
+		FROM sm_spc_specinfo
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+			AND PI_ID LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
 	</select>
 
 	<select id="selectQualityInfoList" resultType="egovMap">
-		SELECT qi_code, gi_groupcode, qi_name, qi_trust_type, qi_type,
-		qi_isuse FROM
-		sm_quality_info
+		SELECT a.ssi_id, a.si_id, a.pi_id,b.qi_type,qi_isuse FROM
+		sm_spc_specinfo a
+		JOIN sm_quality_info b
+		ON a.SI_ID = b.QI_NAME
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+			AND PI_ID LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY qi_code DESC
+		ORDER BY SSI_ID DESC
 		OFFSET (#{firstIndex}) ROWS
 		FETCH
 		NEXT
@@ -28,13 +29,14 @@
 	</select>
 
 	<select id="selectExistsQualInfo" resultType="int">
-		SELECT COUNT(*) FROM sm_quality_info
+		SELECT COUNT(*)
+		FROM sm_quality_info
 		WHERE GI_GROUPCODE = #{giGroupcode}
 	</select>
 
 	<select id="selectStandard" resultType="egovMap">
 		SELECT * FROM
-		sm_standard_info
+		sm_quality_info
 	</select>
 
 	<insert id="registQualityInfo">
@@ -48,7 +50,6 @@
 		INSERT INTO sm_quality_info
 		(
 		qi_code,
-		gi_groupcode,
 		qi_name,
 		qi_trust_type,
 		qi_type,
@@ -64,7 +65,6 @@
 		(
 		@str + RIGHT('00000' + CAST(@seq AS
 		VARCHAR(10)), @padding),
-		#{giGroupcode},
 		#{qiName},
 		#{qiTrustType},
 		#{qiType},
@@ -79,57 +79,107 @@
 	</insert>
 
 	<insert id="registStandard">
-		INSERT INTO sm_spc_specinfo 
+		INSERT INTO sm_spc_specinfo
 		(
 		si_id, pi_id,
 		ssi_od01, ssi_od01_max, ssi_od01_min,
-		ssi_od02, ssi_od02_max, ssi_od02_min,
+		<if
+			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			ssi_od02, ssi_od02_max, ssi_od02_min,
+		</if>
 		ssi_id01, ssi_id01_max, ssi_id01_min,
-		ssi_id02, ssi_id02_max, ssi_id02_min,
+		<if
+			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			ssi_id02, ssi_id02_max, ssi_id02_min,
+		</if>
 		ssi_t1_bevel, ssi_t1_bevel_max, ssi_t1_bevel_min,
-		ssi_t1_body, ssi_t1_body_max, ssi_t1_body_min,
-		ssi_t2_bevel, ssi_t2_bevel_max, ssi_t2_bevel_min,
-		ssi_t2_body, ssi_t2_body_max, ssi_t2_body_min,
+		<if
+			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			ssi_t1_body, ssi_t1_body_max, ssi_t1_body_min,
+		</if>
+		<if test="ithType == 'STUD'">
+			ssi_t2_bevel, ssi_t2_bevel_max, ssi_t2_bevel_min,
+			ssi_t2_body, ssi_t2_body_max, ssi_t2_body_min,
+		</if>
 		ssi_bevel_end, ssi_bevel_end_max, ssi_bevel_end_min,
-		ssi_root_face, ssi_root_face_max, ssi_root_face_min,
-		ssi_oa_q_max, ssi_op_p_max,
-		ssi_elbow_a, ssi_elbow_a_max, ssi_elbow_a_min,
-		ssi_tee_c, ssi_tee_c_max, ssi_tee_c_min,
-		ssi_tee_m, ssi_tee_m_max, ssi_tee_m_min,
-		ssi_reducer_h, ssi_redu_h_max, ssi_redu_h_min,
-		ssi_cap_limit_t,
-		ssi_cap_e, ssi_cap_e_max, ssi_cap_e_min,
-		ssi_cap_e1, ssi_cap_e1_max, ssi_cap_e1_min,
-		ssi_stub_f, ssi_stub_f_max, ssi_stub_f_min,
-		ssi_stub_g, ssi_stub_g_max, ssi_stub_g_min,
-		ssi_stub_gt, ssi_stub_gt_max, ssi_stub_gt_min,
-		ssi_stub_r, ssi_stub_r_max, ssi_stub_r_min
+		ssi_root_face,
+		ssi_root_face_max, ssi_root_face_min,
+		ssi_oa_q_max,
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'TEE(R)' or  ithType == 'TEE(S)'">ssi_op_p_max,</if>
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)'">
+			ssi_elbow_a, ssi_elbow_a_max, ssi_elbow_a_min
+		</if>
+		<if test="ithType == 'TEE(S)' or ithType == 'TEE(R)'">
+			ssi_tee_c, ssi_tee_c_max, ssi_tee_c_min,
+			ssi_tee_m, ssi_tee_m_max, ssi_tee_m_min
+		</if>
+		<if test="ithType == 'R(C)' or  ithType == 'R(E)'">
+			ssi_rede_h, ssi_redu_h_max, ssi_redu_h_min
+		</if>
+		<if test="ithType == 'CAP'">
+			ssi_cap_limit_t,
+			ssi_cap_e, ssi_cap_e_max, ssi_cap_e_min,
+			ssi_cap_e1, ssi_cap_e1_max, ssi_cap_e1_min
+		</if>
+		<if test="ithType == 'STUD'">
+			ssi_stub_f, ssi_stub_f_max, ssi_stub_f_min,
+			ssi_stub_g, ssi_stub_g_max, ssi_stub_g_min,
+			ssi_stub_gt, ssi_stub_gt_max, ssi_stub_gt_min,
+			ssi_stub_r, ssi_stub_r_max, ssi_stub_r_min
+		</if>
 		)
 		VALUES
 		(
 		#{siId}, #{piId},
 		#{ssiOd01}, #{ssiOd01Max}, #{ssiOd01Min},
-		#{ssiOd02}, #{ssiOd02Max}, #{ssiOd02Min},
+		<if
+			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			#{ssiOd02}, #{ssiOd02Max}, #{ssiOd02Min},
+		</if>
 		#{ssiId01}, #{ssiId01Max}, #{ssiId01Min},
-		#{ssiId02}, #{ssiId02Max}, #{ssiId02Min},
+		<if
+			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			#{ssiId02}, #{ssiId02Max}, #{ssiId02Min},
+		</if>
 		#{ssiT1Bevel}, #{ssiT1BevelMax}, #{ssiT1BevelMin},
-		#{ssiT1Body}, #{ssiT1BodyMax}, #{ssiT1BodyMin},
-		#{ssiT2Bevel}, #{ssiT2BevelMax}, #{ssiT2BevelMin},
-		#{ssiT2Body}, #{ssiT2BodyMax}, #{ssiT2BodyMin},
+		<if
+			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			#{ssiT1Body}, #{ssiT1BodyMax}, #{ssiT1BodyMin},
+		</if>
+		<if test="ithType == 'STUD'">
+			#{ssiT2Bevel}, #{ssiT2BevelMax}, #{ssiT2BevelMin},
+			#{ssiT2Body}, #{ssiT2BodyMax}, #{ssiT2BodyMin},
+		</if>
 		#{ssiBevelEnd}, #{ssiBevelEndMax}, #{ssiBevelEndMin},
-		#{ssiRootFace}, #{ssiRootFaceMax}, #{ssiRootFaceMin},
-		#{ssiOaQMax}, #{ssiOpPMax},
-		#{ssiElbowA}, #{ssiElbowAMax}, #{ssiElbowAMin},
-		#{ssiTeeC}, #{ssiTeeCMax}, #{ssiTeeCMin},
-		#{ssiTeeM}, #{ssiTeeMMax}, #{ssiTeeMMin},
-		#{ssiReducerH}, #{ssiReduHMax}, #{ssiReduHMin},
-		#{ssiCapLimitT},
-		#{ssiCapE}, #{ssiCapEMax}, #{ssiCapEMin},
-		#{ssiCapE1}, #{ssiCapE1Max}, #{ssiCapE1Min},
-		#{ssiStubF}, #{ssiStubFMax}, #{ssiStubFMin},
-		#{ssiStubG}, #{ssiStubGMax}, #{ssiStubGMin},
-		#{ssiStubGt}, #{ssiStubGtMax}, #{ssiStubGtMin},
-		#{ssiStubR}, #{ssiStubRMax}, #{ssiStubRMin}
+		#{ssiRootFace},
+		#{ssiRootFaceMax}, #{ssiRootFaceMin},
+		#{ssiOaQMax},
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'TEE(R)' or  ithType == 'TEE(S)'"> #{ssiOpPMax},</if>
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)'">
+			#{ssiElbowA}, #{ssiElbowAMax}, #{ssiElbowAMin}
+		</if>
+		<if test="ithType == 'TEE(S)' or ithType == 'TEE(R)'">
+			#{ssiTeeC}, #{ssiTeeCMax}, #{ssiTeeCMin},
+			#{ssiTeeM}, #{ssiTeeMMax}, #{ssiTeeMMin}
+		</if>
+		<if test="ithType == 'R(C)' or  ithType == 'R(E)'">
+			#{ssiReducerH}, #{ssiReduHMax}, #{ssiReduHMin}
+		</if>
+		<if test="ithType == 'CAP'">
+			#{ssiCapLimitT},
+			#{ssiCapE}, #{ssiCapEMax}, #{ssiCapEMin},
+			#{ssiCapE1}, #{ssiCapE1Max}, #{ssiCapE1Min}
+		</if>
+		<if test="ithType == 'STUD'">
+			#{ssiStubF}, #{ssiStubFMax}, #{ssiStubFMin},
+			#{ssiStubG}, #{ssiStubGMax}, #{ssiStubGMin},
+			#{ssiStubGt}, #{ssiStubGtMax}, #{ssiStubGtMin},
+			#{ssiStubR}, #{ssiStubRMax}, #{ssiStubRMin}
+		</if>
 		)
 	</insert>
 
@@ -142,6 +192,12 @@
 		WHERE 1=1
 		and qi_code
 		= #{qiCode}
+	</select>
+
+	<select id="codeNum" resultType="int">
+		SELECT COUNT(*) AS code FROM sm_spc_code
+		WHERE sc_code LIKE CONCAT(#{str},'%')
+
 	</select>
 
 	<select id="selectStandardInfoToCnt" resultType="int">
@@ -215,4 +271,32 @@
 		p_url
 		LIKE CONCAT('%',#{str},'%')
 	</select>
+	
+	<insert id="spcCodeReg">
+	INSERT INTO sm_spc_code
+	(
+	sc_prod,
+	sc_item,
+	sc_code) VALUES
+	(
+	#{scProd},
+	#{scItem},
+	#{scCode})
+	</insert>
+	
+	<insert id="spcUpLowReg">
+	INSERT INTO sm_spc_up_low
+	(
+	sc_code,
+	sul_base_val,
+	sul_max_val,
+	sul_min_val
+	) values
+	(
+	#{scCode},
+	#{sulBaseVal},
+	#{sulMaxVal},
+	#{sulMinVal}
+	)
+	</insert>
 </mapper>

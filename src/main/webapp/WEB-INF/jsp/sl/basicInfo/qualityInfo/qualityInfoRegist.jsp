@@ -49,42 +49,32 @@
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/registQualityInfoOk.do" name="registForm" method="post">
-                            	<input type="hidden" name=qiTrustType id="qiTrustType"/>
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>관리항목코드<span class="req">*</span></th>
-												<td>
-													<select name="giGroupcode" id="giGroupcode" class="form-control">
-														<option value="">선택</option>
-														<c:forEach var="list" items="${standardList}" varStatus="status">
-															<option value="${list.siId}">${list.siName}</option>
-														</c:forEach>
-													</select>
-												</td>
+												<th>신뢰성구분</th>
+												<td><input type="text" class="form-control" name="qiTrustType" id="qiTrustType"></td>
 												<th>관리항목명</th>
-												<td><input type="text" class="form-control" name=qiName id="qiName" readonly/></td>
+												<td><input type="text" class="form-control" name=qiName id="qiName"/></td>
 											</tr>
 											<tr>
-											<th>신뢰성구분</th>
-											<td><input type="text" class="form-control" id="qiT" disabled></td>
+											
 											<th>정성/정량 구분</th>
 											<td>
 											<select name="qiType" class="form-control">
 											<option value="">선택</option>
-											<option value="1">정성</option>
-											<option value="2">정량</option>
+											<option value="정성">정성</option>
+											<option value="정량">정량</option>
 											</select>
 											</td>
-											</tr>
-											<tr>
+											
 											
 											<th>사용여부</th>
 											<td>
 											<select name="qiIsuse" class="form-control">
 											<option value="">선택</option>
-											<option value="1">사용</option>
-											<option value="0">미사용</option>
+											<option value="사용">사용</option>
+											<option value="미사용">미사용</option>
 											</select>
 											</td>
 											</tr>
@@ -155,10 +145,7 @@
 
 	<script>
 	function fn_regist_qualityInfo(){
-		 if(registForm.giGroupcode.value == ''){
-			alert("관리항목코드를 확인 바랍니다.");
-			return;
-		} 
+	
 		 
 		 if(registForm.qiType.value == ''){
 			 alert("정성/정량 구분을 확인바랍니다.")
@@ -194,14 +181,12 @@
 			alert(msg);
 		}
 		
-		$('#giGroupcode').change(function(){
-			standardInfoAjax();
-		});
+	
 		
 		
 	});
 	
-	
+/* 	
 	function standardInfoAjax(){
 		$.ajax({
 			  type:"POST",
@@ -227,8 +212,8 @@
 			  error:function(request,status,error){ 
 				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
 			  }
-		  });
-	}
+		  }); 
+	}*/
 	</script>
 </body>
 

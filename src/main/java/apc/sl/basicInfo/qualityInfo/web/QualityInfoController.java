@@ -1,5 +1,6 @@
 package apc.sl.basicInfo.qualityInfo.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,13 +65,18 @@ public class QualityInfoController {
 	@RequestMapping("/sl/basicInfo/qualityInfo/registQualityInfoOk.do")
 	public String registQualityInfoOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId",session.getAttribute("user_id"));
-		int exists = qualityInfoService.selectExistsQualInfo(map);
 		
-		if(exists == 1) {
-			redirectAttributes.addFlashAttribute("msg","이미등록된 정보입니다.");
-			return "redirect:/sl/basicInfo/qualityInfo/registQualityInfo.do";
-		}
 		
+		
+//		int exists = qualityInfoService.selectExistsQualInfo(map);
+//		
+//		
+//		
+//		if(exists == 1) {
+//			redirectAttributes.addFlashAttribute("msg","이미등록된 정보입니다.");
+//			return "redirect:/sl/basicInfo/qualityInfo/registQualityInfo.do";
+//		}
+		System.out.println(map);
 		qualityInfoService.registQualityInfo(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";
@@ -138,6 +144,49 @@ public class QualityInfoController {
 	}
 	@RequestMapping("/sl/basicInfo/qualityInfo/registStandardOk.do")
 	public String registStandardOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
+		System.out.println("맵 : " + map);
+		String type = "";
+		//엘보우
+		if(map.get("ithType").equals("90E(L)") || map.get("ithType").equals("90E(S)") || map.get("ithType").equals("45E(L)")) {
+			type = "A";
+			int codeNum = qualityInfoService.codeNum(type);
+			String [] elbowItem = {"Od01","Id01","T1Bevel","BevelEnd","RootFace","ElbowA","OaQ","OpP"};
+			
+			spcDb(type,elbowItem,map,codeNum);
+		}
+		
+		//TEE
+		if(map.get("ithType").equals("T(S)") || map.get("ithType").equals("T(R)")) {
+			
+			type = "B";
+			int codeNum = qualityInfoService.codeNum(type);
+			String [] elbowItem = {"Od01","Od02","Id01","Id02","T1Bevel","T1Body","BevelEnd","RootFace","TeeC","TeeM","OaQ","OpP"};
+			spcDb(type,elbowItem,map,codeNum);
+		}
+		//Reduce
+		if(map.get("ithType").equals("R(C)") || map.get("ithType").equals("R(E)")) {
+			
+			type = "C";
+			int codeNum = qualityInfoService.codeNum(type);
+			String [] elbowItem = {"Od01","Od02","Id01","Id02","T1Bevel","T1Body","BevelEnd","RootFace","ReduH","OaQ"};
+			spcDb(type,elbowItem,map,codeNum);
+		}
+		//CAP
+		if(map.get("ithType").equals("CAP")) {
+			
+			type = "D";
+			int codeNum = qualityInfoService.codeNum(type);
+			String [] elbowItem = {"Od01","Id01","T1Bevel","BevelEnd","RootFace","CapE","OaQ"};
+			spcDb(type,elbowItem,map,codeNum);
+		}
+		//STUD
+		if(map.get("ithType").equals("STUD")) {
+			
+			type = "E";
+			int codeNum = qualityInfoService.codeNum(type);
+			String [] elbowItem = {"Od01","Od02","Id01","Id02","T1Bevel","T2Bevel","T1Body","T2Body","BevelEnd","RootFace","StubF","StubG","StubGt","StubR","OaQ","OpP"};
+			spcDb(type,elbowItem,map,codeNum);
+		}
 		
 		qualityInfoService.registStandard(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
@@ -148,5 +197,32 @@ public class QualityInfoController {
 		qualityInfoService.deleteStandardInfo(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/qualityInfo/listStandard.do";
+	}
+	
+	public void spcDb(String type, String[] item, Map<String,Object> map, int num) {
+		
+		Map<String,Object> temp = new HashMap<String, Object>();
+		
+		//spc_code테이블
+		for(int i=0; i<item.length; i++) {
+			temp.put("scCode",type+(num+i));
+			temp.put("scProd",map.get("piId"));
+			temp.put("scItem",item[i]);
+			String Base = map.get("ssi"+item[i])+"";
+			String Maxval = map.get("ssi"+item[i]+"Max")+"";
+			String Minval = map.get("ssi"+item[i]+"Min")+"";
+			
+			temp.put("sulBaseVal", Base);
+			temp.put("sulMaxVal", Maxval);
+			temp.put("sulMinVal", Minval);
+		
+			
+			qualityInfoService.spcCodeReg(temp);
+			qualityInfoService.spcUpLowReg(temp);
+			
+		}
+		
+		
+		
 	}
 }

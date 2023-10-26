@@ -187,8 +187,8 @@
 		avgRealTime.push(0);
 	}
 	<c:forEach items="${prodCntList2}" var="list">
-	totalRealTime[${list.months-1}] = ${list.sumCsWorkTime};
-	avgRealTime[${list.months-1}] = ${list.avgWorkTime};
+	totalRealTime[${list.months-1}] = ${list.totalTime};
+	avgRealTime[${list.months-1}] = ${list.avgTime};
 	</c:forEach>
 		
 	}
