@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.process.cut.service.impl.CutMapper">
 	<select id="selectCutListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_mf_proc
+		SELECT COUNT(*) FROM sm_cut_proc
 		WHERE 1=1
 		
 
@@ -10,10 +10,10 @@
 			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND mp_reg_date >= #{searchStDate}
+			AND cp_reg_date >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND mp_reg_date <![CDATA[<=]]> #{searchEdDate}
+			AND cp_reg_date <![CDATA[<=]]> #{searchEdDate}
 		</if>
 
 	</select>
@@ -44,19 +44,19 @@
 		AND or_process IN
 		(0,
 		1) -->
-		SELECT * FROM sm_mf_proc
+		SELECT * FROM sm_cut_proc
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
 		</if>
 		<if test="searchStDate != ''">
-			AND mp_reg_date >= #{searchStDate}
+			AND cp_reg_date >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND mp_reg_date <![CDATA[<=]]> #{searchEdDate}
+			AND cp_reg_date <![CDATA[<=]]> #{searchEdDate}
 		</if>
 		<!-- GROUP BY a.or_id -->
-		ORDER BY mp_idx DESC
+		ORDER BY cp_idx DESC
 		OFFSET #{firstIndex} ROWS
 		FETCH
 		NEXT
@@ -118,140 +118,63 @@
 		FROM sm_prod_result WHERE wo_idx = #{woIdx} AND pr_list_nm = #{prNm}
 	</select>
 
-	<insert id="registCPLLog">
-		INSERT INTO sm_cut_proc_log (
-		or_id,
-		cpl_st_date,
-		cpl_manager,
-		cpl_reg_id,
-		cpl_reg_date,
-		cpl_person
-		) VALUES
-		(
-		#{orId},
-		GETDATE(),
-		#{cplManager},
-		#{userId},
-		GETDATE(),
-		'1'
-		)
-	</insert>
 
 	<insert id="registCut">
-		INSERT INTO sm_mf_proc (
+		INSERT INTO sm_cut_proc (
 		or_id,
-		mp_mfno,
-		mp_prod_name,
-		mp_texture,
-		mp_thickness,
-		mp_state,
-		mp_standard,
+		cp_mfno,
+		cp_prod_name,
+		cp_texture,
+		cp_thickness,
+		cp_state,
+		cp_standard,
 		po_lotno,
-		mp_qty,
-		mp_note,
-		mp_reg_date,
-		mp_pr_state
+		cp_qty,
+		cp_note,
+		cp_reg_date
 		) VALUES
 		(
 		#{orId},
-		#{mpMfno},
-		#{mpProdName},
-		#{mpTexture},
-		#{mpThickness},
-		#{mpState},
-		#{mpStandard},
+		#{cpMfno},
+		#{cpProdName},
+		#{cpTexture},
+		#{cpThickness},
+		#{cpState},
+		#{cpStandard},
 		#{poLotno},
-		#{mpQty},
-		#{mpNote},
-		GETDATE(),
-		0
-		)
-
-	</insert>
-
-	<select id="selectCutInfo" resultType="egovMap">
-		SELECT * FROM sm_mf_proc
-		WHERE or_id = #{orId}
-	</select>
-
-	<select id="selectCheckStop" resultType="int">
-		SELECT COUNT(*) FROM
-		sm_cut_process_stop
-		WHERE or_id = #{orId}
-		AND cps_state = 1
-	</select>
-
-	<update id="updateOrState">
-		UPDATE sm_orders SET
-		or_process = 1
-		WHERE or_id =
-		#{orId}
-	</update>
-
-	<insert id="registCStopLog">
-		INSERT INTO sm_cut_process_stop (
-		or_id,
-		cps_state,
-		cps_stop_time
-		) VALUES
-		(
-		#{orId},
-		1,
+		#{cpQty},
+		#{cpNote},
 		GETDATE()
 		)
 
 	</insert>
 
+	<select id="selectCutInfo" resultType="egovMap">
+		SELECT * FROM sm_cut_proc
+		WHERE or_id = #{orId}
+	</select>
+
+
+
+
+
+
 	<update id="modifyCut">
-		UPDATE sm_mf_proc SET
-		mp_prod_name = #{mpProdName},
-		mp_texture = #{mpTexture},
-		mp_thickness = #{mpThickness},
-		mp_state = #{mpState},
-		mp_standard = #{mpStandard},
-		mp_qty = #{mpQty},
-		mp_note =
-		#{mpNote}
+		UPDATE sm_cut_proc SET
+		cp_mfno = #{cpMfno},
+		cp_prod_name = #{cpProdName},
+		cp_texture = #{cpTexture},
+		cp_thickness = #{cpThickness},
+		cp_state = #{cpState},
+		cp_standard = #{cpStandard},
+		cp_qty = #{cpQty},
+		cp_note =
+		#{cpNote}
 		WHERE or_id = #{orId}
 
 	</update>
 
-	<update id="modifyCutManger">
-		UPDATE sm_cut_proc_log SET
-		cpl_manager = #{cplManager}
-		WHERE or_id = #{orId} AND cpl_idx = (
-		SELECT MAX(cpl_idx)
-		FROM sm_cut_proc_log
-		WHERE or_id = #{orId}
-		)
 
-
-	</update>
-
-	<update id="updateLogEdtime">
-		<!-- UPDATE sm_cut_proc_log SET
-		cpl_ed_date = GETDATE()
-		WHERE or_id = #{orId}
-		AND cpl_idx = (
-		SELECT TOP 1 cpl_idx
-		FROM
-		sm_cut_proc_log
-		WHERE or_id = #{orId}
-		ORDER BY cpl_idx DESC
-		) -->
-		UPDATE sm_cut_proc_log SET
-		cpl_ed_date = GETDATE(),
-		cpl_work_time = DATEDIFF(MINUTE,cpl_st_date,getdate())
-		WHERE or_id = #{orId}
-		AND cpl_idx = (
-		SELECT TOP 1 cpl_idx
-		FROM
-		sm_cut_proc_log
-		WHERE or_id = #{orId}
-		ORDER BY cpl_idx DESC
-		)
-
-	</update>
 
 	<update id="updateProcess3">
 		UPDATE sm_orders SET
@@ -276,7 +199,7 @@
 	</update>
 
 	<delete id="deleteCut">
-		DELETE FROM sm_mf_proc WHERE or_id = #{orId}
+		DELETE FROM sm_cut_proc WHERE or_id = #{orId}
 	</delete>
 	<!-- <delete id="deleteProdResult"> -->
 	<!-- DELETE FROM sm_prod_result WHERE wo_idx = #{woIdx} -->
@@ -291,22 +214,5 @@
 		#{woIdx}
 	</select>
 
-	<select id="selectAnalysisCnt" resultType="egovMap">
-		SELECT
-		COUNT(*) AS
-		total,
-		(SELECT COUNT(*) FROM sm_prod_result WHERE pr_list_nm = '품질검사')
-		AS
-		analysisCnt,
-		(SELECT COUNT(*) FROM sm_process WHERE pr_cur_nm='품질검사')
-		AS processingCnt
-		FROM sm_work_order
-	</select>
 
-	<update id="updateOrProcess3">
-		UPDATE sm_orders SET
-		or_process = 2
-		WHERE or_id
-		=#{orId}
-	</update>
 </mapper>

@@ -174,8 +174,9 @@ public class Scheduler {
 				linee.put("poLotno", line2[10].trim());
 				linee.put("mpQty", line2[18].trim());
 				linee.put("mpNote", line2[20].trim());
-				System.out.println(linee);
+				System.out.println("생산데이터 들어옴 : " + now);
 				excelReaderService.registProc(linee);
+				excelReaderService.registCutpro(linee);
 			}
 			br.close();
 			EgovFileUtil.delete(note);

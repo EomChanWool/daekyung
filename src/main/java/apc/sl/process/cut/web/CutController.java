@@ -226,14 +226,7 @@ public class CutController {
 //				map.replace("cpStarttime",time111);
 //				map.replace("cpEndtime", time222);
 				
-				
 		
-	
-		
-		
-		
-		
-		map.put("userId", session.getAttribute("user_id"));
 		cutService.modifyCut(map);
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다.");

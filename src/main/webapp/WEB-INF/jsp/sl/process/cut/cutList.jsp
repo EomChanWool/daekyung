@@ -107,17 +107,17 @@
                                     	<c:forEach var="result" items="${cutList}" varStatus="status">
 	                                   		<tr>
 	                                   			<td>${result.orId}</td>
-	                                   			<td>${result.mpMfno}</td>
-	                                   			<td>${result.mpProdName}</td>
-	                                   			<td>${result.mpTexture}</td>
-	                                   			<td>${result.mpThickness}</td>
-	                                   			<td>${result.mpState}</td>
-	                                   			<td>${result.mpStandard}</td>
+	                                   			<td>${result.cpMfno}</td>
+	                                   			<td>${result.cpProdName}</td>
+	                                   			<td>${result.cpTexture}</td>
+	                                   			<td>${result.cpThickness}</td>
+	                                   			<td>${result.cpState}</td>
+	                                   			<td>${result.cpStandard}</td>
 	                                   			<td>${result.poLotno}</td>
-	                                   			<td>${result.mpQty}</td>
-	                                   			<td>${result.mpNote}</td>
+	                                   			<td>${result.cpQty}</td>
+	                                   			<td>${result.cpNote}</td>
 	                                            <td>
-	                                            	<fmt:formatDate value="${result.mpRegDate}" pattern="yyyy-MM-dd"/>
+	                                            	<fmt:formatDate value="${result.cpRegDate}" pattern="yyyy-MM-dd"/>
 	                                            </td>
 	                                             <td style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_go_cut('${result.orId}')">
@@ -248,12 +248,12 @@
 		}
 	}
 	
-	function addManger(index){
+/* 	function addManger(index){
 		var str = '#cplManager_'+index;
 		console.log($(str).val());
 		$('#cplManage').val($(str).val());
 	}
-	
+	 */
 	
 
 	$(function() {

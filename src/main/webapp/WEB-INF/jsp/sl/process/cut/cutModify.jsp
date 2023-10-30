@@ -63,31 +63,31 @@
 												<th>수주번호 <span class="req">*</span></th>
 												<td><span class="form-control val-area">${cutVO.orId}</span></td>
 												<th>공정번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="mpMfno" id="mpMfno" value="${cutVO.mpMfno}"></td>
+												<td><input type="text" class="form-control" name="cpMfno" id="cpMfno" value="${cutVO.cpMfno}"></td>
 											</tr>
 											<tr>
 											<th>품명</th>
-											<td><input type="text" class="form-control" name="mpProdName" id="mpProdName" value="${cutVO.mpProdName}"></td>
+											<td><input type="text" class="form-control" name="cpProdName" id="cpProdName" value="${cutVO.cpProdName}"></td>
 											<th>재질</th>
-											<td><input type="text" class="form-control" name="mpTexture" id="mpTexture" value="${cutVO.mpTexture}"></td>
+											<td><input type="text" class="form-control" name="cpTexture" id="cpTexture" value="${cutVO.cpTexture}"></td>
 											</tr>
 											<tr>
 											<th>두께</th>
-											<td><input type="text" class="form-control" name="mpThickness" id="mpThickness" value="${cutVO.mpThickness}"></td>
+											<td><input type="text" class="form-control" name="cpThickness" id="cpThickness" value="${cutVO.cpThickness}"></td>
 											<th>상태</th>
-											<td><input type="text" class="form-control" name="mpState" id="mpState" value="${cutVO.mpState}"></td>
+											<td><input type="text" class="form-control" name="cpState" id="cpState" value="${cutVO.cpState}"></td>
 											</tr>
 											<tr>
 											<th>규격</th>
-											<td><input type="text" class="form-control" name="mpStandard" id="mpStandard" value="${cutVO.mpStandard}"></td>
+											<td><input type="text" class="form-control" name="cpStandard" id="cpStandard" value="${cutVO.cpStandard}"></td>
 											<th>로트번호</th>
 											<td><span class="form-control val-area">${cutVO.poLotno}</span></td>
 											</tr>
 											<tr>
 											<th>생산량</th>
-											<td><input type="text" class="form-control" name="mpQty" id="mpQty" value="${cutVO.mpQty}"></td>
+											<td><input type="text" class="form-control" name="cpQty" id="cpQty" value="${cutVO.cpQty}"></td>
 											<th>비고</th>
-											<td><input type="text" class="form-control" name="mpNote" id="mpNote" value="${cutVO.mpNote}"></td>
+											<td><input type="text" class="form-control" name="cpNote" id="cpNote" value="${cutVO.cpNote}"></td>
 											</tr>
 											
 										</tbody>
@@ -137,11 +137,11 @@
 
 		
 		
-		if($('#mpMfno').val() == ''){
+		if($('#cpMfno').val() == ''){
 			alert("공정번호를 확인 바랍니다.");
 			return;
 		}
-		if($('#mpQty').val() == ''){
+		if($('#cpQty').val() == ''){
 			alert("생산량을 확인 바랍니다.");
 			return;
 		}
