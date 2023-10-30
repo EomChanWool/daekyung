@@ -54,7 +54,7 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/listStandard.do" method="post">
-									<input type="hidden" name="siId">
+									<input type="hidden" name="qiCode">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="규격명을 입력해 주세요"
@@ -79,22 +79,23 @@
                                         <tr>
 											<th>규격항목명</th>
 											<th>규격타입</th>
+											<th>신뢰성 구분</th>
+											<th>사용 구분</th>
 											<th>삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${standardList}" varStatus="status">
 	                                   		<tr>
-	                                            <td>${result.siName}</td>
-	                                            <c:if test="${result.siType eq '1'}"><td>KS</td></c:if>
-	                                            <c:if test="${result.siType eq '2'}"><td>JIS</td></c:if>
-	                                            <c:if test="${result.siType eq '3'}"><td>ASME</td></c:if>
-	                                            
-	                                            
-	                                            
+	                                            <td>${result.qiName}</td>
+	                                            <td>${result.qiType}</td>
+	                                           	<td>${result.qiTrustType}</td>
+	                                            <td>${result.qiIsuse}</td>
 	                                            <td style="padding: 5px 0px;">
-	                                            	
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_standard('${result.siId}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_standard_go('${result.qiCode}')">
+				                                        <span class="text">수정</span>
+				                                    </a>
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_standard('${result.qiCode}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -163,14 +164,18 @@
 			listForm.submit();
 		}
 		
-		
+		function fn_modify_standard_go(qiCode){
+			listForm.qiCode.value = qiCode;
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifyQualityInfo.do";
+			listForm.submit();
+		}
 	
 		
 		
 	
 		function fn_delete_standard(idx){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.siId.value = idx;
+				listForm.qiCode.value = idx;
 				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/deleteStandard.do";
 				listForm.submit();
 			}

@@ -184,8 +184,7 @@
 	</insert>
 
 	<select id="selectQualityInfoInfo" resultType="egovMap">
-		SELECT qi_code,
-		gi_groupcode, qi_name, qi_trust_type, qi_type,
+		SELECT qi_code,qi_name, qi_trust_type, qi_type,
 		qi_isuse, qi_comment,
 		qi_remark FROM
 		sm_quality_info
@@ -201,20 +200,20 @@
 	</select>
 
 	<select id="selectStandardInfoToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_standard_info
+		SELECT COUNT(*) FROM sm_quality_info
 		where 1=1
 		<if test="searchKeyword != ''">
-			AND si_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
 	</select>
 
 	<select id="selectStandardInfo" resultType="egovMap">
-		SELECT * FROM sm_standard_info
+		SELECT * FROM sm_quality_info
 		WHERE 1=1
 		<if test="searchKeyword != ''">
-			AND si_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY si_id DESC
+		ORDER BY qi_code DESC
 		OFFSET (#{firstIndex}) ROWS
 		FETCH
 		NEXT
@@ -250,7 +249,7 @@
 	</delete>
 
 	<delete id="deleteStandardInfo">
-		delete from sm_standard_info where si_id =#{siId}
+		DELETE FROM sm_quality_info WHERE qi_code = #{qiCode}
 	</delete>
 
 	<select id="selectDetailQualInfo" resultType="egovMap">

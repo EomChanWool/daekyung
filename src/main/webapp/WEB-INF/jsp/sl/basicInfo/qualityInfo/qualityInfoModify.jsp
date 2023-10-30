@@ -55,15 +55,11 @@
 											<tr>
 												<th>관리항목명 <span class="req">*</span></th>
 												<td>
-													<input type="text" class="form-control" name=qiName id="qiName" value="${qualityInfoVO.qiName}" readonly/>
+													<input type="text" class="form-control" name="qiName" id="qiName" value="${qualityInfoVO.qiName}" readonly/>
 												</td>
-												<th>신뢰성구분</th>
-												<c:if test="${qualityInfoVO.qiTrustType eq '1'}"><td>
-												<input type="text" class="form-control" name=qiName id="qiName" value="KS" readonly/></td></c:if>
-												<c:if test="${qualityInfoVO.qiTrustType eq '2'}"><td>
-												<input type="text" class="form-control" name=qiName id="qiName" value="JIS" readonly/></td></c:if>
-												<c:if test="${qualityInfoVO.qiTrustType eq '3'}"><td>
-												<input type="text" class="form-control" name=qiName id="qiName" value="ASME" readonly/></td></c:if>
+												<th>신뢰성구분 <span class="req">*</span></th>
+												<td>
+												<input type="text" class="form-control" name="qiTrustType" id="qiTrustType" value="${qualityInfoVO.qiTrustType}" readonly/></td>
 												
 											</tr>
 											<tr>
@@ -71,16 +67,16 @@
 											<td>
 											<select name="qiType" class="form-control">
 											<option value="">선택</option>
-											<option value="1" ${qualityInfoVO.qiType == 1 ? 'selected' : ''}>정성</option>
-											<option value="2" ${qualityInfoVO.qiType == 2 ? 'selected' : ''}>정량</option>
+											<option value="정성" ${qualityInfoVO.qiType == '정성' ? 'selected' : ''}>정성</option>
+											<option value="정량" ${qualityInfoVO.qiType == '정량' ? 'selected' : ''}>정량</option>
 											</select>
 											</td>
 											<th>사용여부</th>
 											<td>
 											<select name="qiIsuse" class="form-control">
 											<option value="">선택</option>
-											<option value="1" ${qualityInfoVO.qiIsuse == 1 ? 'selected' : ''}>사용</option>
-											<option value="0" ${qualityInfoVO.qiIsuse == 0 ? 'selected' : ''}>미사용</option>
+											<option value="사용" ${qualityInfoVO.qiIsuse == '사용' ? 'selected' : ''}>사용</option>
+											<option value="미사용" ${qualityInfoVO.qiIsuse == '미사용' ? 'selected' : ''}>미사용</option>
 											</select>
 											</td>
 											</tr>
@@ -115,7 +111,7 @@
                                 </form>
                                 <div class="btn_bottom_wrap">
 									<button type="submit" class="btn_ok" onclick="fn_regist_qualityInfo()" style="border:none;">확인</button>
-									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do'">취소</span>
+									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/listStandard.do'">취소</span>
 								</div>
                             </div>
                         </div>

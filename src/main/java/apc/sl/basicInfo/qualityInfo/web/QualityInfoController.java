@@ -94,7 +94,7 @@ public class QualityInfoController {
 		map.put("userId", session.getAttribute("user_id"));
 		qualityInfoService.modifyQualityInfo(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
-		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";
+		return "redirect:/sl/basicInfo/qualityInfo/listStandard.do";
 	}
 	
 	@RequestMapping("/sl/basicInfo/qualityInfo/detailQualityInfo.do")
