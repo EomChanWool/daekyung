@@ -53,7 +53,6 @@
                         <div class="card-body">
                             <div class="table-responsive">
                             	<form action="${pageContext.request.contextPath}/sl/process/inspect/registInspectOk.do" name="registForm" method="post">
-	                                <input type="hidden" name="azIdx">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>

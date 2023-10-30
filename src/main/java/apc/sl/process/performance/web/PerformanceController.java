@@ -81,6 +81,12 @@ public class PerformanceController {
 			redirectAttributes.addFlashAttribute("msg","없거나 검사하지 않은 제품 입니다.");
 			return "redirect:/sl/process/checkPr/registPerformance.do";
 		}
+		int checkExist = performanceService.checkExist(map);
+		
+		if(checkExist !=0) {
+			redirectAttributes.addFlashAttribute("msg","이미 등록한 제품 입니다.");
+			return "redirect:/sl/process/checkPr/registPerformance.do";
+		}
 		
 		map.put("userId", session.getAttribute("user_id"));
 		performanceService.registcheckPr(map);

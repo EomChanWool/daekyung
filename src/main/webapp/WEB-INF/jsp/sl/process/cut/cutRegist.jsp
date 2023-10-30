@@ -61,51 +61,33 @@
 	                                    <tbody>
 											<tr>
 												<th>수주번호 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="orId" id="orId"></td>
-												<th>거래처 <span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="orCompany" id="orCompany" ></td>
+												<td><input type="text" class="form-control" name="orId" id="orId" value="${cutVO.orId}"></td>
+												<th>공정번호 <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="mpMfno" id="mpMfno" value="${cutVO.mpMfno}"></td>
 											</tr>
 											<tr>
 											<th>품명</th>
-											<td><input type="text" class="form-control" name="orProd" id="orProd"></td>
-											<th>일자</th>
-											<td><input type="date" class="form-control" name="orDate" id="orDate" ></td>
-											</tr>
-											<tr>
-											<th>납기일자</th>
-											<td><input type="date" class="form-control" name="orDueDate" id="orDueDate" ></td>
-											<th>완료일자</th>
-											<td><input type="date" class="form-control" name="orFinDate" id="orFinDate" ></td>
-											</tr>
-											<tr>
-											<th>수주구분</th>
-											<td><input type="text" class="form-control" name="orOrType" id="orOrType"></td>
+											<td><input type="text" class="form-control" name="mpProdName" id="mpProdName" value="${cutVO.mpProdName}"></td>
 											<th>재질</th>
-											<td><input type="text" class="form-control" name="orTexture" id="orTexture"></td>
+											<td><input type="text" class="form-control" name="mpTexture" id="mpTexture" value="${cutVO.mpTexture}"></td>
 											</tr>
 											<tr>
 											<th>두께</th>
-											<td><input type="text" class="form-control" name="orThickness" id="orThickness"></td>
-											<th>규격</th>
-											<td><input type="text" class="form-control" name="orStandard" id="orStandard"></td>
-											</tr>
-											<tr>
+											<td><input type="text" class="form-control" name="mpThickness" id="mpThickness" value="${cutVO.mpThickness}"></td>
 											<th>상태</th>
-											<td><input type="text" class="form-control" name="orState" id="orState"></td>
-											<th>담당자</th>
-											<td><input type="text" class="form-control" name="orManager" id="orManager"></td>
+											<td><input type="text" class="form-control" name="mpState" id="mpState" value="${cutVO.mpState}"></td>
 											</tr>
 											<tr>
-											<th>성적서의뢰</th>
-											<td><input type="text" class="form-control" name="orReport" id="orReport"></td>
-											<th>단가</th>
-											<td><input type="text" class="form-control" name="orUnit" id="orUnit"></td>
+											<th>규격</th>
+											<td><input type="text" class="form-control" name="mpStandard" id="mpStandard" value="${cutVO.mpStandard}"></td>
+											<th>로트번호</th>
+											<td><input type="text" class="form-control" name="poLotno" id="poLotno" value="${cutVO.poLotno}"></td>
 											</tr>
 											<tr>
-											<th>금액</th>
-											<td><input type="text" class="form-control" name="orMoney" id="orMoney"></td>
-											<th>수량</th>
-											<td><input type="text" class="form-control" name="orQty" id="orQty"></td>
+											<th>생산량</th>
+											<td><input type="text" class="form-control" name="mpQty" id="mpQty" value="${cutVO.mpQty}"></td>
+											<th>비고</th>
+											<td><input type="text" class="form-control" name="mpNote" id="mpNote" value="${cutVO.mpNote}"></td>
 											</tr>
 											
 										</tbody>
@@ -167,81 +149,18 @@
 			alert("수주번호를 확인 바랍니다.");
 			return;
 		}
-		
-		if($('#orCompany').val() == ''){
-			alert("거래처를 확인 바랍니다.");
+		if($('#mpMfno').val() == ''){
+			alert("공정번호를 확인 바랍니다.");
 			return;
 		}
-		
-		if($('#orProd').val() == ''){
-			alert("품명을 확인 바랍니다.");
+		if(!num.test($('#mpQty').val())){
+			alert("생산량에는 숫자만 기입 바랍니다.");
 			return;
 		}
-		
-		if($('#orDate').val() == ''){
-			alert("일자를 확인 바랍니다.");
+		if($('#mpQty').val() == ''){
+			alert("생산량을 확인 바랍니다.");
 			return;
 		}
-		
-		
-		if($('#orDueDate').val() == ''){
-			alert("납기일을 확인 바랍니다.");
-			return;
-		}
-		if($('#orFinDate').val() == ''){
-			alert("완료일을 확인 바랍니다.");
-			return;
-		}
-		if($('#orOrType').val() == ''){
-			alert("수주구분을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#orTexture').val() == ''){
-			alert("재질을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#orThickness').val() == ''){
-			alert("두께를 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#orStandard').val() == ''){
-			alert("규격을 확인 바랍니다.");
-			return;
-		}
-		
-		
-		
-		if($('#orManager').val() == ''){
-			alert("담당자를 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#orUnit').val() !=''){
-		
-		if(!num.test($('#orUnit').val())){
- 			alert("단가는 숫자만 입력가능합니다.");
-			return;
- 		}
-		}
-		
-		if($('#orMoney').val()){
-		
-		if(!num.test($('#orMoney').val())){
- 			alert("금액은 숫자만 입력가능합니다.");
-			return;
- 		}}
-		
-		if($('#orQty').val() == ''){
-			alert("수량을 확인 바랍니다.");
-			return;
-		}
-		if(!num.test($('#orQty').val())){
- 			alert("수량은 숫자만 입력가능합니다.");
-			return;
- 		}
 		
 		registForm.submit();
 	}
@@ -260,34 +179,11 @@
 		
 		
 		
-		$('#poLotno').change(function(){
-			cutAjax();
-		});
+	
 		
 	});
 	
 	
-	function cutAjax(){
-		$.ajax({
-			  type:"POST",
-			  url:"<c:url value='${pageContext.request.contextPath}/sl/process/cutProcess/cutAjax.do'/>",	  		  			  
-			  dataType:"JSON",
-			  data:{
-				  'poLotno': $('#poLotno').val(),
-				  
-			  },
-			  success:function(result){
-				  registForm.piItemType.value = result.cut_ajax.piItemType;
-				  registForm.cpCutQty.value = result.cut_ajax.poOrderQty;
-				  if(result.cut_ajax.poState == 0 || result.cut_ajax.poState == 1){
-					  $('#poState').val("1");
-				  }
-			  },
-			  error:function(request,status,error){ 
-				  alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);		  
-			  }
-		  });
-	}
 	
 	
 	</script>

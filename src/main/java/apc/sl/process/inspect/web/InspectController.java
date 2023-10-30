@@ -63,7 +63,6 @@ public class InspectController {
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		
 		List<?> inspectList = inspectService.selectInspectList(searchVO);
 		
 		
@@ -79,9 +78,7 @@ public class InspectController {
 		
 		List<?> mfList = inspectService.selectMfList();
 		
-		List<?> siList = inspectService.selectSiList();
 		
-		model.put("siList", siList);
 		
 		model.put("mfList", mfList);
 		
@@ -117,8 +114,11 @@ public class InspectController {
 //			redirectAttributes.addFlashAttribute("msg", "이미검사한 제품 입니다.");
 //			return "redirect:/sl/process/inspect/registInspect.do";
 //		}
-
+		Map<String, Object> siIdMap = inspectService.registSiid(map);
 		
+		map.put("siId", siIdMap.get("siId"));
+		
+		System.out.println("맵 : " + map);
 		inspectService.registInspect(map);
 		
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
@@ -128,13 +128,10 @@ public class InspectController {
 	
 	@RequestMapping("/sl/process/inspect/modifyInspect.do")
 	public String modifyInspect(@RequestParam Map<String,Object> map, ModelMap model) {
-		
+		System.out.println(map);
 		Map<String, Object> list = inspectService.selectInco(map);
 		
-		//List<?> biList = inspectService.selectBiList();
-		
 		model.put("incoVO", list);
-		//model.put("biList", biList);
 		System.out.println("리스트 : " + list);
 		
 		return "sl/process/inspect/inspectModify";

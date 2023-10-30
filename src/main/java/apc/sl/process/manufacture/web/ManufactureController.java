@@ -70,7 +70,6 @@ public class ManufactureController {
 		model.put("mfmList", mfmList);
 		model.put("manufactureList", manufactureList);
 		model.put("paginationInfo", paginationInfo);
-		System.out.println("manu : " + manufactureList);
 		
 		return "sl/process/manufacture/manufactureList";
 	}

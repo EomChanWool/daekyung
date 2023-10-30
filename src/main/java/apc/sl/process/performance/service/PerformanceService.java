@@ -10,6 +10,8 @@ public interface PerformanceService {
 	int selectPerformanceListToCnt(SearchVO searchVO);
 	
 	int checkOrid(Map<String, Object> map);
+	
+	int checkExist(Map<String, Object> map);
 
 	List<?> selectPerformanceList(SearchVO searchVO);
 	

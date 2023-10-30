@@ -87,7 +87,7 @@
                                             <th>품목코드</th>
                                             <th>품목명</th>
                                             <th>검사방식</th>
-                                            <th>SPC항목</th>
+                                            <th>관리항목</th>
                                             <th>SPC스펙</th>
                                             <th>검사일</th>
                                             <th>검사자</th>
@@ -103,7 +103,7 @@
 	                                            <td>${result.isiItemType}</td>
 	                                            <td>${result.isiItemName}</td>
 	                                            <td>${result.isiWay}</td>
-	                                            <td>${result.siName}</td>
+	                                            <td>${result.siId}</td>
 	                                            <td>${result.isiSpcSpec}</td>
 	                                            <td>${result.isiDate}</td>
 	                                            <td>${result.isiManager}</td>

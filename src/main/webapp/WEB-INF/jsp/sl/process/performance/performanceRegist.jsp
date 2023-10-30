@@ -74,7 +74,7 @@
 												<td><input type="text" class="form-control" name="ptBadQty" id="ptBadQty"></td>
 											</tr>
 											<tr>
-												<th>등록자 <span class="req">*</span></th>
+												<th>등록자 </th>
 												<td><input type="text" class="form-control" name="ptRegId" id="ptRegId"></td>
 											</tr>
 											
@@ -120,35 +120,20 @@
 
 	<script>
 	function fn_regist_document(){
-		/* if($('#orId').val() == ''){
-			alert("수주번호를 확인 바랍니다.");
+		 if($('#ptLotno').val() == ''){
+			alert("로트번호를 확인 바랍니다.");
 			return;
 		}
 		
-		if($('#eqId').val() == ''){
-			alert("설비를 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#ptStarttime').val() == ''){
-			alert("가동시간을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#ptEndtime').val() == ''){
-			alert("종료시간을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#ptMfQty').val() == ''){
-			alert("가공수량을 확인 바랍니다.");
-			return;
-		}
-		
-		if($('#ptBadQty').val() == ''){
-			alert("불량수량을 확인 바랍니다.");
-			return;
-		} */
+		 if($('#ptInsDate').val() == ''){
+				alert("검사일을 확인 바랍니다.");
+				return;
+			}
+		 
+		 if($('#ptBadQty').val() == ''){
+				alert("불량수량을 확인 바랍니다.");
+				return;
+			}
 		
 		registForm.submit();
 	}

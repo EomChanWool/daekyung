@@ -68,4 +68,9 @@ public class PerformanceServieImpl implements PerformanceService {
 	public List<?> inspectList(Map<String, Object> map) {
 		return performanceMapper.inspectList(map);
 	}
+
+	@Override
+	public int checkExist(Map<String, Object> map) {
+		return performanceMapper.checkExist(map);
+	}
 }

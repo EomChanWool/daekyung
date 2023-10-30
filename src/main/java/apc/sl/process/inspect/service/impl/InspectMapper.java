@@ -14,8 +14,6 @@ public interface InspectMapper {
 	
 	List<?>selectInspectList(SearchVO searchVO);
 	
-	List<?> selectSiList();
-	
 	List<?> selectMfList();
 	
 	List<?> selectInfo2(Map<String,Object> map);
@@ -29,6 +27,8 @@ public interface InspectMapper {
 	Map<String, Object> spcInfo(String str);
 	
 	Map<String,Object> eDataInfo(String str);
+	
+	Map<String,Object> registSiid(Map<String,Object> map);
 	
 	int selectCheckIns(Map<String,Object> map);
 	

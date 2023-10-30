@@ -5,10 +5,6 @@
 
 	<select id="selectInspectListToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_inspection_info a
-		JOIN sm_standard_info b
-		ON
-		a.SI_id = b.si_id
-
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND isi_lotno LIKE CONCAT('%',#{searchKeyword},'%')
@@ -20,13 +16,10 @@
 	<select id="selectInspectList" resultType="egovMap">
 		SELECT
 		isi_id,isi_lotno,or_id,isi_item_name,isi_way,isi_date,isi_manager,isi_file1,isi_file2,isi_file3,isi_file4,
-		isi_file5, b.si_name, a.si_id, a.isi_item_type, a.isi_spc_spec,
+		isi_file5, a.si_id, a.isi_item_type, a.isi_spc_spec,
 		a.isi_check,a.isi_file1,a.isi_report_file,a.isi_report_image
 		FROM sm_inspection_info a
-		left JOIN sm_standard_info
-		b
-		ON a.SI_id
-		= b.si_id
+		
 		where 1=1
 		<if test="searchKeyword != ''">
 			AND isi_lotno LIKE CONCAT('%',#{searchKeyword},'%')
@@ -39,10 +32,6 @@
 		#{recordCountPerPage} ROWS ONLY
 	</select>
 
-	<select id="selectSiList" resultType="egovMap">
-		select * from
-		sm_standard_info
-	</select>
 
 	<select id="selectMfList" resultType="egovMap">
 		SELECT or_id FROM
@@ -70,13 +59,10 @@
 	<select id="selectInco" resultType="egovMap">
 		SELECT
 		isi_id,or_id,isi_item_name,isi_way,isi_date,isi_manager,isi_file1,isi_file2,isi_file3,isi_file4,
-		isi_file5, b.si_name, a.si_id, a.isi_item_type, a.isi_spc_spec,
+		isi_file5, a.si_id, a.isi_item_type, a.isi_spc_spec,
 		a.isi_check, a.isi_lotno
 		FROM sm_inspection_info a
-		JOIN sm_standard_info
-		b
-		ON a.SI_id
-		= b.si_id
+
 		where isi_id = #{isiId}
 	</select>
 
@@ -129,7 +115,7 @@
 		#{isiDate},
 		#{isiItemType},
 		#{isiItemName},
-		(SELECT si_id FROM sm_spc_specinfo WHERE pi_id = #{isiItemName}),
+		#{siId},
 		#{isiManager},
 		0,
 		#{isiFile1},
@@ -144,6 +130,11 @@
 	SELECT COUNT(*) FROM
 		sm_inspection_info
 		WHERE id_doc = #{str}
+	</select>
+	
+	<select id="registSiid" resultType="egovMap">
+	SELECT si_id FROM sm_spc_specinfo
+	WHERE pi_id = #{isiSpcSpec}
 	</select>
 
 	<update id="modifyInspect">
