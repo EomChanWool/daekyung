@@ -187,8 +187,8 @@
 			kpiOutputData[${list.kiMonth-1}] = ${list.kiQty};
 			</c:forEach>
 			<c:forEach items="${totalProdCnt}" var="list">
-			var sumData = ${list.sumData06};
-			var workTime = ${list.sumCsWorkTime};
+			var sumData = ${list.totalQty};
+			var workTime = ${list.totalTime};
 			
 			var hourProd = Math.round((sumData/workTime) * 60);
 			

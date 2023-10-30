@@ -196,7 +196,7 @@
 	</select>
 
 	<select id="selectProdCnt" resultType="egovMap">
-		SELECT
+		<!-- SELECT
 		month(cs_reg_date) AS months,
 		SUM(CAST(cs_data06 AS INT)) AS sum_data06,
 		SUM(cs_work_time) AS sum_cs_work_time
@@ -218,7 +218,19 @@
 		) AS grouped_data
 		GROUP BY
 		month(cs_reg_date)
-		ORDER BY months asc
+		ORDER BY months asc -->
+		SELECT
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		SUM(cs_work_time)AS total_time,
+		SUM(cs_qty) AS total_qty
+		FROM sm_cut_sensor_data
+		WHERE 1=1
+		AND YEAR(cs_reg_date) = #{searchCondition}
+		AND cs_state = 0
+		GROUP BY
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months
 	</select>
 	
 	<select id="inspecPer" resultType="egovMap">

@@ -53,21 +53,23 @@ public class KpiController {
 		  List<?> kpiList = kpiService.selectKpiList(searchVO); 
 		  model.put("kpiList", kpiList);
 		  model.put("date", getYears());
+		  
+		  System.out.println("확인1");
 		  List<?> kpiGraphList = kpiService.selectKpiGraphList(searchVO);
 		  model.put("kpiGraphList", kpiGraphList);
-		  
+		  System.out.println("확인2");
 		  //생산량
 		  List<?> totalProdCnt = kpiService.selectProdCnt(searchVO);
 		  model.put("totalProdCnt", totalProdCnt);
-		  
+		  System.out.println("확인3");
 		  //불량률
 		  List<?> inspecPer = kpiService.inspecPer(searchVO);
 		  model.put("inspecPer", inspecPer);
-		  
+		  System.out.println("확인4");
 		  //작업공수
 		  List<Map<String, Object>> workTimeList = kpiService.selectWorktime(searchVO);
 		  List<Map<String, Object>> workCntList = kpiService.selectWorkCnt(searchVO);
-		  
+		  System.out.println("확인5");
 		  
 		  for(int i=0; i<workCntList.size(); i++) {
 			  workTimeList.get(i).put("prodCnt",workCntList.get(i).get("prodCnt"));
@@ -75,6 +77,7 @@ public class KpiController {
 				  workTimeList.get(i+1).put("prodCnt", "0");
 			  }
 		  }
+		  System.out.println("확인6");
 //		 
 //		  if(workCntList.size() < workTimeList.size()) {
 //			  for(int x= workCntList.size(); x<workTimeList.size();x++) {
