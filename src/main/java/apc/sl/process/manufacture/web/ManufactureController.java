@@ -131,9 +131,9 @@ public class ManufactureController {
 		Map<String,Object> outData = manufactureService.outData(map);
 		
 		//txt파일 서버에 생성
-				CreateFile(outData);
+			//	CreateFile(outData);
 				//ftp로 서버에 생성된 파일 전송후 서버에있는 파일 지우기
-				open(finish);
+			//	open(finish);
 		return "redirect:/sl/process/manufacture/manufactureList.do";
 	}
 	
@@ -248,23 +248,23 @@ public class ManufactureController {
 		return "sl/process/manufacture/manufactureDetail";
 	}
 	
-	
-	private void CreateFile(Map<String,Object> outData) {
-		String fileName = "C:\\test\\Test2.txt";
-		
-		try {
-			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
-			
-			fw.write(outData.toString()+",");
-			fw.flush();
-			fw.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-	}
+//	
+//	private void CreateFile(Map<String,Object> outData) {
+//		String fileName = "C:\\test\\Test2.txt";
+//		
+//		try {
+//			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
+//			
+//			fw.write(outData.toString()+",");
+//			fw.flush();
+//			fw.close();
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		
+//	}
 	
 	public void open(int finish) {
 		

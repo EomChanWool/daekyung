@@ -42,6 +42,14 @@ WHERE PO_LOTNO = #{str}
 WHERE id_doc = #{idDoc}
 	</select>
 	
+	<select id="outProList" resultType="egovMap">
+	SELECT a.or_id, a.mfl_manager, a.mfl_ed_date, b.mp_mfno, b.mp_prod_name, b.po_lotno, b.MP_QTY
+FROM sm_mf_proc_log a
+JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+WHERE CAST(a.mfl_ed_date AS DATE) = CAST(GETDATE() AS DATE)
+	
+	</select>
+	
 	<insert id="registinspData">
 	INSERT INTO sm_inspection_data
 	(id_doc,

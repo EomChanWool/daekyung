@@ -106,4 +106,9 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		excelReaderMapper.registCutpro(map);
 	}
 
+	@Override
+	public List<?> outProList() {
+		return excelReaderMapper.outProList();
+	}
+
 }

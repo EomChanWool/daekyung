@@ -28,6 +28,8 @@ public interface ExcelReaderMapper {
 	
 	void registCutpro(Map<String,String> map);
 	
+	List<?> outProList();
+	
 	Map<String, Object> inspCount(String edDate);
 	
 	List<Map<String, Object>> noUpList(String edDate);
