@@ -62,44 +62,36 @@
 										</tr>
 										<tr>
 											<th>재질</th>
-											<td><span class="form-control val-area">${prodInfoVO.piItemCode01}</span></td>
+											<td><span class="form-control val-area">${prodInfoVO.piItemTexture}</span></td>
 											<th>규격</th>
-											<td><span class="form-control val-area">${prodInfoVO.piItemCode02}</span></td>
+											<td><span class="form-control val-area">${prodInfoVO.piItemStandard}</span></td>
 											
 										</tr>
 										<tr>
 											<th>두께</th>
-											<td><span class="form-control val-area">${prodInfoVO.piItemCode03}</span></td>
+											<td><span class="form-control val-area">${prodInfoVO.piItemThickness}</span></td>
 											<th>길이</th>
-											<td><span class="form-control val-area">${prodInfoVO.piItemCode04}</span></td>
+											<td><span class="form-control val-area">${prodInfoVO.piItemLong}</span></td>
 											
 										</tr>
 										<tr>
-											<th>상태조건</th>
-											<td><span class="form-control val-area">${prodInfoVO.piItemState}</span></td>
 											<th>제품명</th>
 											<td><span class="form-control val-area">${prodInfoVO.piItemName}</span></td>
-											
-										</tr>
-										<tr>
-											<th>재고</th>
-											<td><span class="form-control val-area">${prodInfoVO.piCnt}</span></td>
-											<th>잔량</th>
-											<td><span class="form-control val-area">${prodInfoVO.piItemRemain}</span></td>
+											<th>히트</th>
+											<td><span class="form-control val-area">${prodInfoVO.piItemHeat}</span></td>
 											
 										</tr>
 										<tr>
 											<th>단가</th>
-											<td><span class="form-control val-area" id="piPrice">${prodInfoVO.piPrice}</span></td>
+											<td><span class="form-control val-area" id="piPrice">${prodInfoVO.piItemUnit}</span></td>
 											<th>단중</th>
-											<td><span class="form-control val-area">${prodInfoVO.piItemMiddle}</span></td>
-											
+											<td><span class="form-control val-area">${prodInfoVO.piMiddle}</span></td>
 										</tr>
 										<tr>
-											<th>히트</th>
-											<td><span class="form-control val-area">${prodInfoVO.piHeat}</span></td>
-											<th>등록ID</th>
-											<td><span class="form-control val-area">${prodInfoVO.miRegId}</span></td>
+											<th>수량</th>
+											<td><span class="form-control val-area">${prodInfoVO.piRemainQty}</span></td>
+											<th>중량</th>
+											<td><span class="form-control val-area">${prodInfoVO.piRemainKg}</span></td>
 										</tr>
 										<tr>
 											<th>등록일</th>

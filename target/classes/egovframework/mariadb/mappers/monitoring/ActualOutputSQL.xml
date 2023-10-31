@@ -56,7 +56,7 @@
 		ORDER BY months
 	</select>
 	<select id="selectProdCnt2" resultType="egovMap">
-	SELECT
+	<!-- SELECT
 		YEAR(cs_reg_date) AS years,
 		month(cs_reg_date) AS months,
 		AVG(cs_work_time) AS avg_work_time,
@@ -79,6 +79,18 @@
 		) AS grouped_data
 		GROUP BY
 		month(cs_reg_date), YEAR(cs_reg_date)
-		ORDER BY months asc
+		ORDER BY months asc -->
+		SELECT
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		SUM(cs_work_time)AS total_time,
+		AVG(cs_work_time)AS avg_time
+		FROM sm_cut_sensor_data
+		WHERE 1=1
+		AND YEAR(cs_reg_date) = #{searchCondition}
+		AND cs_state = 0
+		GROUP BY
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months
 	</select>
 </mapper>

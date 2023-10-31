@@ -60,7 +60,7 @@
 							    		<option value="" <c:if test="${searchVO.searchCondition eq ''}">selected="selected"</c:if>>선택</option>
 							    		<option value="제품코드" <c:if test="${searchVO.searchCondition eq '제품코드'}">selected="selected"</c:if>>제품코드</option>
 							    		<option value="제품구분" <c:if test="${searchVO.searchCondition eq '제품구분'}">selected="selected"</c:if>>제품구분</option>
-							    		<option value="상태조건" <c:if test="${searchVO.searchCondition eq '상태조건'}">selected="selected"</c:if>>상태조건</option>
+							    		<option value="상태조건" <c:if test="${searchVO.searchCondition eq '제품명'}">selected="selected"</c:if>>제품명</option>
 						    		</select>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" 
 						    					value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요" 
@@ -84,11 +84,11 @@
                                         <tr>
                                             <th>제품코드</th>
 											<th>제품구분</th>
+											<th>제품명</th>
 											<th>재질</th>
 											<th>규격</th>
 											<th>두께</th>
 											<th>길이</th>
-											<th>상태조건</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
@@ -97,11 +97,11 @@
 	                                   		<tr onclick="fn_detail_prodInfo('${result.piId }')" style="cursor: pointer;">
 	                                            <td>${result.piId }</td>
 												<td>${result.piItemType }</td>
-												<td>${result.piItemCode01 }</td>
-												<td>${result.piItemCode02 }</td>
-												<td>${result.piItemCode03 }</td>
-												<td>${result.piItemCode04 }</td>
-												<td>${result.piItemState }</td>
+												<td>${result.piItemName }</td>
+												<td>${result.piItemTexture }</td>
+												<td>${result.piItemStandard }</td>
+												<td>${result.piItemThickness }</td>
+												<td>${result.piItemLong }</td>
 	                                            <td style="padding: 5px 0px;" onclick="event.cancelBubble=true">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prodInfo_go('${result.piId}')">
 				                                        <span class="text">수정</span>

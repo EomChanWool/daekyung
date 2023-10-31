@@ -10,8 +10,8 @@
 		<if test="searchCondition == '제품구분'">
 			AND pi_item_type LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchCondition == '상태조건'">
-			AND pi_item_state LIKE '%' + #{searchKeyword} + '%'
+		<if test="searchCondition == '제품명'">
+			AND pi_item_name LIKE '%' + #{searchKeyword} + '%'
 		</if>
 <!-- 		<if test="searchKeyword != ''"> -->
 <!-- 				AND item_name LIKE CONCAT ('%', #{searchKeyword}, '%') -->
@@ -22,11 +22,11 @@
 		SELECT
 			pi_id,
 			pi_item_type,
-			pi_item_code01,
-			pi_item_code02,
-			pi_item_code03,
-			pi_item_code04,
-			pi_item_state
+			pi_item_name,
+			pi_item_texture,
+			pi_item_standard,
+			pi_item_thickness,
+			pi_item_long
 		FROM sm_product_info
 		WHERE 1=1
 		<if test="searchCondition == '제품코드'">
@@ -35,8 +35,8 @@
 		<if test="searchCondition == '제품구분'">
 			AND pi_item_type LIKE '%' + #{searchKeyword} + '%'
 		</if>
-		<if test="searchCondition == '상태조건'">
-			AND pi_item_state LIKE '%' + #{searchKeyword} + '%'
+		<if test="searchCondition == '제품명'">
+			AND pi_item_name LIKE '%' + #{searchKeyword} + '%'
 		</if>
 		ORDER BY pi_id DESC
 		OFFSET #{firstIndex} ROWS
@@ -48,36 +48,32 @@
 			(
 			pi_id,
 			pi_item_type,
-			pi_item_code01,
-			pi_item_code02,
-			pi_item_code03,
-			pi_item_code04,
-			pi_item_state,
+			pi_item_texture,
+			pi_item_standard,
+			pi_item_thickness,
+			pi_item_long,
+			pi_item_heat,
 			pi_item_name,
-			pi_cnt,
-			pi_item_remain,
-			pi_price,
-			pi_item_middle,
-			pi_heat,
-			mi_reg_id,
+			pi_remain_qty,
+			pi_remain_kg,
+			pi_item_unit,
+			pi_middle,
 			pi_reg_date
 			)
 		VALUES
 			(
 			#{piId},
 			#{piItemType},
-			#{piItemCode01},
-			#{piItemCode02},
-			#{piItemCode03},
-			#{piItemCode04},
-			#{piItemState},
+			#{piItemTexture},
+			#{piItemStandard},
+			#{piItemThickness},
+			#{piItemLong},
+			#{piItemHeat},
 			#{piItemName},
-			#{piCnt},
-			#{piItemRemain},
-			#{piPrice},
-			#{piItemMiddle},
-			#{piHeat},
-			#{userId},
+			#{piRemainQty},
+			#{piRemainKg},
+			#{piItemUnit},
+			#{piMiddle},
 			GETDATE()
 			)
 	</insert>
@@ -86,18 +82,16 @@
 		SELECT
 			pi_id,
 			pi_item_type,
-			pi_item_code01,
-			pi_item_code02,
-			pi_item_code03,
-			pi_item_code04,
-			pi_item_state,
 			pi_item_name,
-			pi_cnt,
-			pi_item_remain,
-			pi_price,
-			pi_item_middle,
-			pi_heat,
-			mi_reg_id,
+			pi_item_texture,
+			pi_item_standard,
+			pi_item_thickness,
+			pi_item_long,
+			pi_item_heat,
+			pi_middle,
+			pi_item_unit,
+			pi_remain_qty,
+			pi_remain_kg,
 			pi_reg_date
 		FROM sm_product_info
 		WHERE pi_id = #{piId}
@@ -106,17 +100,16 @@
 	<update id="modifyProdInfo">
 		UPDATE sm_product_info SET
 			pi_item_type = #{piItemType},
-			pi_item_code01 = #{piItemCode01},
-			pi_item_code02 = #{piItemCode02},
-			pi_item_code03 = #{piItemCode03},
-			pi_item_code04 = #{piItemCode04},
-			pi_item_state = #{piItemState},
+			pi_item_texture = #{piItemTexture},
+			pi_item_standard = #{piItemStandard},
+			pi_item_thickness = #{piItemThickness},
+			pi_item_long = #{piItemLong},
+			pi_item_heat = #{piItemHeat},
 			pi_item_name = #{piItemName},
-			pi_cnt = #{piCnt},
-			pi_item_remain = #{piItemRemain},
-			pi_price = #{piPrice},
-			pi_item_middle = #{piItemMiddle},
-			pi_heat = #{piHeat}
+			pi_remain_qty = #{piRemainQty},
+			pi_remain_kg = #{piRemainKg},
+			pi_item_unit = #{piItemUnit},
+			pi_middle = #{piMiddle}
 		WHERE pi_id = #{piId}
 	</update>
 	

@@ -57,7 +57,8 @@ public class ProdInfoController {
 	
 	@RequestMapping("/sl/basicInfo/prodInfo/registProdInfoOk.do")
 	public String registProdInfoOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		map.put("userId", session.getAttribute("user_id"));
+//		map.put("userId", session.getAttribute("user_id"));
+		System.out.println(map);
 		prodInfoService.registProdInfo(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/prodInfo/prodInfoList.do";

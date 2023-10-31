@@ -23,7 +23,7 @@
 		isi_file5, b.si_name, a.si_id, a.isi_item_type, a.isi_spc_spec,
 		a.isi_check,a.isi_file1,a.isi_report_file,a.isi_report_image
 		FROM sm_inspection_info a
-		JOIN sm_standard_info
+		left JOIN sm_standard_info
 		b
 		ON a.SI_id
 		= b.si_id

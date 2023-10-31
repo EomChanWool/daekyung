@@ -21,10 +21,33 @@
 
 	</select>
 	
+	<select id="idTestTime" resultType="egovMap">
+		SELECT id_test_time FROM sm_inspection_excel_history
+		WHERE id_doc = #{idDoc}
+	</select>
+	
 	<select id="mfProc" resultType="egovMap">
 	
 	SELECT * FROM sm_mf_proc
 WHERE PO_LOTNO = #{str}
+	</select>
+	
+	<select id="checkjungbok" resultType="int">
+	SELECT COUNT(*) FROM sm_orders
+	WHERE or_id = #{orId}
+	</select>
+	
+	<select id="checkVision" resultType="int">
+	SELECT COUNT(*) FROM sm_inspection_data
+WHERE id_doc = #{idDoc}
+	</select>
+	
+	<select id="outProList" resultType="egovMap">
+	SELECT a.or_id, a.mfl_manager, a.mfl_ed_date, b.mp_mfno, b.mp_prod_name, b.po_lotno, b.MP_QTY
+FROM sm_mf_proc_log a
+JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+WHERE CAST(a.mfl_ed_date AS DATE) = CAST(GETDATE() AS DATE)
+	
 	</select>
 	
 	<insert id="registinspData">
@@ -33,14 +56,18 @@ WHERE PO_LOTNO = #{str}
 	 po_lotno,
 	 id_prod_name,
 	 id_name,
-	 mp_mfno,
-	 id_test_time) values(
+	 id_mfno,
+	 id_test_time,
+	 id_check_time,
+	 or_id) values(
 	 #{idDoc},
 	 #{poLotno},
 	 #{idProdName},
 	 #{idName},
 	 #{mpMfno},
-	 #{idTestTime}
+	 #{idTestTime},
+	 #{idCheckTime},
+	 #{orId}
 	 )
 	
 	</insert>
@@ -216,6 +243,36 @@ WHERE PO_LOTNO = #{str}
 	GETDATE(),
 	0)
 	</insert>
+	
+	<insert id="registCutpro">
+	INSERT INTO sm_cut_proc(
+	cp_mfno,
+	or_id,
+	cp_prod_name,
+	cp_texture,
+	cp_thickness,
+	cp_state,
+	cp_standard,
+	po_lotno,
+	cp_qty,
+	cp_note,
+	cp_reg_date
+	) 
+	values(
+	#{mpMfno},
+	#{orId},
+	#{mpProdName},
+	#{mpTexture},
+	#{mpThickness},
+	#{mpState},
+	#{mpStandard},
+	#{poLotno},
+	#{mpQty},
+	#{mpNote},
+	GETDATE()
+	)
+	
+	</insert>
 
 	<insert id="registMm">
 		<!-- INSERT INTO sm_material_move ( mm_id, pi_id, mm_in, mm_in_kg, mm_out, 
@@ -314,6 +371,12 @@ WHERE PO_LOTNO = #{str}
 		#{teName2}
 		)
 	</insert>
+	
+	<update id="insFileStateUpdate">
+	UPDATE sm_inspection_excel_history SET
+	id_reg_state = 1
+	WHERE id_doc = #{idDoc}
+	</update>
 
 	<delete id="deletedb">
 		DELETE FROM sm_product_info;
