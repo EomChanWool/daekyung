@@ -1,291 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="apc.sl.collectInfo.processing.service.impl.ProcessingMapper">
+<mapper
+	namespace="apc.sl.collectInfo.processing.service.impl.ProcessingMapper">
 	<select id="selectProcessingListToCnt" resultType="int">
-		SELECT COUNT(*) FROM sm_orders
+		SELECT COUNT(*) FROM sm_mf_proc_log
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND or_name LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
 	</select>
-	
+
 	<select id="selectProcessingList" resultType="egovMap">
-		SELECT
-			or_idx,
-			es_idx,
-			or_name,
-			or_dte,
-			FORMAT(or_money,0) AS or_money,
-			or_com_manager
-		FROM sm_orders
-		WHERE 1=1
+		<!-- SELECT a.mfl_idx, a.or_id,a.mfl_st_date, a.mfl_ed_date, a.mfl_manager, 
+			a.mfl_work_time, b.po_lotno, b.mp_qty, b.mp_prod_name, b.mp_texture, b.mp_thickness, 
+			b.mp_state, b.mp_standard, DATEDIFF(MINUTE, a.mfl_st_date, a.mfl_ed_date) 
+			AS time_result FROM sm_mf_proc_log a JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID 
+			WHERE 1=1 -->
+		SELECT DISTINCT a.mfl_idx,a.or_id, a.mfl_st_date, a.mfl_ed_date,
+		a.mfl_manager,
+		a.mfl_work_time, b.po_lotno, b.mp_qty, b.mp_prod_name,
+		b.mp_texture,
+		b.mp_thickness, b.mp_state,
+		b.mp_standard,
+		(a.mfl_work_time - ISNULL((SELECT SUM (mfs_rest_time) FROM
+		sm_mf_process_stop c WHERE
+		a.or_id = c.or_id GROUP BY or_id), 0))
+		AS
+		real_time
+		FROM sm_mf_proc_log a
+		JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+		LEFT JOIN sm_mf_process_stop s ON a.OR_ID = s.OR_ID
+		WHERE b.MP_PR_STATE
+		= 2
 		<if test="searchKeyword != ''">
-			AND or_name LIKE CONCAT('%', #{searchKeyword}, '%')
+			AND or_id LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if>
-		ORDER BY or_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY mfl_idx DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="checkStop" resultType="egovMap">
+		SELECT mfs_state, mfs_idx
+		FROM
+		sm_mf_process_stop
+		WHERE or_id = #{orId}
+		AND mfs_idx = (SELECT
+		MAX(mfs_idx) FROM sm_mf_process_stop WHERE or_id =
+		#{orId})
+
+	</select>
+
+	<select id="processingAjax" resultType="egovMap">
+		SELECT DISTINCT
+		a.mfl_idx,a.or_id, a.mfl_st_date, a.mfl_manager,
+		b.po_lotno,
+		b.mp_qty,
+		b.mp_prod_name, b.mp_texture,
+		b.mp_thickness, b.mp_state,
+		b.mp_standard
+		FROM sm_mf_proc_log a
+		JOIN sm_mf_proc b ON a.OR_ID =
+		b.OR_ID
+		WHERE
+		b.MP_PR_STATE IN(1,3)
+		AND a.or_id = #{orId}
+	</select>
+
+	<select id="existPro" resultType="int">
+		SELECT COUNT(*) FROM sm_mf_proc
+		WHERE or_id = #{orId}
+		AND mp_pr_state in (1,3)
+	</select>
+
+	<select id="processInfo" resultType="egovMap">
+		SELECT DISTINCT a.mfl_idx,
+		a.or_id,
+		LEFT(CONVERT(NVARCHAR, a.mfl_st_date, 120), 16) AS
+		mfl_st_date,
+		LEFT(CONVERT(NVARCHAR, a.mfl_ed_date, 120), 16) AS
+		mfl_ed_date,
+		a.mfl_manager, a.mfl_work_time, b.po_lotno, b.mp_qty,
+		b.mp_prod_name,
+		b.mp_texture, b.mp_thickness, b.mp_state, b.mp_standard
+		FROM sm_mf_proc_log a
+		JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+		where
+		mfl_idx = #{mflIdx}
 	</select>
 	
-	<select id="selectAccountList" resultType="egovMap">
-		SELECT a_idx, a_name FROM sm_account
+	<select id="proState" resultType="egovMap">
+	SELECT mp_pr_state FROM sm_mf_proc
+WHERE or_id = #{orId}
 	</select>
 	
-	<select id="selectCompanyList" resultType="egovMap">
-		SELECT c_idx, c_name FROM sm_company
+	<select id="prodList" resultType="egovMap">
+	SELECT * FROM sm_mf_proc
+	WHERE mp_pr_state IN(1,3)
 	</select>
+
+
+	<update id="updatePro">
+		UPDATE sm_mf_proc_log SET
+		mfl_manager = #{mflManager},
+		mfl_st_date = #{mflStDate},
+		mfl_ed_date = #{mflEdDate}
+		WHERE mfl_idx = #{mflIdx}
+	</update>
 	
-	<select id="selectProductList" resultType="egovMap">
-		SELECT item_cd, item_name, item_per_price FROM sm_item WHERE item_type = '제품'
-	</select>
+	<update id="updateWorktime">
+	update sm_mf_proc_log set
+	mfl_work_time = DATEDIFF(MINUTE,
+		mfl_st_date, mfl_ed_date)
+		where mfl_idx = #{mflIdx}
+	</update>
 	
-	<select id="selectProdStockChk" resultType="int">
-		SELECT COUNT(*) FROM sm_item
-		WHERE 1=1
-		AND item_cd = #{itemCd}
-		AND item_cnt >= #{cnt}
-	</select>
+	<delete id="deletePro">
 	
-<!-- 	<insert id="registEstimate"> -->
-<!-- 		INSERT INTO sm_estimate -->
-<!-- 			( -->
-<!-- 			c_idx, -->
-<!-- 			a_idx, -->
-<!-- 			es_item_cd1, es_prod1, es_cnt1, es_per_price1, -->
-<!-- 			<if test="esProd2 != ''">es_item_cd2, es_prod2, es_cnt2, es_per_price2,</if> -->
-<!-- 			<if test="esProd3 != ''">es_item_cd3, es_prod3, es_cnt3, es_per_price3,</if> -->
-<!-- 			<if test="esProd4 != ''">es_item_cd4, es_prod4, es_cnt4, es_per_price4,</if> -->
-<!-- 			<if test="esProd5 != ''">es_item_cd5, es_prod5, es_cnt5, es_per_price5,</if> -->
-<!-- 			<if test="esProd6 != ''">es_item_cd6, es_prod6, es_cnt6, es_per_price6,</if> -->
-<!-- 			<if test="esProd7 != ''">es_item_cd7, es_prod7, es_cnt7, es_per_price7,</if> -->
-<!-- 			<if test="esProd8 != ''">es_item_cd8, es_prod8, es_cnt8, es_per_price8,</if> -->
-<!-- 			<if test="esProd9 != ''">es_item_cd9, es_prod9, es_cnt9, es_per_price9,</if> -->
-<!-- 			<if test="esProd10 != ''">es_item_cd10, es_prod10, es_cnt10, es_per_price10,</if> -->
-<!-- 			es_fst_qut_dte, -->
-<!-- 			es_fst_qut_money, -->
-<!-- 			es_fnl_qut_dte, -->
-<!-- 			es_fnl_qut_money, -->
-<!-- 			es_reg_dte, -->
-<!-- 			es_reg_mem -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			#{cIdx}, -->
-<!-- 			#{aIdx}, -->
-<!-- 			#{esItemCd1},#{esProd1},#{esCnt1},#{esPerPrice1}, -->
-<!-- 			<if test="esProd2 != ''">#{esItemCd2},#{esProd2},#{esCnt2},#{esPerPrice2},</if> -->
-<!-- 			<if test="esProd3 != ''">#{esItemCd3},#{esProd3},#{esCnt3},#{esPerPrice3},</if> -->
-<!-- 			<if test="esProd4 != ''">#{esItemCd4},#{esProd4},#{esCnt4},#{esPerPrice4},</if> -->
-<!-- 			<if test="esProd5 != ''">#{esItemCd5},#{esProd5},#{esCnt5},#{esPerPrice5},</if> -->
-<!-- 			<if test="esProd6 != ''">#{esItemCd6},#{esProd6},#{esCnt6},#{esPerPrice6},</if> -->
-<!-- 			<if test="esProd7 != ''">#{esItemCd7},#{esProd7},#{esCnt7},#{esPerPrice7},</if> -->
-<!-- 			<if test="esProd8 != ''">#{esItemCd8},#{esProd8},#{esCnt8},#{esPerPrice8},</if> -->
-<!-- 			<if test="esProd9 != ''">#{esItemCd9},#{esProd9},#{esCnt9},#{esPerPrice9},</if> -->
-<!-- 			<if test="esProd10 != ''">#{esItemCd10},#{esProd10},#{esCnt10},#{esPerPrice10},</if> -->
-<!-- 			#{orDte}, -->
-<!-- 			#{orMoney}, -->
-<!-- 			#{orDte}, -->
-<!-- 			#{orMoney}, -->
-<!-- 			NOW(), -->
-<!-- 			#{userId} -->
-<!-- 			) -->
-<!-- 	</insert> -->
+	update sm_mf_proc set
+	MP_PR_STATE = 3
+	where or_id = #{orId}
 	
-<!-- 	<insert id="registProcessing"> -->
-<!-- 		INSERT INTO sm_orders -->
-<!-- 			( -->
-<!-- 			es_idx, -->
-<!-- 			or_name, -->
-<!-- 			or_dte, -->
-<!-- 			c_idx, -->
-<!-- 			a_idx, -->
-<!-- 			or_Money, -->
-<!-- 			or_due_dte, -->
-<!-- 			or_due_place, -->
-<!-- 			or_note, -->
-<!-- 			or_state, -->
-<!-- 			or_reg_dte, -->
-<!-- 			or_reg_mem -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			(SELECT MAX(es_idx) FROM sm_estimate), -->
-<!-- 			#{orName}, -->
-<!-- 			#{orDte}, -->
-<!-- 			#{cIdx}, -->
-<!-- 			#{aIdx}, -->
-<!-- 			#{orMoney}, -->
-<!-- 			#{orDueDte}, -->
-<!-- 			#{orDuePlace}, -->
-<!-- 			#{orNote}, -->
-<!-- 			1, -->
-<!-- 			NOW(), -->
-<!-- 			#{userId} -->
-<!-- 			) -->
-<!-- 	</insert> -->
-	
-<!-- 	<insert id="registOutSourcing"> -->
-<!-- 		INSERT INTO sm_outso_info -->
-<!-- 			( -->
-<!-- 			or_idx, -->
-<!-- 			oi_out_dte, -->
-<!-- 			oi_reg_dte, -->
-<!-- 			oi_reg_mem -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			(SELECT MAX(or_idx) FROM sm_orders), -->
-<!-- 			#{orDte}, -->
-<!-- 			NOW(), -->
-<!-- 			#{userId} -->
-<!-- 			) -->
-<!-- 	</insert> -->
-	
-<!-- 	<insert id="registShipment"> -->
-<!-- 		INSERT INTO sm_shipment -->
-<!-- 			( -->
-<!-- 			a_idx, -->
-<!-- 			a_name, -->
-<!-- 			a_tel, -->
-<!-- 			sh_place, -->
-<!-- 			or_idx, -->
-<!-- 			sh_req_dte, -->
-<!-- 			sh_state, -->
-<!-- 			sh_reg_dte, -->
-<!-- 			sh_reg_mem -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			#{aIdx}, -->
-<!-- 			(SELECT a_name FROM sm_account WHERE a_idx = #{aIdx}), -->
-<!-- 			(SELECT a_tel FROM sm_account WHERE a_idx = #{aIdx}), -->
-<!-- 			#{orDuePlace}, -->
-<!-- 			(SELECT MAX(or_idx) FROM sm_orders), -->
-<!-- 			#{orDueDte}, -->
-<!-- 			1, -->
-<!-- 			NOW(), -->
-<!-- 			#{userId} -->
-<!-- 			) -->
-<!-- 	</insert> -->
-	
-<!-- 	<insert id="registDelivery"> -->
-<!-- 		INSERT INTO sm_delivery -->
-<!-- 			( -->
-<!-- 			sh_idx, -->
-<!-- 			or_idx, -->
-<!-- 			a_idx, -->
-<!-- 			de_money, -->
-<!-- 			de_dte, -->
-<!-- 			de_state, -->
-<!-- 			de_reg_dte, -->
-<!-- 			de_reg_mem -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			(SELECT MAX(sh_idx) FROM sm_shipment), -->
-<!-- 			(SELECT MAX(or_idx) FROM sm_orders), -->
-<!-- 			#{aIdx}, -->
-<!-- 			#{orMoney}, -->
-<!-- 			#{orDte}, -->
-<!-- 			0, -->
-<!-- 			NOW(), -->
-<!-- 			#{userId} -->
-<!-- 			) -->
-<!-- 	</insert> -->
-	
-<!-- 	<update id="updateItemCnt"> -->
-<!-- 		UPDATE sm_item SET -->
-<!-- 			item_cnt = (item_cnt + #{cnt}) -->
-<!-- 		WHERE item_cd = #{itemCd} -->
-<!-- 	</update> -->
-	
-	<select id="selectProcessingInfo" resultType="egovMap">
-		SELECT
-			a.or_idx,
-			a.es_idx,
-			a.or_name,
-			a.or_dte,
-			a.c_idx,
-			a.a_idx,
-			a.or_money,
-			a.or_mny_unit,
-			a.or_due_dte,
-			a.or_due_place,
-			a.or_com_manager,
-			a.or_note,
-			b.es_item_cd1, b.es_prod1, b.es_cnt1, b.es_per_price1, FORMAT(b.es_per_price1, 0) AS pp1,
-			b.es_item_cd2, b.es_prod2, b.es_cnt2, b.es_per_price2, FORMAT(b.es_per_price2, 0) AS pp2,
-			b.es_item_cd3, b.es_prod3, b.es_cnt3, b.es_per_price3, FORMAT(b.es_per_price3, 0) AS pp3,
-			b.es_item_cd4, b.es_prod4, b.es_cnt4, b.es_per_price4, FORMAT(b.es_per_price4, 0) AS pp4,
-			b.es_item_cd5, b.es_prod5, b.es_cnt5, b.es_per_price5, FORMAT(b.es_per_price5, 0) AS pp5,
-			b.es_item_cd6, b.es_prod6, b.es_cnt6, b.es_per_price6, FORMAT(b.es_per_price6, 0) AS pp6,
-			b.es_item_cd7, b.es_prod7, b.es_cnt7, b.es_per_price7, FORMAT(b.es_per_price7, 0) AS pp7,
-			b.es_item_cd8, b.es_prod8, b.es_cnt8, b.es_per_price8, FORMAT(b.es_per_price8, 0) AS pp8,
-			b.es_item_cd9, b.es_prod9, b.es_cnt9, b.es_per_price9, FORMAT(b.es_per_price9, 0) AS pp9,
-			b.es_item_cd10, b.es_prod10, b.es_cnt10, b.es_per_price10, FORMAT(b.es_per_price10, 0) AS pp10,
-			c.c_name,
-			c.c_addr,
-			d.a_name,
-			d.a_addr,
-			d.a_tel
-		FROM sm_orders a
-		JOIN sm_estimate b
-		ON a.es_idx = b.es_idx
-		JOIN sm_company c
-		ON a.c_idx = c.c_idx
-		JOIN sm_account d
-		ON a.a_idx = d.a_idx
-		WHERE or_idx = #{orIdx}
-	</select>
-	
-<!-- 	<update id="modifyProcessing"> -->
-<!-- 		UPDATE sm_orders SET -->
-<!-- 			or_name = #{orName}, -->
-<!-- 			or_dte = #{orDte}, -->
-<!-- 			c_idx = #{cIdx}, -->
-<!-- 			a_idx = #{aIdx}, -->
-<!-- 			or_due_dte = #{orDueDte}, -->
-<!-- 			or_due_place = #{orDuePlace}, -->
-<!-- 			or_note = #{orNote}, -->
-<!-- 			or_edt_dte = NOW(), -->
-<!-- 			or_edt_mem = #{userId} -->
-<!-- 		WHERE or_idx = #{orIdx} -->
-<!-- 	</update> -->
-	
-<!-- 	<update id="modifyEstimate"> -->
-<!-- 		UPDATE sm_estimate SET -->
-<!-- 			c_idx = #{cIdx}, -->
-<!-- 			a_idx = #{aIdx}, -->
-<!-- 			<if test="itemcCd1 != ''">es_item_cd1 = #{itemCd1}, es_prod1 = #{prod1}, es_cnt1 = #{cnt1}, es_per_price1 = #{perPrice1},</if> -->
-<!-- 			<if test="itemcCd2 != ''">es_item_cd2 = #{itemCd2}, es_prod2 = #{prod2}, es_cnt2 = #{cnt2}, es_per_price2 = #{perPrice2},</if> -->
-<!-- 			<if test="itemcCd3 != ''">es_item_cd3 = #{itemCd3}, es_prod3 = #{prod3}, es_cnt3 = #{cnt3}, es_per_price3 = #{perPrice3},</if> -->
-<!-- 			<if test="itemcCd4 != ''">es_item_cd4 = #{itemCd4}, es_prod4 = #{prod4}, es_cnt4 = #{cnt4}, es_per_price4 = #{perPrice4},</if> -->
-<!-- 			<if test="itemcCd5 != ''">es_item_cd5 = #{itemCd5}, es_prod5 = #{prod5}, es_cnt5 = #{cnt5}, es_per_price5 = #{perPrice5},</if> -->
-<!-- 			<if test="itemcCd6 != ''">es_item_cd6 = #{itemCd6}, es_prod6 = #{prod6}, es_cnt6 = #{cnt6}, es_per_price6 = #{perPrice6},</if> -->
-<!-- 			<if test="itemcCd7 != ''">es_item_cd7 = #{itemCd7}, es_prod7 = #{prod7}, es_cnt7 = #{cnt7}, es_per_price7 = #{perPrice7},</if> -->
-<!-- 			<if test="itemcCd8 != ''">es_item_cd8 = #{itemCd8}, es_prod8 = #{prod8}, es_cnt8 = #{cnt8}, es_per_price8 = #{perPrice8},</if> -->
-<!-- 			<if test="itemcCd9 != ''">es_item_cd9 = #{itemCd9}, es_prod9 = #{prod9}, es_cnt9 = #{cnt9}, es_per_price9 = #{perPrice9},</if> -->
-<!-- 			<if test="itemcCd10 != ''">es_item_cd10 = #{itemCd10}, es_prod10 = #{prod10}, es_cnt10 = #{cnt10}, es_per_price10 = #{perPrice10},</if> -->
-<!-- 			es_fnl_qut_dte = NOW(), -->
-<!-- 			es_fnl_qut_money = #{orMoney} -->
-<!-- 	</update> -->
-	
-<!-- 	<delete id="deleteDelivery"> -->
-<!-- 		DELETE FROM sm_delivery WHERE or_idx = #{orIdx} -->
-<!-- 	</delete> -->
-	
-<!-- 	<delete id="deleteShipment"> -->
-<!-- 		DELETE FROM sm_shipment WHERE or_idx = #{orIdx} -->
-<!-- 	</delete> -->
-	
-<!-- 	<delete id="deleteOutSourcing"> -->
-<!-- 		DELETE FROM sm_outso_info WHERE or_idx = #{orIdx} -->
-<!-- 	</delete> -->
-	
-<!-- 	<delete id="deleteProcessing"> -->
-<!-- 		DELETE FROM sm_orders WHERE or_idx = #{orIdx} -->
-<!-- 	</delete> -->
-	
-<!-- 	<delete id="deleteEstimate"> -->
-<!-- 		DELETE FROM sm_estimate WHERE es_idx = #{esIdx} -->
-<!-- 	</delete> -->
+	</delete>
+
 </mapper>
