@@ -95,8 +95,8 @@
                             		<div id="actualOutputGraph" style="width: 100%; height:300px;"></div>
 						    	</div>
 						    	<div class="cont">
-								      <h1>공정능력추이현황</h1>
-                            		<div id="ordersOutputGraph" style="width: 100%; height:300px;"></div>
+								      <h1>Today daq count</h1>
+                            		<div id="lineRunningGraph2" style="width: 100%; height:300px;"></div>
 						    	</div>
 						    	 </div>
 					    	</form>
@@ -690,6 +690,116 @@ option && myChart.setOption(option);
 
 	
 	</script>
+	
+	<script>
+	var chartDom4 = document.getElementById('lineRunningGraph2');
+	var myChart = echarts.init(chartDom4);
+	var option;
+	
+	
+	let lineName = [];
+	
+	let lineCount4 = [];
+	
+	let lineWorkTime = [];
+	
+	<c:forEach items="${lineRunningList}" var="list">
+	lineName.push('${list.daqName}');
+	lineCount4.push('${list.counting}');
+	lineWorkTime.push('${list.workTime}');
+	</c:forEach>
+	
+	
+	option = {
+			  tooltip: {
+			    trigger: 'axis',
+			    axisPointer: {
+			    	type: 'cross',
+			    	axis: "auto",
+			    	crossStyle: {
+			        	color: '#999'
+			    	}
+			    }
+			  },
+			  toolbox: {
+			    feature: {
+			      dataView: { show: false, readOnly: false },
+			      magicType: { show: false, type: ['line', 'bar'] },
+			      restore: { show: false },
+			      saveAsImage: { show: true }
+			    }
+			  },
+			  legend: {
+			    data: ['카운트','작동시간']
+			  },
+			  xAxis: [
+			    {
+			      type: 'category',
+			      data: lineName,
+			      axisPointer: {
+			        type: 'shadow'
+			      }
+			    }
+			  ],
+			  yAxis: [
+			    {
+			      type: 'value',
+			      name: '카운트',
+			      axisLabel: {
+			        formatter: '{value} Count'
+			      }
+			    },
+			    {
+	    		  type: 'value',
+		      	  name: '작동시간',
+		      	position: 'right',
+		      	  axisLabel: {
+		            formatter: '{value} sec',
+		            
+				  }
+			    }
+			  ],
+			  series: [
+			    {
+			      name: '카운트',
+			      type: 'bar',
+			      label: {
+			          show: true,
+			          position: 'inside',
+			          formatter: '{c} Count'
+			          
+			        },
+			      tooltip: {
+			        valueFormatter: function (value) {
+			          return value + ' Count';
+			        }
+			      },
+			      data: lineCount4
+			    },
+			    {
+				      name: '작동시간',
+				      yAxisIndex: 1,
+				      type: 'bar',
+				      label: {
+				          show: true,
+				          position: 'inside',
+				          formatter: '{c} sec'
+				          
+				        },
+				      tooltip: {
+				        valueFormatter: function (value) {
+				          return value + ' sec';
+				        }
+				      },
+				      data: lineWorkTime
+				    },
+			  ]
+			};
+	option && myChart.setOption(option);
+	
+	
+	</script>
+	
 </body>
 
 </html>

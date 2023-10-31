@@ -371,6 +371,12 @@ WHERE CAST(a.mfl_ed_date AS DATE) = CAST(GETDATE() AS DATE)
 		#{teName2}
 		)
 	</insert>
+	
+	<update id="insFileStateUpdate">
+	UPDATE sm_inspection_excel_history SET
+	id_reg_state = 1
+	WHERE id_doc = #{idDoc}
+	</update>
 
 	<delete id="deletedb">
 		DELETE FROM sm_product_info;

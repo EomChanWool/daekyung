@@ -713,6 +713,7 @@ public class Scheduler {
 				int exist = excelReaderService.checkVision(map);
 				if(exist == 0) {
 					excelReaderService.registinspData(map);
+					excelReaderService.insFileStateUpdate(map);
 				}
 				
 				

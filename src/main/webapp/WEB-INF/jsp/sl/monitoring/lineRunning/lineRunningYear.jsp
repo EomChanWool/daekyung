@@ -245,7 +245,7 @@
 		      	  name: '작동시간',
 		      	  position: 'right',
 		      	  axisLabel: {
-		            formatter: '{value} min'
+		            formatter: '{value} sec'
 				  }
 			    }
 			  ],
@@ -273,12 +273,12 @@
 				      label: {
 				          show: true,
 				          position: 'inside',
-				          formatter: '{c} min'
+				          formatter: '{c} sec'
 				          
 				        },
 				      tooltip: {
 				        valueFormatter: function (value) {
-				          return value + ' min';
+				          return value + ' sec';
 				        }
 				      },
 				      data: workTime

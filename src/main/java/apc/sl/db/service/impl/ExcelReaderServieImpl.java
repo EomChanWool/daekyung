@@ -111,4 +111,9 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		return excelReaderMapper.outProList();
 	}
 
+	@Override
+	public void insFileStateUpdate(Map<String, Object> map) {
+		excelReaderMapper.insFileStateUpdate(map);
+	}
+
 }

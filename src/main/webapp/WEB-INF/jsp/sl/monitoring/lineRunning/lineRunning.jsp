@@ -95,7 +95,7 @@
 	                                   		<td>${result.daqEdDate}</td>
 	                                   		<td>${result.daqName}</td>
 	                                   		<td>${result.counting}</td>
-	                                   		<td>${result.workTime}분</td>
+	                                   		<td>${result.workTime}초</td>
 	                                   		</tr>
                                     	</c:forEach>
                                     	<c:if test="${empty lineRunningList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
@@ -254,7 +254,7 @@
 		      	  name: '작동시간',
 		      	position: 'right',
 		      	  axisLabel: {
-		            formatter: '{value} MIN',
+		            formatter: '{value} sec',
 		            
 				  }
 			    }
@@ -283,12 +283,12 @@
 				      label: {
 				          show: true,
 				          position: 'inside',
-				          formatter: '{c} min'
+				          formatter: '{c} sec'
 				          
 				        },
 				      tooltip: {
 				        valueFormatter: function (value) {
-				          return value + ' min';
+				          return value + ' sec';
 				        }
 				      },
 				      data: lineWorkTime

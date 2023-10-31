@@ -42,4 +42,6 @@ public interface ExcelReaderService {
 	Map<String,Object> idTestTime(Map<String,Object> map);
 	
 	int checkVision(Map<String,Object> map);
+	
+	void insFileStateUpdate(Map<String,Object> map);
 }
