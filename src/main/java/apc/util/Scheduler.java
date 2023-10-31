@@ -3,10 +3,12 @@ package apc.util;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -74,6 +76,106 @@ public class Scheduler {
 //		System.out.println("ini맵2 : " + rowMap2);
 //	}
 	
+	//끝난 가공공정 txt파일로 생성
+	@Scheduled(cron = "20 55 20 * * *")
+	public void outPro() {
+		
+		List<?> outProList = excelReaderService.outProList();
+		
+		System.out.println(outProList);
+		
+		String fileName = "C:\\test\\Test2.txt";
+		
+		try {
+			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
+			
+			for(int i=0; i<outProList.size(); i++) {
+				System.out.println(i +" : "+outProList.get(i));
+				fw.write(outProList.get(i).toString() + "\n");
+				
+			}
+			fw.flush();
+			fw.close();
+//			fw.write(outProList.toString()+",");
+//			fw.flush();
+//			fw.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	//끝난 가공공정 txt파일로 생성된것을 ftp서버로 옮김
+	@Scheduled(cron = "40 55 20 * * *")
+	public void outProFTP() {
+		
+	    ftp = new FTPClient();
+	    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
+	    //ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
+	    ftp.setControlEncoding("UTF-8");
+	    //PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
+	    ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
+
+	    try {
+	        //ftp 서버 연결
+	        ftp.connect("dkbend.iptime.org", 30431);
+
+	        //ftp 서버에 정상적으로 연결되었는지 확인
+	        int reply = ftp.getReplyCode();
+	        if (!FTPReply.isPositiveCompletion(reply)) {
+	            ftp.disconnect();
+	            System.out.println("에러");
+	        }
+
+	        //socketTimeout 값 설정
+	        ftp.setSoTimeout(1000);
+	        //ftp 서버 로그인
+	        ftp.login("signlab", "dk304316@");
+	        //file type 설정 (default FTP.ASCII_FILE_TYPE)
+	        ftp.setFileType(FTP.BINARY_FILE_TYPE);
+	        //ftp Active모드 설정
+	        ftp.enterLocalPassiveMode(); 
+	            
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        System.out.println("에러");
+	    }
+	    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+	    Date now = new Date();
+		String edDate = format.format(now);
+	    
+	    String append_fileName = "C:\\test\\Test2.txt";
+	    
+	    File append_file = new File(append_fileName);
+	    
+	    String fileName = "/down-data/pro"+"-"+edDate+".txt";
+	   
+	    System.out.println("");
+		 try {
+		FileInputStream inputStream = new FileInputStream(append_file);
+		
+		boolean result = ftp.appendFile(fileName, inputStream);
+		
+		inputStream.close();
+		}
+		 catch (Exception e) {
+			e.printStackTrace();
+		}
+		 finally {
+			 try {
+				 EgovFileUtil.delete(append_file);
+			        ftp.logout();
+			        ftp.disconnect();
+			        
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			        System.out.println("에러");
+			    }
+		}
+		
+		
+	    
+	}
 
 	
 	
@@ -174,8 +276,9 @@ public class Scheduler {
 				linee.put("poLotno", line2[10].trim());
 				linee.put("mpQty", line2[18].trim());
 				linee.put("mpNote", line2[20].trim());
-				System.out.println(linee);
+				System.out.println("생산데이터 들어옴 : " + now);
 				excelReaderService.registProc(linee);
+				excelReaderService.registCutpro(linee);
 			}
 			br.close();
 			EgovFileUtil.delete(note);
@@ -610,6 +713,7 @@ public class Scheduler {
 				int exist = excelReaderService.checkVision(map);
 				if(exist == 0) {
 					excelReaderService.registinspData(map);
+					excelReaderService.insFileStateUpdate(map);
 				}
 				
 				

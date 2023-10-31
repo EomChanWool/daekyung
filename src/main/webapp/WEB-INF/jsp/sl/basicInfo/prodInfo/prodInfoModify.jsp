@@ -60,42 +60,37 @@
 											</tr>
 											<tr>
 												<th>재질</th>
-												<td><input type="text" class="form-control" name="piItemCode01" id="piItemCode01" value="${prodInfoVO.piItemCode01}"/></td>
+												<td><input type="text" class="form-control" name="piItemTexture" id="piItemTexture" value="${prodInfoVO.piItemTexture}"/></td>
 												<th>규격</th>
-												<td><input type="text" class="form-control" name="piItemCode02" id="piItemCode02" value="${prodInfoVO.piItemCode02}"/></td>
+												<td><input type="text" class="form-control" name="piItemStandard" id="piItemStandard" value="${prodInfoVO.piItemStandard}"/></td>
 												
 											</tr>
 											<tr>
 												<th>두께</th>
-												<td><input type="text" class="form-control" name="piItemCode03" id="piItemCode03" value="${prodInfoVO.piItemCode03}"/></td>
+												<td><input type="text" class="form-control" name="piItemThickness" id="piItemThickness" value="${prodInfoVO.piItemThickness}"/></td>
 												<th>길이</th>
-												<td><input type="text" class="form-control" name="piItemCode04" id="piItemCode04" value="${prodInfoVO.piItemCode04}"/></td>
-												
-											</tr>
-											<tr>
-												<th>상태조건</th>
-												<td><input type="text" class="form-control" name="piItemState" id="piItemState" value="${prodInfoVO.piItemState}"/></td>
-												<th>제품명</th>
-												<td><input type="text" class="form-control" name="piItemName" value="${prodInfoVO.piItemName}"/></td>
-												
-											</tr>
-											<tr>
-												<th>재고</th>
-												<td><input type="text" class="form-control" name="piCnt" id="piCnt" value="${prodInfoVO.piCnt}"/></td>
-												<th>잔량</th>
-												<td><input type="text" class="form-control" name="piItemRemain" id="piItemRemain" value="${prodInfoVO.piItemRemain}"/></td>
-												
-											</tr>
-											<tr>
-												<th>단가</th>
-												<td><input type="text" class="form-control" name="piPrice" id="piPrice" value="${prodInfoVO.piPrice}"/></td>
-												<th>단중</th>
-												<td><input type="text" class="form-control" name="piItemMiddle" id="piItemMiddle" value="${prodInfoVO.piItemMiddle}"/></td>
+												<td><input type="text" class="form-control" name="piItemLong" id="piItemLong" value="${prodInfoVO.piItemLong}"/></td>
 												
 											</tr>
 											<tr>
 												<th>히트</th>
-												<td><input type="text" class="form-control" name="piHeat" value="${prodInfoVO.piHeat}"/></td>
+												<td><input type="text" class="form-control" name="piItemHeat" id="piItemHeat" value="${prodInfoVO.piItemHeat}"/></td>
+												<th>제품명</th>
+												<td><input type="text" class="form-control" name="piItemName" id="piItemName" value="${prodInfoVO.piItemName}"/></td>
+												
+											</tr>
+											<tr>
+												<th>수량</th>
+												<td><input type="text" class="form-control" name="piRemainQty" id="piRemainQty" value="${prodInfoVO.piRemainQty}"/></td>
+												<th>중량</th>
+												<td><input type="text" class="form-control" name="piRemainKg" id="piRemainKg" value="${prodInfoVO.piRemainKg}"/></td>
+												
+											</tr>
+											<tr>
+												<th>단가</th>
+												<td><input type="text" class="form-control" name="piItemUnit" id="piItemUnit" value="${prodInfoVO.piItemUnit}"/></td>
+												<th>단중</th>
+												<td><input type="text" class="form-control" name="piMiddle" id="piMiddle" value="${prodInfoVO.piMiddle}"/></td>
 											</tr>
 										</tbody>
 	                                </table>
@@ -142,7 +137,7 @@
 		
 		var num =  /^[0-9.]+$/;
 		
- 		if($('#piId').val() == ''){
+		if($('#piId').val() == ''){
  			alert("제품코드를 확인 바랍니다.");
  			return;
  		}
@@ -150,39 +145,39 @@
  			alert("구분을 확인 바랍니다.");
  			return;
  		}
- 		if($('#piItemCode01').val() == ''){
+ 		if($('#piItemTexture').val() == ''){
  			alert("재질을 확인 바랍니다.");
  			return;
  		}
- 		if($('#piItemCode02').val() == ''){
+ 		if($('#piItemStandard').val() == ''){
  			alert("규격을 확인 바랍니다.");
  			return;
  		}
- 		if($('#piItemCode03').val() == ''){
+ 		if($('#piItemThickness').val() == ''){
  			alert("두께를 확인 바랍니다.");
  			return;
  		}
- 		if($('#piItemCode04').val() == ''){
+ 		if($('#piItemLong').val() == ''){
  			alert("길이를 확인 바랍니다.");
  			return;
  		}
- 		if($('#piItemState').val() == ''){
- 			alert("상태조건을 확인 바랍니다.");
+ 		if($('#piItemHeat').val() == ''){
+ 			alert("히트를 확인 바랍니다.");
  			return;
  		}
- 		if(!num.test($('#piCnt').val())){
- 			alert("재고에는 숫자만 입력됩니다.");
+ 		if(!num.test($('#piRemainQty').val())){
+ 			alert("수량에는 숫자만 입력됩니다.");
 			return;
  		}
- 		if(!num.test($('#piItemRemain').val())){
- 			alert("잔량에는 숫자만 입력됩니다.");
+ 		if(!num.test($('#piRemainKg').val())){
+ 			alert("중량에는 숫자만 입력됩니다.");
 			return;
  		}
- 		if(!num.test($('#piPrice').val())){
+ 		if(!num.test($('#piItemUnit').val())){
  			alert("단가에는 숫자만 입력됩니다.");
 			return;
  		}
- 		if(!num.test($('#piItemMiddle').val())){
+ 		if(!num.test($('#piMiddle').val())){
  			alert("단중에는 숫자만 입력됩니다.");
 			return;
  		}

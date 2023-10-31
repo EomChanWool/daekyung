@@ -23,6 +23,10 @@ public interface ExcelReaderService {
 	
 	void testRegist(Map<String,String> map);
 	
+	void registCutpro(Map<String,String> map);
+	
+	List<?> outProList();
+	
 	Map<String, Object> inspCount(String edDate);
 	
 	List<Map<String, Object>> noUpList(String edDate);
@@ -38,4 +42,6 @@ public interface ExcelReaderService {
 	Map<String,Object> idTestTime(Map<String,Object> map);
 	
 	int checkVision(Map<String,Object> map);
+	
+	void insFileStateUpdate(Map<String,Object> map);
 }

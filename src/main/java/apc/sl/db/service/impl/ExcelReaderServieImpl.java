@@ -101,4 +101,19 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		return excelReaderMapper.checkVision(map);
 	}
 
+	@Override
+	public void registCutpro(Map<String, String> map) {
+		excelReaderMapper.registCutpro(map);
+	}
+
+	@Override
+	public List<?> outProList() {
+		return excelReaderMapper.outProList();
+	}
+
+	@Override
+	public void insFileStateUpdate(Map<String, Object> map) {
+		excelReaderMapper.insFileStateUpdate(map);
+	}
+
 }
