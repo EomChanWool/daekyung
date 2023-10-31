@@ -84,6 +84,11 @@
 
 
 	</insert>
+	
+	<select id="checkExist" resultType="int">
+	SELECT COUNT(*) FROM sm_perf_test
+	WHERE PT_LOTNO = #{ptLotno}
+	</select>
 
 	<select id="selectFmList" resultType="egovMap">
 		SELECT *

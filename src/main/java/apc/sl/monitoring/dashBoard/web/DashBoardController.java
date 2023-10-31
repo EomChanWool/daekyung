@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import apc.sl.monitoring.actualOutput.service.ActualOutputService;
 import apc.sl.monitoring.dashBoard.service.DashBoardService;
 import apc.sl.monitoring.lineRunning.service.LineRunningService;
+import apc.sl.monitoring.monitorSetting.service.MonitorSettingService;
 import apc.sl.monitoring.ordersOutput.service.OrdersOutputService;
 import apc.util.SearchVO;
 
@@ -26,14 +27,6 @@ import apc.util.SearchVO;
 public class DashBoardController {
 	@Autowired
 	private DashBoardService dashBoardService;
-	@Autowired
-	private OrdersOutputService ordersOutputService;
-	@Autowired
-	private ActualOutputService actualOutputService;
-	
-	@Autowired
-	private LineRunningService lineRunningService;
-	
 	@RequestMapping("/sl/monitoring/dashBoard.do")
 	public String dashBoardList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
 		
@@ -67,6 +60,31 @@ public class DashBoardController {
 		model.put("prodCntListAc2", prodCntListAc2);
 		
 		model.put("searchCondition", searchVO.getSearchCondition());
+		
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date now = new Date();
+		
+//		// Calendar 객체 생성 및 현재 날짜로 설정
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.setTime(now);
+//
+//		// 하루를 뺀다
+//		calendar.add(Calendar.DATE, -1);
+//
+//		// 하루 전의 날짜를 얻음
+//		Date oneDayBefore = calendar.getTime();
+
+		String edDate = format.format(now);
+		
+		if(searchVO.getSearchEdDate().equals("")) {
+			searchVO.setSearchEdDate(edDate);
+		}
+		
+		List<?> lineRunningList = dashBoardService.selectLineRunningList(searchVO);
+		System.out.println(lineRunningList);
+		model.put("lineRunningList", lineRunningList);
 		
 		return "sl/monitoring/dashBoard/dashBoard";
 	}

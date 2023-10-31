@@ -71,11 +71,6 @@ public class InspectServieImpl implements InspectService {
 	}
 
 	@Override
-	public List<?> selectSiList() {
-		return inspectMapper.selectSiList();
-	}
-
-	@Override
 	public List<?> selectMfList() {
 		return inspectMapper.selectMfList();
 	}
@@ -108,6 +103,11 @@ public class InspectServieImpl implements InspectService {
 	@Override
 	public void updateReportFileName(Map<String, Object> map) {
 		inspectMapper.updateReportFileName(map);
+	}
+
+	@Override
+	public Map<String, Object> registSiid(Map<String, Object> map) {
+		return inspectMapper.registSiid(map);
 	}
 
 	

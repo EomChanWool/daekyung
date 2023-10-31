@@ -69,4 +69,9 @@ public class DashBoardServieImpl implements DashBoardService {
 		return dashBoardMapper.selectProdCntAc2(str3);
 	}
 
+	@Override
+	public List<?> selectLineRunningList(SearchVO searchVO) {
+		return dashBoardMapper.selectLineRunningList(searchVO);
+	}
+
 }

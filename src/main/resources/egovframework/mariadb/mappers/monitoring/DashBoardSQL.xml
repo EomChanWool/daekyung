@@ -90,7 +90,7 @@
 	</select>
 	
 	<select id="selectProdCntAc2" resultType="egovMap">
-	SELECT
+	<!-- SELECT
 		YEAR(cs_reg_date) AS years,
 		month(cs_reg_date) AS months,
 		AVG(cs_work_time) AS avg_work_time,
@@ -113,7 +113,31 @@
 		) AS grouped_data
 		GROUP BY
 		month(cs_reg_date), YEAR(cs_reg_date)
-		ORDER BY months asc
+		ORDER BY months asc -->
+		SELECT
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		SUM(cs_work_time)AS sum_cs_work_time,
+		AVG(cs_work_time)AS avg_work_time
+		FROM sm_cut_sensor_data
+		WHERE 1=1
+		AND YEAR(cs_reg_date) = 2023
+		AND cs_state = 0
+		GROUP BY
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months
+	</select>
+	
+	<select id="selectLineRunningList" resultType="egovMap">
+		SELECT COUNT(*) AS
+		counting , DAQ_NAME, convert(date,DAQ_ED_DATE) AS
+		daq_ed_date, SUM(DAQ_WORK_TIME) AS work_time
+		FROM
+		sm_daq_data
+		WHERE 1=1
+		AND CONVERT(DATE, DAQ_ED_DATE) = #{searchEdDate}
+		GROUP BY daq_name, daq_ed_date
+		ORDER BY DAQ_NAME
 	</select>
 
 </mapper>

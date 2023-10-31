@@ -14,7 +14,9 @@ public interface DashBoardService {
 	Map<String, Object> selectYear3();
 
 	List<?> selectNoticeList(SearchVO searchVO);
-
+	
+	List<?> selectLineRunningList(SearchVO searchVO);
+	
 	Map<String, Object> selectNoticeInfo(Map<String, Object> map);
 	
 	List<?> selectOrdersCnt(String str1);

@@ -71,7 +71,7 @@
 	                                <span class="text">등록</span>
 	                            </a>
 	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_list_standard()" style="float: right; margin-left: 0.3rem;">
-	                                <span class="text">규격삭제</span>
+	                                <span class="text">규격관리</span>
 	                            </a>
 	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_standard()" style="float: right;">
 	                                <span class="text">품목등록</span>

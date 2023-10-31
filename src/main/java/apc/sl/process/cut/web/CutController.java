@@ -195,8 +195,6 @@ public class CutController {
 		
 
 			System.out.println("맵확인 : " + map);
-			List<?> cmList = cutService.selectCutManager();
-			model.put("cmList", cmList);
 			Map<String, Object> detail = cutService.selectCutInfo(map);
 			model.put("cutVO", detail);
 		
@@ -228,16 +226,8 @@ public class CutController {
 //				map.replace("cpStarttime",time111);
 //				map.replace("cpEndtime", time222);
 				
-				
 		
-	
-		
-		
-		
-		
-		map.put("userId", session.getAttribute("user_id"));
 		cutService.modifyCut(map);
-		cutService.modifyCutManger(map);
 		
 		redirectAttributes.addFlashAttribute("msg", "수정 되었습니다.");
 		return "redirect:/sl/process/cutProcess/cutList.do";
@@ -261,8 +251,6 @@ public class CutController {
 	@RequestMapping("/sl/process/cutProcess/deleteCut.do")
 	public String deleteCut(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		cutService.deleteCut(map);
-		map.put("poState", "0");
-		cutService.updatePoState(map);
 
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/process/cutProcess/cutList.do";

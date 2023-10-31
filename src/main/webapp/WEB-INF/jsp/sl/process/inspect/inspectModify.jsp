@@ -84,9 +84,9 @@
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
 											<tr>
-												<th>SPC항목  <span class="req">*</span></th>
+												<th>관리항목  <span class="req">*</span></th>
 												<td>
-													<input type="text" class="form-control" name="siType" id="siType" value="${incoVO.siName}" readonly>
+													<input type="text" class="form-control" name="siType" id="siType" value="${incoVO.siId}" readonly>
 													
 												</td>
 												<th>SPC스펙  <span class="req">*</span></th>
