@@ -42,6 +42,7 @@ public class PrPerformanceController {
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> prPerList = prPerformanceService.selectPrPerformanceList(searchVO);
 		model.put("prPerList",prPerList);
+		System.out.println("리스트 ㅣ " + prPerList);
 		model.put("paginationInfo", paginationInfo);
 		
 		return "sl/basicInfo/prPerformance/prPerformanceList";
