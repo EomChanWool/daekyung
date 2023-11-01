@@ -9,8 +9,11 @@ public interface InspectService {
 	
 	int selectInspectListToCnt(SearchVO searchVO);
 	
+	int waterListToCnt(SearchVO searchVO);
+	
 	List<?> selectInspectList(SearchVO searchVO);
 	
+	List<?> waterList(SearchVO searchVO);
 	
 	List<?> selectMfList();
 	
@@ -26,7 +29,7 @@ public interface InspectService {
 	
 	Map<String,Object> eDataInfo(String str);
 	
-	Map<String,Object> registSiid(Map<String,Object> map);
+	Map<String,Object> registSiId(Map<String,Object> map);
 	
 	
 	int selectCheckIns(Map<String,Object> map);
@@ -42,5 +45,6 @@ public interface InspectService {
 	void updateStat(Map<String, Object> map);
 	
 	void updateReportFileName(Map<String, Object> map);
+	
 
 }

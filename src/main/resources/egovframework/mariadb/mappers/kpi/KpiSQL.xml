@@ -226,7 +226,7 @@
 		SUM(cs_qty) AS total_qty
 		FROM sm_cut_sensor_data
 		WHERE 1=1
-		AND YEAR(cs_reg_date) = #{searchCondition}
+		AND YEAR(cs_reg_date) =#{searchCondition}
 		AND cs_state = 0
 		GROUP BY
 		month(cs_reg_date), YEAR(cs_reg_date)

@@ -12,11 +12,15 @@ public interface InspectMapper {
 	
 	int selectInspectListToCnt(SearchVO searchVO);
 	
+	int waterListToCnt(SearchVO searchVO);
+	
 	List<?>selectInspectList(SearchVO searchVO);
 	
 	List<?> selectMfList();
 	
 	List<?> selectInfo2(Map<String,Object> map);
+	
+	List<?> waterList(SearchVO searchVO);
 	
 	Map<String, Object> excelData(String str);
 	
@@ -28,7 +32,7 @@ public interface InspectMapper {
 	
 	Map<String,Object> eDataInfo(String str);
 	
-	Map<String,Object> registSiid(Map<String,Object> map);
+	Map<String,Object> registSiId(Map<String,Object> map);
 	
 	int selectCheckIns(Map<String,Object> map);
 	
@@ -43,5 +47,6 @@ public interface InspectMapper {
 	void updateStat(Map<String, Object> map);
 	
 	void updateReportFileName(Map<String, Object> map);
+	
 	
 }

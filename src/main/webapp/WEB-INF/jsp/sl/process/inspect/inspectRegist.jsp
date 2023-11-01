@@ -135,9 +135,26 @@
 												
 											</tr>
 											
+											<tr>
+											<th>수압코드  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="wpCode" id="wpCode"/>
+												</td>
+												<th>측정값  <span class="req">*</span></th>
+												<td><input type="text" class="form-control" name="wpValue" id="wpValue"/>
+												</td>
+											</tr>
+											
 										</tbody>
 	                                </table>
+	                                
+	                                
                                 </form>
+                            	<div style="display: inline-block; float: right; margin-top: -5px;">
+                   			<button type="button" class="btn btn-success btn-icon-split" style="border:none;" onclick="fn_popup()">
+                   				<span class="text">분석데이터 입력</span>
+                   			</button>
+                   		</div>
+                                
                                 <div class="btn_bottom_wrap">
 									<button type="submit" class="btn_ok" onclick="fn_regist_ins()" style="border:none;">확인</button>
 									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/process/inspect/inspectList.do'">취소</span>
@@ -155,8 +172,10 @@
             <!-- End of Footer -->
         </div>
         <!-- End of Content Wrapper -->
+        
     </div>
     <!-- End of Page Wrapper -->
+   
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -213,7 +232,7 @@
 		$('#isiLotno').change(function(){
 			inspectInfoAjax2();
 		});
-		
+		console.log($('#analysis').css('display'));
 	});
 
 	function inspectInfoAjax(){
@@ -260,7 +279,11 @@
 	}
 	
 
-	
+	function fn_popup() {
+		let popOption = "width 750px, hegiht=750px, top=300px,left=300px,scrollbars=yes"
+		let openUrl = '/sl/process/inspect/registInspectPopup.do'
+		window.open(openUrl,'pop',popOption)
+	}
 	
 	</script>
 </body>

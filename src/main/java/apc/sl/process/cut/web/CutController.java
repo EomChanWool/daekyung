@@ -29,10 +29,10 @@ public class CutController {
 	
 	@RequestMapping("/sl/process/cutProcess/cutList.do")
 	public String cutList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
-		if(model.get("sear") != null) {
-			Map<String, Object> temp = (Map<String, Object>) model.get("sear");
-			searchVO.setSearchKeyword(temp.get("searchKeyword")+"");	
-		}
+//		if(model.get("sear") != null) {
+//			Map<String, Object> temp = (Map<String, Object>) model.get("sear");
+//			searchVO.setSearchKeyword(temp.get("searchKeyword")+"");	
+//		}
 		int totCnt = cutService.selectCutListToCnt(searchVO);
 		/** pageing setting */
 		searchVO.setPageSize(10);
@@ -41,7 +41,6 @@ public class CutController {
 		paginationInfo.setRecordCountPerPage(10); // 한 페이지에 게시되는 게시물 건수
 		paginationInfo.setPageSize(searchVO.getPageSize()); // 페이징 리스트의 사이즈
 		paginationInfo.setTotalRecordCount(totCnt);
-		
 		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());

@@ -81,7 +81,7 @@ public class ProcessingController {
 	
 	@RequestMapping("/sl/collectInfo/processing/registProcessingOk.do")
 	public String registProcessingOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttribues, HttpSession session) {
-		
+		int checkStop = 0;
 		int exist = processingService.existPro(map);
 		
 		if(exist == 0) {
@@ -90,8 +90,10 @@ public class ProcessingController {
 		}
 		
 		Map<String, Object> checkMap = processingService.checkStop(map);
+		if(checkMap != null) {
+			checkStop = Integer.parseInt(checkMap.get("mfsState")+"");
+		}
 		
-		int checkStop = Integer.parseInt(checkMap.get("mfsState")+"");
 		
 		Map<String, Object> proState = processingService.proState(map);
 		

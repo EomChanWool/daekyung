@@ -105,7 +105,9 @@
 											</tbody>
 											
 											</table>
+											
                                 </form>
+                                
                                 <div class="btn_bottom_wrap">
 									<button type="submit" class="btn_ok" onclick="fn_regist_qualityInfo()" style="border:none;">확인</button>
 									<span class="btn_cancel" onclick="location.href='${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do'">취소</span>
@@ -123,8 +125,10 @@
             <!-- End of Footer -->
         </div>
         <!-- End of Content Wrapper -->
+         
     </div>
     <!-- End of Page Wrapper -->
+    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
