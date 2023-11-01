@@ -30,12 +30,12 @@
                     </form>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                 <%--    <ul class="navbar-nav ml-auto">
 
                         <!-- Nav inspect - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
 
-                    </ul>
+                    </ul> --%>
 
                 </nav>
                 <!-- End of Topbar -->
