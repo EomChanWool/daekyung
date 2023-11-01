@@ -34,10 +34,7 @@ public class WaterPressureServieImpl implements WaterPressureService {
 		return waterPressureMapper.selectDeliveryInfo(map);
 	}
 
-	@Override
-	public int selectExistsDeliveryIdx(Map<String, Object> map) {
-		return waterPressureMapper.selectExistsDeliveryIdx(map);
-	}
+
 
 	@Override
 	public int selectAlreadyRegistDeIdx(Map<String, Object> map) {

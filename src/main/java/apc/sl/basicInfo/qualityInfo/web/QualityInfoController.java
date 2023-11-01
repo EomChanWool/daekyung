@@ -108,6 +108,15 @@ public class QualityInfoController {
 	@RequestMapping("/sl/basicInfo/qualityInfo/deleteQualityInfo.do")
 	public String deleteQualityInfo(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		qualityInfoService.deleteQualityInfo(map);
+		
+		List<Map<String,Object>> spcCodeList = qualityInfoService.spcCodeList(map);
+		
+		for(int i=0; i<spcCodeList.size(); i++) {
+			Map<String,Object> codeMap = spcCodeList.get(i);
+			qualityInfoService.deleteQualityInfo3(codeMap);
+		}
+		
+		qualityInfoService.deleteQualityInfo2(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";
 	}

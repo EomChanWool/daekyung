@@ -22,6 +22,8 @@ public interface QualityInfoService {
 	List<?> selectStandardAjaxInfo(Map<String,Object> map);
 	
 	List<?> selectStandardList();
+	
+	List<Map<String,Object>> spcCodeList(Map<String, Object> map);
 
 	void registQualityInfo(Map<String, Object> map);
 
@@ -38,6 +40,10 @@ public interface QualityInfoService {
 	void modifyQualityInfo(Map<String, Object> map);
 
 	void deleteQualityInfo(Map<String, Object> map);
+	
+	void deleteQualityInfo2(Map<String, Object> map);
+	
+	void deleteQualityInfo3(Map<String, Object> map);
 	
 	void deleteStandardInfo(Map<String, Object> map);
 

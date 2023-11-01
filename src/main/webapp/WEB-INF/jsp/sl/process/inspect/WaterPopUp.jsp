@@ -84,7 +84,7 @@
 	                                   	<tr>
 	                                            <td>${result.wpCode}</td>
 	                                            <td>${result.wpValue}</td>
-	                                            <td><fmt:formatDate value="${result.wpTime}" pattern="yyyy-MM-dd"/></td>
+	                                            <td><fmt:formatDate value="${result.wpTime}" pattern="yyyy-MM-dd HH:mm"/></td>
 	                                           
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_regist_water_go('${result.wpCode}','${result.wpValue}')">

@@ -84,17 +84,17 @@
 		si_id, pi_id,
 		ssi_od01, ssi_od01_max, ssi_od01_min,
 		<if
-			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
 			ssi_od02, ssi_od02_max, ssi_od02_min,
 		</if>
 		ssi_id01, ssi_id01_max, ssi_id01_min,
 		<if
-			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
 			ssi_id02, ssi_id02_max, ssi_id02_min,
 		</if>
 		ssi_t1_bevel, ssi_t1_bevel_max, ssi_t1_bevel_min,
 		<if
-			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
 			ssi_t1_body, ssi_t1_body_max, ssi_t1_body_min,
 		</if>
 		<if test="ithType == 'STUD'">
@@ -106,12 +106,12 @@
 		ssi_root_face_max, ssi_root_face_min,
 		ssi_oa_q_max,
 		<if
-			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'TEE(R)' or  ithType == 'TEE(S)'">ssi_op_p_max,</if>
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'T(R)' or  ithType == 'T(S)'">ssi_op_p_max,</if>
 		<if
 			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)'">
 			ssi_elbow_a, ssi_elbow_a_max, ssi_elbow_a_min
 		</if>
-		<if test="ithType == 'TEE(S)' or ithType == 'TEE(R)'">
+		<if test="ithType == 'T(S)' or ithType == 'T(R)'">
 			ssi_tee_c, ssi_tee_c_max, ssi_tee_c_min,
 			ssi_tee_m, ssi_tee_m_max, ssi_tee_m_min
 		</if>
@@ -135,17 +135,17 @@
 		#{siId}, #{piId},
 		#{ssiOd01}, #{ssiOd01Max}, #{ssiOd01Min},
 		<if
-			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
 			#{ssiOd02}, #{ssiOd02Max}, #{ssiOd02Min},
 		</if>
 		#{ssiId01}, #{ssiId01Max}, #{ssiId01Min},
 		<if
-			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
 			#{ssiId02}, #{ssiId02Max}, #{ssiId02Min},
 		</if>
 		#{ssiT1Bevel}, #{ssiT1BevelMax}, #{ssiT1BevelMin},
 		<if
-			test="ithType == 'TEE(S)' or ithType == 'TEE(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
 			#{ssiT1Body}, #{ssiT1BodyMax}, #{ssiT1BodyMin},
 		</if>
 		<if test="ithType == 'STUD'">
@@ -157,12 +157,12 @@
 		#{ssiRootFaceMax}, #{ssiRootFaceMin},
 		#{ssiOaQMax},
 		<if
-			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'TEE(R)' or  ithType == 'TEE(S)'"> #{ssiOpPMax},</if>
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'T(R)' or  ithType == 'T(S)'"> #{ssiOpPMax},</if>
 		<if
 			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)'">
 			#{ssiElbowA}, #{ssiElbowAMax}, #{ssiElbowAMin}
 		</if>
-		<if test="ithType == 'TEE(S)' or ithType == 'TEE(R)'">
+		<if test="ithType == 'T(S)' or ithType == 'T(R)'">
 			#{ssiTeeC}, #{ssiTeeCMax}, #{ssiTeeCMin},
 			#{ssiTeeM}, #{ssiTeeMMax}, #{ssiTeeMMin}
 		</if>
@@ -201,6 +201,7 @@
 
 	<select id="selectStandardInfoToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_quality_info
+		
 		where 1=1
 		<if test="searchKeyword != ''">
 			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
@@ -209,6 +210,7 @@
 
 	<select id="selectStandardInfo" resultType="egovMap">
 		SELECT * FROM sm_quality_info
+		
 		WHERE 1=1
 		<if test="searchKeyword != ''">
 			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
@@ -231,6 +233,11 @@
 		si_type, si_name FROM sm_standard_info
 		WHERE si_id = #{giGroupcode}
 	</select>
+	
+	<select id="spcCodeList" resultType="egovMap">
+	SELECT * FROM sm_spc_code
+	WHERE sc_prod = #{piId}
+	</select>
 
 	<update id="modifyQualityInfo">
 		UPDATE sm_quality_info SET
@@ -245,8 +252,16 @@
 	</update>
 
 	<delete id="deleteQualityInfo">
-		DELETE FROM sm_quality_info WHERE qi_code = #{qiCode}
+		DELETE FROM sm_spc_specinfo WHERE ssi_id = #{ssiId}
 	</delete>
+	<delete id="deleteQualityInfo2">
+		DELETE FROM sm_spc_code WHERE sc_prod = #{piId}
+	</delete>
+	
+	<delete id="deleteQualityInfo3">
+		DELETE FROM sm_spc_up_low WHERE sc_code = #{scCode}
+	</delete>
+	
 
 	<delete id="deleteStandardInfo">
 		DELETE FROM sm_quality_info WHERE qi_code = #{qiCode}
