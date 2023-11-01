@@ -70,7 +70,7 @@ public class PerformanceServieImpl implements PerformanceService {
 	}
 
 	@Override
-	public int checkExist(Map<String, Object> map) {
-		return performanceMapper.checkExist(map);
+	public int checkExists(Map<String, Object> map) {
+		return performanceMapper.checkExists(map);
 	}
 }

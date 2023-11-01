@@ -13,7 +13,7 @@ public interface PerformanceMapper {
 	
 	int checkOrid(Map<String, Object> map);
 	
-	int checkExist(Map<String, Object> map);
+	int checkExists(Map<String, Object> map);
 
 	List<?> selectPerformanceList(SearchVO searchVO);
 	
