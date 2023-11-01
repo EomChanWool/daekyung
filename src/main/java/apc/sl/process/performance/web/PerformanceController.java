@@ -87,7 +87,6 @@ public class PerformanceController {
 			redirectAttributes.addFlashAttribute("msg","이미 등록한 제품 입니다.");
 			return "redirect:/sl/process/checkPr/registPerformance.do";
 		}
-		
 		map.put("userId", session.getAttribute("user_id"));
 		performanceService.registcheckPr(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");

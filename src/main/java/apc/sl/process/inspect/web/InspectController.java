@@ -216,11 +216,23 @@ public class InspectController {
 			model.put("spcInfo",spcInfo);
 			String Edata = map.get("isiFile")+"";
 			Map<String, Object> eDataInfo = inspectService.eDataInfo(Edata);
-			System.out.println(eDataInfo);
 			model.put("eDataInfo", eDataInfo);
 			model.put("cIsiFile", Edata);
 			model.put("cFile", map.get("cFile"));
 			return "sl/process/inspect/ReduceDetail";
+		}
+		if(type.equals("STUB-END")) {
+			Map<String, Object> detail = inspectService.detailInspec(map);
+			model.put("detail", detail);
+			String spcSpect = map.get("isiSpcSpec")+"";
+			Map<String, Object> spcInfo = inspectService.spcInfo(spcSpect);
+			model.put("spcInfo",spcInfo);
+			String Edata = map.get("isiFile")+"";
+			Map<String, Object> eDataInfo = inspectService.eDataInfo(Edata);
+			model.put("eDataInfo", eDataInfo);
+			model.put("cIsiFile", Edata);
+			model.put("cFile", map.get("cFile"));
+			return "sl/process/inspect/StubDetail";
 		}
 		Map<String, Object> detail = inspectService.detailInspec(map);
 		

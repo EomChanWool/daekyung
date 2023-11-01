@@ -81,8 +81,6 @@
 		#{ptInsDate},
 		GETDATE()
 		)
-
-
 	</insert>
 	
 	<select id="checkExists" resultType="int">
