@@ -254,8 +254,8 @@
 		SELECT YEAR(a.or_date) AS
 		years, MONTH(a.or_date) AS months,
 		max(DATEDIFF(DAY, a.or_date,
-		b.rel_date)) AS lead_max
-		, MIN(DATEDIFF(DAY, a.or_date, b.rel_date)) AS
+		b.rel_clgo)) AS lead_max
+		, MIN(DATEDIFF(DAY, a.or_date, b.rel_clgo)) AS
 		lead_min
 		FROM sm_orders a
 		JOIN sm_release_info b ON a.OR_ID = b.OR_ID
