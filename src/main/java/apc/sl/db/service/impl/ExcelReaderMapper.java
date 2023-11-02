@@ -18,7 +18,7 @@ public interface ExcelReaderMapper {
 	
 	void registProc(Map<String, String> map);
 	
-	void updateMm(Map<String, String> map);
+	void updateMm(Map<String, Object> map);
 
 	void deleteMm();
 	
@@ -27,6 +27,8 @@ public interface ExcelReaderMapper {
 	void testRegist(Map<String,String> map);
 	
 	void registCutpro(Map<String,String> map);
+	
+	void registPi(Map<String, String> map);
 	
 	List<?> outProList();
 	
@@ -45,4 +47,8 @@ public interface ExcelReaderMapper {
 	int checkVision(Map<String,Object> map);
 	
 	void insFileStateUpdate(Map<String,Object> map);
+	
+	Map<String, Object> sublList(Map<String, String> map);
+
+	Map<String, Object> clgoList(Map<String, String> map);
 }

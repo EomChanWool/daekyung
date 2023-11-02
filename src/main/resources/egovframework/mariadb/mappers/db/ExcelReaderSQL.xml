@@ -355,11 +355,7 @@ WHERE CAST(a.mfl_ed_date AS DATE) = CAST(GETDATE() AS DATE)
         INSERT (pi_id, pi_item_type, pi_item_heat, pi_item_name, pi_item_texture, pi_item_standard, pi_item_thickness, pi_item_long, pi_middle, pi_item_unit, pi_remain_qty, pi_remain_kg, pi_reg_date)
         VALUES (source.piId, source.piItemType, source.piItemHeat, source.piItemName, source.piItemTexture, source.piItemStandard, source.piItemThickness, source.piItemLong, source.piMiddle, source.piItemUnit, source.piRemainQty, source.piRemainKg, source.piRegDate);
 	</insert>
-	<update id="updateMm">
-		update sm_product_info
-		set pi_remain_qty = #{piRemainQty}
-		where pi_id = #{piId}
-	</update>
+
 	<insert id="testRegist">
 		insert into sm_test(
 		te_idx,
@@ -386,5 +382,69 @@ WHERE CAST(a.mfl_ed_date AS DATE) = CAST(GETDATE() AS DATE)
 	<delete id="deleteMm">
 		DELETE FROM sm_material_move;
 	</delete>
-
+	<select id="sublList" resultType="egovMap">
+		SELECT 
+			pi_remain_qty,
+			pi_remain_kg
+		FROM
+			sm_product_info
+		WHERE
+			pi_id = #{piId}
+	</select>
+	
+	<update id="updateMm">
+		UPDATE
+			sm_material_move
+		SET
+			<if test="mmIn != '' or mmIn != null">
+				mm_in = #{mmIn},
+			</if>
+			<if test="mmInKg != '' or mmInKg != null">
+				mm_in_kg = #{mmInKg},
+			</if>
+			<if test="mmOut != '' or mmOut != null">
+				mm_out = #{mmOut},
+			</if>
+			<if test="mmOutKg != '' or mmOutKg != null">
+				mm_out_kg = #{mmOutKg},
+			</if>
+			mm_reg_date = GETDATE()
+		WHERE
+			pi_id = #{piId}
+	</update>
+	
+	
+	<insert id="registPi">
+	MERGE INTO sm_product_info AS target
+    USING (VALUES (
+        #{piId},
+        #{piItemType},
+        #{piItemHeat},
+        #{piItemName},
+        #{piItemTexture},
+        #{piItemStandard},
+        #{piItemThickness},
+        #{piItemLong},
+        #{piMiddle},
+        #{piItemUnit},
+        #{piRemainQty},
+        #{piRemainKg},
+        GETDATE()
+    )) AS source (piId, piItemType, piItemHeat, piItemName, piItemTexture, piItemStandard, piItemThickness, piItemLong, piMiddle, piItemUnit, piRemainQty, piRemainKg, piRegDate)
+    ON target.pi_id = source.piId
+    WHEN MATCHED THEN
+        UPDATE SET target.pi_remain_qty = source.piRemainQty, target.pi_remain_kg = source.piRemainKg 
+    WHEN NOT MATCHED THEN
+        INSERT (pi_id, pi_item_type, pi_item_heat, pi_item_name, pi_item_texture, pi_item_standard, pi_item_thickness, pi_item_long, pi_middle, pi_item_unit, pi_remain_qty, pi_remain_kg, pi_reg_date)
+        VALUES (source.piId, source.piItemType, source.piItemHeat, source.piItemName, source.piItemTexture, source.piItemStandard, source.piItemThickness, source.piItemLong, source.piMiddle, source.piItemUnit, source.piRemainQty, source.piRemainKg, source.piRegDate);
+	</insert>
+	
+	<select id="clgoList" resultType="egovMap">
+		SELECT 
+			or_id
+		FROM
+			sm_release_info
+		WHERE
+			or_id = #{orId}
+	</select>
 </mapper>

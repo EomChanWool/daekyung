@@ -286,8 +286,67 @@ public class Scheduler {
 		}
 	}
 	
-//	@Scheduled(cron = "50 04 21 * * *")
-//	@Scheduled(cron = "25 * * * * *")
+public void readClgo() throws Exception{
+		
+		
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Date now = new Date();
+		
+		now =  new Date(now.getTime()+(1000*60*60*24*-1));
+		
+		String edDate = format.format(now);
+		
+		
+		File note = new File("C:\\test4\\clgo-"+edDate+".txt");
+		
+		Map<String,String> linee = new HashMap<String, String>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(note));
+			String line = "";
+			
+			while ((line= br.readLine()) !=null) {
+				String[] line2 = line.split(",");
+				Map<String, Object> clgoChk = new HashMap<>();
+				
+				
+				linee.put("orId", line2[0].trim()); //수주번호
+				linee.put("relCompony", line2[1].trim()); //거래처
+				linee.put("relDel", line2[2].trim()); //납품처
+				linee.put("relEsno", line2[3].trim()); //주문번호
+				linee.put("relPrno", line2[4].trim()); //공정번호
+				linee.put("relOrType", line2[5].trim()); //수주구분
+				linee.put("relNabgi", line2[6].trim()); //납기일자
+				linee.put("relQty", line2[7].trim()); //수량
+				linee.put("relUnit", line2[8].trim()); //단가
+				linee.put("relPrice", line2[9].trim()); //금액
+				linee.put("relProd", line2[10].trim()); //품명
+				linee.put("relTexture", line2[11].trim()); //재질
+				linee.put("relThickness", line2[12].trim()); //두께
+				linee.put("relState", line2[13].trim()); //상태
+				linee.put("poLotno", line2[14].trim()); //로트번호
+				linee.put("relReport", line2[15].trim()); //성적서일자
+				linee.put("relCompletion", line2[16].trim()); //완료일자
+				linee.put("relPerson", line2[17].trim()); //담당자
+				linee.put("relNote1", line2[18].trim()); //비고
+				linee.put("relNote2", line2[19].trim()); //비고
+
+
+				clgoChk = excelReaderService.clgoList(linee);
+				if (clgoChk != null) {
+					linee.clear();
+				}
+					excelReaderService.registRelease(linee);
+			}
+			br.close();
+			EgovFileUtil.delete(note);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Scheduled(cron = "30 10 21 * * *")
+//	@Scheduled(cron = "20 26 09 * * *")
 	public void readSubl() throws Exception{
 		
 		
@@ -306,9 +365,7 @@ public class Scheduler {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(note));
 			String line = "";
-			
 			while ((line= br.readLine()) !=null) {
-				
 				String[] line2 = line.split(",");
 				
 				
@@ -322,17 +379,65 @@ public class Scheduler {
 				linee.put("piItemLong", line2[16].trim());
 				linee.put("piMiddle", line2[8].trim());
 				linee.put("piItemUnit", line2[9].trim());
-				linee.put("piRemainQty", line2[10].trim());
-				linee.put("piRemainKg", line2[11].trim());
-				System.out.println(linee);
-				excelReaderService.registMm(linee);
+				String qtyVolume = qtyStr(line2[10].trim());
+				String kgVolume = kgStr(line2[11].trim());
+				linee.put("piRemainQty", qtyVolume);
+				linee.put("piRemainKg", kgVolume);
+//				System.out.println(linee);
+				Map<String, Object> sublList = excelReaderService.sublList(linee);
+				Map<String, Object> mmMap = new HashMap<>();
+				mmMap.put("piId", linee.get("piId"));
+			
+				if (sublList != null) {
+					int nowQty = Integer.parseInt(String.valueOf(sublList.get("piRemainQty")));
+					float nowKg = Float.parseFloat(String.valueOf(sublList.get("piRemainKg")));
+					int addQty = Integer.parseInt(String.valueOf(linee.get("piRemainQty")));
+					float addKg = Float.parseFloat(String.valueOf(linee.get("piRemainKg")));
+					String result = comparisonSubl(nowQty, nowKg, addQty, addKg);
+					
+//					mmMap.put("mmIn", 0);
+//		            mmMap.put("mmInKg", 0);
+//		            mmMap.put("mmOut", 0);
+//		            mmMap.put("mmOutKg", 0);
+					
+					if ( result == "kUp") { //kg증가
+						mmMap.put("mmInKg", addKg - nowKg);
+					} else if ( result == "kDown") { //kg감소
+						mmMap.put("mmOutKg", nowKg - addKg);
+					} else if ( result == "qUp") { //qty증가
+						mmMap.put("mmIn", addQty - nowQty);
+					} else if ( result == "qDown") { //qty감소
+						mmMap.put("mmOut", nowQty - addQty);
+					} else if ( result == "qkUp") { //qty,kg 증가
+						mmMap.put("mmIn", addQty - nowQty);
+						mmMap.put("mmInKg", addKg - nowKg);
+					} else if ( result == "qUpkDown") { //qty증가, kg감소
+						mmMap.put("mmIn", addQty - nowQty);
+						mmMap.put("mmOutKg", nowKg - addKg);
+					} else if ( result == "qDownkUp") { //qty감소, kg증가
+						mmMap.put("mmOut", nowQty - addQty);
+						mmMap.put("mmInKg", addKg - nowKg);
+					} else if ( result == "qDownkDown") { //qty감소, kg감소
+						mmMap.put("mmOut", nowQty - addQty);
+						mmMap.put("mmOutKg", nowKg - addKg);
+					}
+					
+					if (mmMap.get("mmInKg") != null || mmMap.get("mmOutKg") != null
+					 || mmMap.get("mmIn") != null || mmMap.get("mmOut") != null	) {
+						System.out.println(mmMap);
+						excelReaderService.updateMm(mmMap);
+					}
+					excelReaderService.registPi(linee);
+				} else {
+					excelReaderService.registPi(linee);
+					excelReaderService.registMm(linee);
+				}
 			}
 			br.close();
 			EgovFileUtil.delete(note);
 		} catch (Exception e) {
 		}
 	}
-
 	
 	
 	@Scheduled(cron = "20 32 20 * * *")
@@ -509,8 +614,10 @@ public class Scheduler {
 		
 	}
 	
-//	@Scheduled(cron = "20 04 21 * * *")
-//	@Scheduled(cron = "20 * * * * *")
+
+	
+	@Scheduled(cron = "20 04 21 * * *")
+//	@Scheduled(cron = "30 21 09 * * *")
 	public void openSubl() {
 		  ftp = new FTPClient();
 		    //default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
@@ -595,7 +702,93 @@ public class Scheduler {
 		
 		
 	}
-	
+
+		@Scheduled(cron = "20 06 21 * * *")
+//		@Scheduled(cron = "20 20 09 * * *")
+	public void openClgo() {
+		ftp = new FTPClient();
+		//default controlEncoding 값이 "ISO-8859-1" 때문에 한글 파일의 경우 파일명이 깨짐
+		//ftp server 에 저장될 파일명을 uuid 등의 방식으로 한글을 사용하지 않고 저장할 경우 UTF-8 설정이 따로 필요하지 않다.
+		ftp.setControlEncoding("UTF-8");
+		//PrintCommandListener 를 추가하여 표준 출력에 대한 명령줄 도구를 사용하여 FTP 서버에 연결할 때 일반적으로 표시되는 응답을 출력
+		ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
+		
+		try {
+			//ftp 서버 연결
+			ftp.connect("dkbend.iptime.org", 30431);
+			
+			//ftp 서버에 정상적으로 연결되었는지 확인
+			int reply = ftp.getReplyCode();
+			if (!FTPReply.isPositiveCompletion(reply)) {
+				ftp.disconnect();
+				System.out.println("에러");
+			}
+			
+			//socketTimeout 값 설정
+			ftp.setSoTimeout(1000);
+			//ftp 서버 로그인
+			ftp.login("signlab", "dk304316@");
+			//file type 설정 (default FTP.ASCII_FILE_TYPE)
+			ftp.setFileType(FTP.BINARY_FILE_TYPE);
+			//ftp Active모드 설정
+			ftp.enterLocalPassiveMode(); 
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("에러");
+		}
+		//긁어오기 이까지
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Date now = new Date();
+		
+		now =  new Date(now.getTime()+(1000*60*60*24*-1));
+		
+		String edDate = format.format(now);
+		String fileName = "/up-data/clgo-"+edDate;
+		File get_file = new File("C:\\test4","clgo-"+edDate+"row.txt");
+		
+		
+		try {
+			FileOutputStream outputstream = new FileOutputStream(get_file);
+			boolean result = ftp.retrieveFile(fileName, outputstream);
+			
+			if(result) {
+				System.out.println("파일다운성공");
+			}else {
+				System.out.println("파일없음");
+			}
+			
+			FileInputStream fis = new FileInputStream(get_file);
+			InputStreamReader isr = new InputStreamReader(fis,"euc-kr");
+			
+			
+			FileOutputStream fos1 = new FileOutputStream("C:\\test4\\clgo-"+edDate+".txt");
+			OutputStreamWriter osw1 = new OutputStreamWriter(fos1,"utf-8");
+			int c ;
+			while ((c=isr.read())!=-1) {
+				osw1.write(c);
+			}
+			
+			isr.close();
+			osw1.close();
+			outputstream.close();
+			EgovFileUtil.delete(get_file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				//ftp.deleteFile(fileName);
+				ftp.logout();
+				ftp.disconnect();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("에러");
+			}
+		}
+		
+		
+	}
 	
 	
 //	//@Scheduled(cron = "20 * * * * *")
@@ -723,7 +916,65 @@ public class Scheduler {
 		 
 		
 	}
+	public String comparisonSubl(int nowqty, float nowkg, int addqty, float addkg) {
+		String result = "";
+		if (nowqty == addqty && nowkg == addkg) {
+			result = "qkNo";
+		} else if (nowqty == addqty && nowkg < addkg) {
+			result = "kUp";
+		} else if (nowqty == addqty && nowkg > addkg) {
+			result = "kDown";
+		} else if (nowqty < addqty && nowkg == addkg) {
+			result = "qUp";
+		} else if (nowqty > addqty && nowkg == addkg) {
+			result = "qDown";
+		} else if (nowqty < addqty && nowkg < addkg) {
+			result = "qkUp";
+		} else if (nowqty < addqty && nowkg > addkg) {
+			result = "qUpkDown";
+		} else if (nowqty > addqty && nowkg < addkg) {
+			result = "qDownkUp";
+		} else if (nowqty > addqty && nowkg > addkg) {
+			result = "qDownkDown";
+		}
+		return result;
+	}
+	
+	public String qtyStr(String qty) {
 
+		int piRemainQty = 0;
+		try {
+		    String numericPartQty = qty.replaceAll("[^0-9.]", "");
+
+		    if (!numericPartQty.isEmpty()) {
+	            piRemainQty = Integer.parseInt(numericPartQty);
+	        }
+
+		    
+		} catch (NumberFormatException e) {
+			System.out.println(piRemainQty);
+		    e.printStackTrace();
+		}
+		return Integer.toString(piRemainQty);
+	}
+	
+	public String kgStr(String kg) {
+		
+		float piRemainKg = 0;
+		try {
+			String numericPartKg = kg.replaceAll("[^0-9.]", "");
+			
+			if (!numericPartKg.isEmpty()) {
+				piRemainKg = Float.parseFloat(numericPartKg);
+	        }
+
+			
+		} catch (NumberFormatException e) {
+			System.out.println(piRemainKg);
+			e.printStackTrace();
+		}
+		return Float.toString(piRemainKg);
+	}
 	
 //	public static void setUserId(String userId) {
 //		user_id = userId;

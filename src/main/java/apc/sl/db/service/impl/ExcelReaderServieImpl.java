@@ -30,10 +30,7 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 		excelReaderMapper.registMm(map);
 	}
 
-	@Override
-	public void updaeMm(Map<String, String> map) {
-		excelReaderMapper.updateMm(map);
-	}
+	
 
 	@Override
 	public void deleteMm() {
@@ -81,12 +78,6 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 	}
 
 	@Override
-	public void updateMm(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public int checkjungbok(Map<String, String> map) {
 		return excelReaderMapper.checkjungbok(map);
 	}
@@ -115,5 +106,35 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 	public void insFileStateUpdate(Map<String, Object> map) {
 		excelReaderMapper.insFileStateUpdate(map);
 	}
+	
+	@Override
+	public Map<String, Object> sublList(Map<String, String> map) {
+		return excelReaderMapper.sublList(map);
+	}
+
+	@Override
+	public Map<String, Object> clgoList(Map<String, String> map) {
+		return excelReaderMapper.clgoList(map);
+	}
+
+	@Override
+	public void updateMm(Map<String, Object> map) {
+		excelReaderMapper.updateMm(map);
+		
+	}
+
+	@Override
+	public void updaeMm(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registPi(Map<String, String> map) {
+		excelReaderMapper.registPi(map);
+		
+	}
+
+
 
 }
