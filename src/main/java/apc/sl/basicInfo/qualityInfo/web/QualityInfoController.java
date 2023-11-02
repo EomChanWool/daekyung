@@ -207,6 +207,27 @@ public class QualityInfoController {
 		return "redirect:/sl/basicInfo/qualityInfo/listStandard.do";
 	}
 	
+	@RequestMapping("/sl/basicInfo/qualityInfo/modifySpcInfo.do")
+	public String modifySpcInfo(@RequestParam Map<String,Object>map,ModelMap model) {
+		
+		System.out.println(map);
+		
+		Map<String,Object> spcInfo = qualityInfoService.selectSpcInfo(map);
+		
+		model.put("spcInfo", spcInfo);
+		
+		return "sl/basicInfo/qualityInfo/spcInfoModify";
+	}
+	
+	@RequestMapping("/sl/basicInfo/qualityInfo/modifySpcInfoOk.do")
+	public String modifySpcInfoOk(@RequestParam Map<String,Object>map,RedirectAttributes redirectAttributes) {
+		
+		System.out.println(map);
+		
+		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
+		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";
+	}
+	
 	public void spcDb(String type, String[] item, Map<String,Object> map, int num) {
 		
 		Map<String,Object> temp = new HashMap<String, Object>();

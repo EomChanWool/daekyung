@@ -99,7 +99,7 @@
 	                                            <td>${result.qiIsuse}</td>
 	                                            
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_qualityInfo_go('${result.ssiId}','${result.piId}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_qualityInfo_go('${result.ssiId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
 				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_qualityInfo('${result.ssiId}','${result.piId}')">
@@ -181,7 +181,7 @@
 	
 		function fn_modify_qualityInfo_go(id){
 			listForm.ssiId.value = id;
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifyQualityInfo.do";
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifySpcInfo.do";
 			listForm.submit();
 		}
 		function fn_detail_qualityInfo(qiCode){

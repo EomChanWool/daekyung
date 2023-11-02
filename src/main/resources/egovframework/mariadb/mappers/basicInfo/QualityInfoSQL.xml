@@ -238,7 +238,12 @@
 	SELECT * FROM sm_spc_code
 	WHERE sc_prod = #{piId}
 	</select>
-
+	
+	<select id="selectSpcInfo" resultType="egovMap">
+	SELECT * FROM sm_spc_specinfo
+	WHERE ssi_id = #{ssiId}
+	</select>
+	
 	<update id="modifyQualityInfo">
 		UPDATE sm_quality_info SET
 		qi_type = #{qiType},

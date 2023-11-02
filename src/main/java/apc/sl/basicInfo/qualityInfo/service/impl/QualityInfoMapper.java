@@ -33,6 +33,8 @@ public interface QualityInfoMapper {
 	
 	Map<String, Object> selectDetailQualInfo(Map<String, Object> map);
 	
+	Map<String,Object> selectSpcInfo(Map<String,Object> map);
+	
 	void spcCodeReg(Map<String,Object> map);
 	
 	void spcUpLowReg(Map<String,Object> map);

@@ -124,6 +124,11 @@ public class QualityInfoServieImpl implements QualityInfoService {
 		return qualityInfoMapper.spcCodeList(map);
 	}
 
+	@Override
+	public Map<String, Object> selectSpcInfo(Map<String, Object> map) {
+		return qualityInfoMapper.selectSpcInfo(map);
+	}
+
 
 	
 
