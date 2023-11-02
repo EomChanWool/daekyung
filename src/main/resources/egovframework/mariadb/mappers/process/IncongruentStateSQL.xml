@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.quality.incongruentState.service.impl.IncongruentStateMapper">
+
+	<select id="selectIncoStateList" resultType="egovMap">
+		SELECT
+		months.m AS
+		month,
+		COALESCE(COUNT(ti_dte), 0) AS count
+		FROM
+		(SELECT 1 AS m UNION
+		SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+		UNION SELECT 6
+		UNION
+		SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION
+		SELECT 11 UNION
+		SELECT 12) AS months
+		LEFT JOIN sm_analysis_info ON
+		MONTH(ti_dte) = months.m AND YEAR(ti_dte) =
+		#{searchCondition2}
+		GROUP BY
+		months.m
+		ORDER BY
+		months.m
+
+	</select>
+
+
+	<select id="selectIncongruity" resultType="egovMap">
+		SELECT
+		months.m AS month,
+		COALESCE(COUNT(CASE WHEN ti_state = '부적합' THEN ti_dte END), 0) AS count
+		FROM
+		(SELECT 1 AS m UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+		UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION
+		SELECT 10
+		UNION SELECT 11 UNION SELECT 12) AS months
+		LEFT JOIN sm_analysis_info ON
+		MONTH(ti_dte) = months.m AND YEAR(ti_dte) = #{searchCondition2}
+		GROUP BY
+		months.m
+		ORDER BY
+		months.m
+	</select>
+
+	<select id="selectInYearList" resultType="egovMap">
+		SELECT
+		DATE_FORMAT(ti_dte, '%Y') AS ti_year
+		FROM sm_analysis_info
+		GROUP BY
+		DATE_FORMAT(ti_dte, '%Y')
+		ORDER BY ti_year DESC
+	</select>
+
+</mapper>

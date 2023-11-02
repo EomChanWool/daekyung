@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.basicInfo.userAuthority.service.impl.UserAuthorityMapper">
+	<select id="selectUserAuthorityListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_member_auth
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND ma_group LIKE CONCAT ('%', #{searchCondition}, '%')
+		</if>
+		AND ma_state = 1
+	</select>
+
+	<select id="selectUserAuthorityList" resultType="egovMap">
+		SELECT
+		ma_idx,
+		ma_group,
+		ma_pname,
+		ma_url,
+		mi_level,
+		ma_state
+		FROM
+		sm_member_auth
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND ma_group LIKE CONCAT ('%', #{searchCondition}, '%')
+		</if>
+		AND ma_state = 1
+		ORDER BY ma_idx DESC
+		OFFSET (#{firstIndex}) ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+
+
+	<select id="selectNotPro" resultType="egovMap">
+		SELECT ma_idx, ma_group,
+		ma_pname
+		FROM sm_member_auth
+		WHERE ma_state = 0
+	</select>
+
+	<select id="selectUserAuthorityInfo" resultType="egovMap">
+		SELECT * from
+		sm_member_auth WHERE ma_idx = #{maIdx}
+	</select>
+
+	<select id="selectAccess" resultType="int">
+		SELECT MI_LEVEL
+		FROM
+		sm_member_auth
+		WHERE MA_URL LIKE CONCAT('%',#{str},'%')
+		GROUP BY
+		MI_LEVEL
+	</select>
+
+	<select id="menuState" resultType="int">
+		SELECT ma_state
+		FROM
+		sm_member_auth
+		WHERE MA_URL LIKE CONCAT('%',#{str},'%')
+		GROUP BY
+		MA_STATE
+	</select>
+
+	<select id="selectExistAuth" resultType="int">
+		SELECT COUNT(*) FROM sm_member_auth
+		WHERE ma_idx = #{maIdx}
+	</select>
+
+	<select id="selectNotInfo" resultType="egovMap">
+		SELECT ma_group, ma_pname,
+		ma_url,mi_level
+		FROM sm_member_auth
+		WHERE ma_idx = #{maIdx}
+	</select>
+
+	<update id="registUserAuthority">
+		update sm_member_auth set
+		ma_state = 1 ,
+		mi_level =
+		#{miLevel}
+		where ma_idx = #{maIdx}
+
+	</update>
+	<update id="modifyUserAuthority">
+		UPDATE sm_member_auth SET
+		mi_level = #{miLevel}
+		where ma_idx =#{maIdx}
+
+	</update>
+
+	<update id="deleteUserAuthority">
+		UPDATE sm_member_auth SET
+		ma_state = 0
+		where ma_idx = #{maIdx}
+	</update>
+
+	<!-- <delete id="deleteUserAuthority"> -->
+	<!-- DELETE FROM sm_account WHERE a_idx = #{aIdx} -->
+	<!-- </delete> -->
+</mapper>

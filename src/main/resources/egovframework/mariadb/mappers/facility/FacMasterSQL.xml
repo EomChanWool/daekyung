@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.facility.facMaster.service.impl.FacMasterMapper">
+	<select id="selectFacMasterListToCnt" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM sm_equipment
+		WHERE 1=1
+		<if test="searchCondition == '설비ID'">
+			AND eq_id LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비구분'">
+			AND eq_type LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비명'">
+			AND eq_name LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비상태'">
+			AND eq_op_state LIKE '%' + #{searchKeyword} + '%'
+		</if>
+	</select>
+	
+	<select id="selectFacMasterList" resultType="egovMap">
+		SELECT
+			eq_id,
+			eq_type,
+			eq_name,
+			eq_sensorid,
+			eq_place,
+			eq_op_state,
+			eq_isuse,
+			eq_reg_id,
+			eq_reg_date,
+			eq_edt_id,
+			eq_edt_date
+		FROM sm_equipment
+		WHERE 1=1
+		<if test="searchCondition == '설비ID'">
+			AND eq_id LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비구분'">
+			AND eq_type LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비명'">
+			AND eq_name LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '설비상태'">
+			AND eq_op_state LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		ORDER BY eq_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+	</select>
+	
+	<insert id="registFacMaster">
+		DECLARE @str NVARCHAR(50) = 'EM'
+		DECLARE @seq INT
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR eq_seq
+	
+		INSERT INTO sm_equipment
+			(
+			eq_id,
+			eq_type,
+			eq_name,
+			eq_sensorid,
+			eq_place,
+			eq_op_state,
+			eq_isuse,
+			eq_reg_id,
+			eq_reg_date
+			)
+		VALUES
+			(
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
+			#{eqType},
+			#{eqName},
+			#{eqSensorid},
+			#{eqPlace},
+			#{eqOpState},
+			#{eqIsuse},
+			#{userId},
+			GETDATE()
+			)
+	</insert>
+	
+	<select id="selectFacMasterInfo" resultType="egovMap">
+		SELECT
+			eq_id,
+			eq_type,
+			eq_name,
+			eq_sensorid,
+			eq_place,
+			eq_op_state,
+			eq_isuse,
+			eq_reg_id,
+			eq_reg_date,
+			eq_edt_id,
+			eq_edt_date
+		FROM sm_equipment
+		WHERE eq_id = #{eqId}
+	</select>
+	
+	<update id="modifyFacMaster">
+		UPDATE sm_equipment SET
+			eq_id = #{eqId},
+			eq_type = #{eqType},
+			eq_name = #{eqName},
+			eq_sensorid = #{eqSensorid},
+			eq_place = #{eqPlace},
+			eq_op_state = #{eqOpState},
+			eq_isuse = #{eqIsuse},
+			eq_edt_id = #{userId},
+			eq_edt_date = GETDATE()
+		WHERE eq_id = #{eqId}
+	</update>
+	
+	<delete id="deleteFacMaster">
+		DELETE FROM sm_equipment WHERE eq_id = #{eqId}
+	</delete>
+	
+</mapper>

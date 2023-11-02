@@ -1,0 +1,74 @@
+@charset "utf-8";
+
+.login_bg{
+	background: #F6F8FA;
+}
+.login_wrap{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+	.login{
+		box-sizing: border-box;
+		display: flex;
+		align-content: center;
+	    justify-content: center;
+	    align-items: center;
+	    flex-direction: column;
+		min-width: 420px;
+		min-height: 340px;
+		padding: 20px;
+		background: var(--sub-color-1);
+		text-align: center;
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		font: 1rem 'PretendardBold';
+	}
+		.login_tit > span.ci_skaceLogin{
+			float: left;
+			width: 100%;
+			height: 30px;
+			margin: 10px 0;
+			background: url('../images/ci_skaceLogin.png') no-repeat center;
+			cursor: pointer;
+			display: inline-block;
+		}
+		.login_tit > span.login_txt{
+			float: left;
+			width: 100%;
+			margin-bottom: 40px;
+			font: 1.786rem 'PretendardBold';
+			color: #414757;
+			cursor: pointer;
+		}
+		.login input[type="text"], .login input[type="password"]{
+			float: left;
+			width: 100%;
+			height: 40px;
+			margin-bottom: 10px;
+			border: 1px solid var(--border-color);
+			border-radius: 5px;
+			text-align: center;
+			font: 1rem 'Pretendard';
+			outline: none;
+		}
+		.login input[type="text"]:focus, .login input[type="password"]:focus{
+			outline: none;
+			border-color: var(--main-color);
+			box-shadow: none;
+			transition: all 0.5s linear;
+		}
+		.btn_login{
+			float: left;
+			box-sizing: border-box;
+			width: 100%;
+			height: 45px;
+			margin: 10px;
+			border-radius: 5px;
+			background: var(--main-color);
+			color: var(--sub-color-2);
+			font: 1.143rem 'PretendardBold';
+			cursor: pointer;
+		}

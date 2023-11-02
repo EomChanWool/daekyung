@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="a">
+	<!-- <select id="selectMaterialMoveListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_program
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND p_group LIKE CONCAT ('%', #{searchCondition}, '%')
+		</if>
+	</select>
+	
+	<select id="selectMaterialMoveList" resultType="egovMap">
+		SELECT
+			p_idx,
+			p_group,
+			p_name,
+			p_url,
+			p_use_flag
+		FROM sm_program
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND p_group LIKE CONCAT ('%', #{searchCondition}, '%')
+		</if>
+		ORDER BY p_idx DESC
+		LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<insert id="registMaterialMove">
+		INSERT INTO sm_program
+			(
+			p_idx,
+			p_group,
+			p_name,
+			p_url,
+			p_use_flag
+			)
+		VALUES
+			(
+			(SELECT CONCAT('P', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.p_idx),0) FROM sm_program a),'[a-z]','')))+1,4,0))),
+			#{pGroup},
+			#{pName},
+			#{pUrl},
+			#{pUseFlag}
+			)
+	</insert>
+	
+	<select id="selectMaterialMoveInfo" resultType="egovMap">
+		SELECT
+			p_idx,
+			p_group,
+			p_name,
+			p_url,
+			p_use_flag
+		FROM sm_program
+		WHERE p_idx = #{pIdx}
+	</select>
+	
+	<update id="modifyMaterialMove">
+		UPDATE sm_program SET
+			p_group = #{pGroup},
+			p_name = #{pName},
+			p_url = #{pUrl},
+			p_use_flag = #{pUseFlag}
+		WHERE p_idx = #{pIdx}
+	</update>
+	
+	<delete id="deleteMaterialMove">
+		DELETE FROM sm_program WHERE p_idx = #{pIdx}
+	</delete> -->
+</mapper>

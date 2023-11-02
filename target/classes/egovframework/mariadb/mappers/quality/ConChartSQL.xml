@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.quality.conChart.service.impl.ConChartMapper">
+	<select id="selectConChartListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_item
+		WHERE 1=1
+		AND item_type = '자재'
+		<if test="searchCondition != ''">
+			AND item_type LIKE CONCAT('%',#{searchCondition},'%')
+		</if>
+		<if test="searchKeyword != ''">
+			AND item_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	
+	<select id="selectConChartList" resultType="egovMap">
+		SELECT
+			item_cd,
+			item_name,
+			item_std,
+			item_cnt,
+			item_note
+		FROM sm_item
+		WHERE 1=1
+		AND item_type = '자재'
+		<if test="searchCondition != ''">
+			AND item_type LIKE CONCAT('%',#{searchCondition},'%')
+		</if>
+		<if test="searchKeyword != ''">
+			AND item_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY item_cd DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+</mapper>

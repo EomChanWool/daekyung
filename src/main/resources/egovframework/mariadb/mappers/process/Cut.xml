@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.process.cut.service.impl.CutMapper">
+	<select id="selectCutListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_cut_proc
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		<if test="searchStDate != ''">
+			AND cp_reg_date >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND cp_reg_date <![CDATA[<=]]> #{searchEdDate}
+		</if>
+
+	</select>
+
+	<select id="selectCutList" resultType="egovMap">
+	<!-- 	SELECT a.or_id ,MAX(a.or_prod) AS or_prod, MAX(a.or_qty) AS or_qty,
+		MAX(a.or_process) AS or_process,
+		ISNULL(
+		(
+		SELECT TOP 1 cps_state
+		FROM
+		sm_cut_process_stop
+		WHERE OR_ID = a.OR_ID
+		ORDER BY cps_idx DESC
+		),
+		0
+		) AS
+		cps_state , MAX(b.cps_idx) AS cps_idx, MAX(cpl_manager) AS cpl_manager
+		FROM sm_orders a
+		LEFT JOIN
+		sm_cut_process_stop b
+		ON a.OR_ID =
+		b.OR_ID
+		LEFT
+		JOIN sm_cut_proc_log c
+		ON a.or_id = c.or_id
+		WHERE 1=1
+		AND or_process IN
+		(0,
+		1) -->
+		SELECT * FROM sm_cut_proc
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		<if test="searchStDate != ''">
+			AND cp_reg_date >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND cp_reg_date <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		<!-- GROUP BY a.or_id -->
+		ORDER BY cp_idx DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="detailCut" resultType="egovMap">
+		select * from sm_cut_proc
+		where cp_idx = #{cpIdx}
+	</select>
+
+
+	<select id="selectEQList" resultType="egovMap">
+		SELECT eq_id,eq_name FROM
+		sm_equipment
+	</select>
+
+	<select id="selectLotnoList" resultType="egovMap">
+		SELECT po_lotno FROM
+		sm_product_order
+		where po_state IN (0,1)
+	</select>
+
+	<select id="selectCutAjax" resultType="egovMap">
+		SELECT a.po_lotno,
+		b.pi_item_type,a.po_order_qty , a.po_state FROM
+		sm_product_order a JOIN
+		sm_product_info b ON a.PI_ID=b.PI_ID
+		WHERE a.po_lotno = #{poLotno}
+	</select>
+
+	<select id="selectCutManager" resultType="egovMap">
+		SELECT mi_name FROM
+		sm_member_info
+		WHERE MI_DEPARTMENT = '절단부'
+	</select>
+
+	<update id="updatePoState">
+		update sm_product_order set
+		po_state = #{poState}
+		where po_lotno = #{poLotno}
+	</update>
+
+
+
+	<select id="selctExistsOn" resultType="int">
+		SELECT COUNT(*) FROM
+		sm_orders WHERE or_id = #{orId}
+	</select>
+
+	<select id="selectExistsLot" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		sm_product_order WHERE po_lotno = #{poLotno}
+	</select>
+
+	<select id="selectExistsProdResult" resultType="int">
+		SELECT COUNT(*)
+		FROM sm_prod_result WHERE wo_idx = #{woIdx} AND pr_list_nm = #{prNm}
+	</select>
+
+
+	<insert id="registCut">
+		INSERT INTO sm_cut_proc (
+		or_id,
+		cp_mfno,
+		cp_prod_name,
+		cp_texture,
+		cp_thickness,
+		cp_state,
+		cp_standard,
+		po_lotno,
+		cp_qty,
+		cp_note,
+		cp_reg_date
+		) VALUES
+		(
+		#{orId},
+		#{cpMfno},
+		#{cpProdName},
+		#{cpTexture},
+		#{cpThickness},
+		#{cpState},
+		#{cpStandard},
+		#{poLotno},
+		#{cpQty},
+		#{cpNote},
+		GETDATE()
+		)
+
+	</insert>
+
+	<select id="selectCutInfo" resultType="egovMap">
+		SELECT * FROM sm_cut_proc
+		WHERE or_id = #{orId}
+	</select>
+
+
+
+
+
+
+	<update id="modifyCut">
+		UPDATE sm_cut_proc SET
+		cp_mfno = #{cpMfno},
+		cp_prod_name = #{cpProdName},
+		cp_texture = #{cpTexture},
+		cp_thickness = #{cpThickness},
+		cp_state = #{cpState},
+		cp_standard = #{cpStandard},
+		cp_qty = #{cpQty},
+		cp_note =
+		#{cpNote}
+		WHERE or_id = #{orId}
+
+	</update>
+
+
+
+	<update id="updateProcess3">
+		UPDATE sm_orders SET
+		or_process = 4
+		WHERE or_id
+		=#{orId}
+	</update>
+
+	<update id="updateCSStopLog2">
+		<!-- UPDATE sm_cut_prosess_stop SET cps_state = 2, cps_re_time = GETDATE(), 
+			CPS_REST_TIME = DATEDIFF(MINUTE, CPS_STOP_TIME, GETDATE()) WHERE or_id = 
+			( SELECT TOP 1 or_id FROM sm_cut_prosess_stop WHERE or_id = #{orId} WHERE 
+			cps_idx = #{cpsIdx} ORDER BY CPS_STOP_TIME DESC ) -->
+		UPDATE sm_cut_process_stop SET
+		cps_state = 2,
+		cps_re_time = GETDATE(),
+		CPS_REST_TIME = DATEDIFF(MINUTE,
+		CPS_STOP_TIME, GETDATE())
+		where cps_idx
+		= #{cpsIdx}
+
+	</update>
+
+	<delete id="deleteCut">
+		DELETE FROM sm_cut_proc WHERE or_id = #{orId}
+	</delete>
+	<!-- <delete id="deleteProdResult"> -->
+	<!-- DELETE FROM sm_prod_result WHERE wo_idx = #{woIdx} -->
+	<!-- AND PR_LIST_NM = '품질검사' -->
+	<!-- </delete> -->
+
+	<select id="selectOrderState" resultType="egovMap">
+		SELECT b.or_state FROM
+		sm_work_order a JOIN
+		sm_orders b ON a.OR_IDX=b.OR_IDX
+		WHERE a.wo_idx =
+		#{woIdx}
+	</select>
+
+
+</mapper>

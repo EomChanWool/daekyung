@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.quality.cpk.service.impl.CpkMapper">
+	<select id="selectCpkListToCnt" resultType="int">
+		SELECT COUNT(a.item_cd)
+		FROM sm_adjust a
+		JOIN sm_item b
+		ON a.item_cd = b.item_cd
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND b.item_type LIKE CONCAT('%',#{searchCondition},'%')
+		</if>
+		<if test="searchKeyword != ''">
+			AND a.item_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	<select id="selectCpkList" resultType="egovMap">
+		SELECT
+			a.ad_idx,
+			a.item_cd,
+			a.item_name,
+			a.ad_place,
+			FORMAT(a.ad_cnt, 0) AS ad_cnt,
+			FORMAT(a.ad_real_cnt, 0) AS ad_real_cnt,
+			FORMAT(a.ad_adj_cnt, 0) AS ad_adj_cnt,
+			a.ad_uom,
+			DATE_FORMAT(a.ad_reg_dte, '%Y-%m-%d %H:%i') AS ad_reg_dte		
+		FROM sm_adjust a
+		JOIN sm_item b
+		ON a.item_cd = b.item_cd
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND b.item_type LIKE CONCAT('%',#{searchCondition},'%')
+		</if>
+		<if test="searchKeyword != ''">
+			AND a.item_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY ad_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectItemList" resultType="egovMap">
+		SELECT item_cd, item_name FROM sm_item WHERE item_type LIKE CONCAT('%',#{type},'%')
+	</select>
+	
+	<select id="selectItemCntInfo" resultType="egovMap">
+		SELECT item_name, item_cnt, item_per_price FROM sm_item WHERE item_cd = #{itemCd}
+	</select>
+	
+	<select id="selectExistsItemCode" resultType="int">
+		SELECT COUNT(*) FROM sm_item WHERE item_cd = #{itemCd}
+	</select>
+	
+<!-- 	<insert id="registCpk"> -->
+<!-- 		INSERT INTO sm_adjust -->
+<!-- 			( -->
+<!-- 			item_cd, -->
+<!-- 			item_name, -->
+<!-- 			<if test="adPlace != ''">ad_place,</if> -->
+<!-- 			ad_cnt, -->
+<!-- 			ad_real_cnt, -->
+<!-- 			ad_adj_cnt, -->
+<!-- 			<if test="adUom != ''">ad_uom,</if> -->
+<!-- 			ad_reg_mem, -->
+<!-- 			ad_reg_dte -->
+<!-- 			) -->
+<!-- 		VALUES -->
+<!-- 			( -->
+<!-- 			#{itCd}, -->
+<!-- 			#{itemName}, -->
+<!-- 			<if test="adPlace != ''">#{adPlace},</if> -->
+<!-- 			#{adCnt}, -->
+<!-- 			#{adRealCnt}, -->
+<!-- 			#{adAdjCnt}, -->
+<!-- 			<if test="adUom != ''">#{adUom},</if> -->
+<!-- 			#{userId}, -->
+<!-- 			NOW() -->
+<!-- 			) -->
+<!-- 	</insert> -->
+	
+<!-- 	<update id="updateItemCnt"> -->
+<!-- 		UPDATE sm_item SET -->
+<!-- 			item_cnt = #{adRealCnt} -->
+<!-- 		WHERE item_cd = #{itemCd} -->
+<!-- 	</update> -->
+	
+	<select id="selectCpkInfo" resultType="egovMap">
+		SELECT
+			a.ad_idx,
+			a.item_cd,
+			a.item_name,
+			a.ad_place,
+			a.ad_cnt,
+			a.ad_real_cnt,
+			a.ad_adj_cnt,
+			a.ad_uom,
+			b.item_type
+		FROM sm_adjust a
+		JOIN sm_item b
+		ON a.item_cd = b.item_cd
+		WHERE ad_idx = #{adIdx}
+	</select>
+	
+<!-- 	<update id="modifyCpk"> -->
+<!-- 		UPDATE sm_adjust SET -->
+<!-- 			item_cd = #{itemCd}, -->
+<!-- 			item_name = #{itemName}, -->
+<!-- 			ad_cnt = #{adCnt}, -->
+<!-- 			ad_real_cnt = #{adRealCnt}, -->
+<!-- 			ad_adj_cnt = #{adAdjCnt}, -->
+<!-- 			<if test="adPlace != ''">ad_place = #{adPlace},</if> -->
+<!-- 			<if test="adUom != ''">ad_uom = #{adUom},</if> -->
+<!-- 			ad_edt_mem = #{userId}, -->
+<!-- 			ad_edt_dte = NOW() -->
+<!-- 		WHERE ad_idx = #{adIdx} -->
+<!-- 	</update> -->
+	
+	<select id="selectChkRecent" resultType="int">
+		SELECT
+			MAX(ad_idx)
+		FROM sm_adjust
+		WHERE 1=1
+		AND item_cd = #{itemCd}
+		GROUP by item_cd
+	</select>
+	
+<!-- 	<delete id="deleteCpk"> -->
+<!-- 		DELETE FROM sm_adjust WHERE ad_idx = #{adIdx} -->
+<!-- 	</delete> -->
+</mapper>
