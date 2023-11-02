@@ -153,7 +153,6 @@ public class QualityInfoController {
 	}
 	@RequestMapping("/sl/basicInfo/qualityInfo/registStandardOk.do")
 	public String registStandardOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		System.out.println("맵 : " + map);
 		String type = "";
 		//엘보우
 		if(map.get("ithType").equals("90E(L)") || map.get("ithType").equals("90E(S)") || map.get("ithType").equals("45E(L)")) {
@@ -196,7 +195,7 @@ public class QualityInfoController {
 			String [] elbowItem = {"Od01","Od02","Id01","Id02","T1Bevel","T2Bevel","T1Body","T2Body","BevelEnd","RootFace","StubF","StubG","StubGt","StubR","OaQ","OpP"};
 			spcDb(type,elbowItem,map,codeNum);
 		}
-		
+		System.out.println("map: " + map.get("ithType"));
 		qualityInfoService.registStandard(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";

@@ -116,7 +116,7 @@
 			ssi_tee_m, ssi_tee_m_max, ssi_tee_m_min
 		</if>
 		<if test="ithType == 'R(C)' or  ithType == 'R(E)'">
-			ssi_rede_h, ssi_redu_h_max, ssi_redu_h_min
+			ssi_redu_h, ssi_redu_h_max, ssi_redu_h_min
 		</if>
 		<if test="ithType == 'CAP'">
 			ssi_cap_limit_t,
@@ -129,7 +129,7 @@
 			ssi_stub_gt, ssi_stub_gt_max, ssi_stub_gt_min,
 			ssi_stub_r, ssi_stub_r_max, ssi_stub_r_min
 		</if>
-		)
+		, ssi_type)
 		VALUES
 		(
 		#{siId}, #{piId},
@@ -167,7 +167,7 @@
 			#{ssiTeeM}, #{ssiTeeMMax}, #{ssiTeeMMin}
 		</if>
 		<if test="ithType == 'R(C)' or  ithType == 'R(E)'">
-			#{ssiReducerH}, #{ssiReduHMax}, #{ssiReduHMin}
+			#{ssiReduH}, #{ssiReduHMax}, #{ssiReduHMin}
 		</if>
 		<if test="ithType == 'CAP'">
 			#{ssiCapLimitT},
@@ -180,7 +180,7 @@
 			#{ssiStubGt}, #{ssiStubGtMax}, #{ssiStubGtMin},
 			#{ssiStubR}, #{ssiStubRMax}, #{ssiStubRMin}
 		</if>
-		)
+		,#{ithType})
 	</insert>
 
 	<select id="selectQualityInfoInfo" resultType="egovMap">
