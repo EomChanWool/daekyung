@@ -15,7 +15,6 @@ public interface WaterPressureService {
 
 	List<?> selectDeliveryInfo(Map<String, Object> map);
 
-	int selectExistsDeliveryIdx(Map<String, Object> map);
 
 	int selectAlreadyRegistDeIdx(Map<String, Object> map);
 

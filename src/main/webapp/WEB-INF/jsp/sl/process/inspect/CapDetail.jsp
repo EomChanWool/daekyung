@@ -84,6 +84,8 @@
                                     	<td><span class="form-control val-area" id="isiFile">${cIsiFile}</span></td>
                                     	<th>보고서 번호</th>
                                     	<td><span class="form-control val-area" id="isiFile">${detail.isiLotno}-${detail.isiId}</span></td>
+                                    	<th>수압측정값</th>
+                                    	<td><span class="form-control val-area" id="isiFile">${detail.wpValue}</span></td>
                                     	</tr>
                             </tbody>
                             </table>

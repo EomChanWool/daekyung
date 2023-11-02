@@ -49,9 +49,7 @@ public class InspectController {
 	
 	@RequestMapping("/sl/process/inspect/inspectList.do")
 	public String inspectList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
-		
 		int totCnt = inspectService.selectInspectListToCnt(searchVO);
-		
 		/** pageing setting */
 		searchVO.setPageSize(10);
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -65,7 +63,6 @@ public class InspectController {
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> inspectList = inspectService.selectInspectList(searchVO);
 		
-		
 		model.put("inspectList", inspectList);
 		model.put("paginationInfo", paginationInfo);
 		
@@ -78,11 +75,31 @@ public class InspectController {
 		
 		List<?> mfList = inspectService.selectMfList();
 		
-		
-		
 		model.put("mfList", mfList);
 		
 		return "sl/process/inspect/inspectRegist";
+	}
+	@RequestMapping("/sl/process/inspect/registInspectPopup.do")
+	public String registInspectPopup(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model) {
+		
+		int totCnt = inspectService.waterListToCnt(searchVO);
+		/** pageing setting */
+		searchVO.setPageSize(10);
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(searchVO.getPageIndex()); // 현재 페이지 번호
+		paginationInfo.setRecordCountPerPage(10); // 한 페이지에 게시되는 게시물 건수
+		paginationInfo.setPageSize(searchVO.getPageSize()); // 페이징 리스트의 사이즈
+		paginationInfo.setTotalRecordCount(totCnt);
+		
+		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
+		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		List<?> waterList = inspectService.waterList(searchVO);
+		
+		model.put("waterList", waterList);
+		model.put("paginationInfo", paginationInfo);
+		
+		return "sl/process/inspect/WaterPopUp";
 	}
 	
 	@RequestMapping(value="/sl/process/inspect/inspectInfoAjax.do", method=RequestMethod.POST)
@@ -114,7 +131,7 @@ public class InspectController {
 //			redirectAttributes.addFlashAttribute("msg", "이미검사한 제품 입니다.");
 //			return "redirect:/sl/process/inspect/registInspect.do";
 //		}
-		Map<String, Object> siIdMap = inspectService.registSiid(map);
+		Map<String, Object> siIdMap = inspectService.registSiId(map);
 		
 		map.put("siId", siIdMap.get("siId"));
 		
@@ -199,11 +216,23 @@ public class InspectController {
 			model.put("spcInfo",spcInfo);
 			String Edata = map.get("isiFile")+"";
 			Map<String, Object> eDataInfo = inspectService.eDataInfo(Edata);
-			System.out.println(eDataInfo);
 			model.put("eDataInfo", eDataInfo);
 			model.put("cIsiFile", Edata);
 			model.put("cFile", map.get("cFile"));
 			return "sl/process/inspect/ReduceDetail";
+		}
+		if(type.equals("STUB-END")) {
+			Map<String, Object> detail = inspectService.detailInspec(map);
+			model.put("detail", detail);
+			String spcSpect = map.get("isiSpcSpec")+"";
+			Map<String, Object> spcInfo = inspectService.spcInfo(spcSpect);
+			model.put("spcInfo",spcInfo);
+			String Edata = map.get("isiFile")+"";
+			Map<String, Object> eDataInfo = inspectService.eDataInfo(Edata);
+			model.put("eDataInfo", eDataInfo);
+			model.put("cIsiFile", Edata);
+			model.put("cFile", map.get("cFile"));
+			return "sl/process/inspect/StubDetail";
 		}
 		Map<String, Object> detail = inspectService.detailInspec(map);
 		
@@ -245,6 +274,8 @@ public class InspectController {
 		if(type.equals("90E(L)") || type.equals("90E(S)") || type.equals("45E(L)")) {
 			
 		setStyle2(form_wb, docNo ,2, 4);
+		
+		setStyle2(form_wb,infoData.get("wpValue")+""  ,41, 11);
 		
 		setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 		setStyle2(form_wb, itemType2[1] ,4, 4);
@@ -534,7 +565,7 @@ public class InspectController {
 		if(type.equals("TEE")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
-			
+			setStyle2(form_wb,infoData.get("wpValue")+""  ,41, 11);
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 			setStyle2(form_wb, itemType2[1] ,4, 4);
 			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -871,7 +902,7 @@ public class InspectController {
 		if(type.equals("R(C)")||type.equals("R(E)")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
-			
+			setStyle2(form_wb,infoData.get("wpValue")+""  ,41, 11);
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 			setStyle2(form_wb, itemType2[1] ,4, 4);
 			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);
@@ -1156,7 +1187,7 @@ public class InspectController {
 if(type.equals("CAP")) {
 			
 			setStyle2(form_wb, docNo ,2, 4);
-			
+			setStyle2(form_wb,infoData.get("wpValue")+""  ,41, 11);
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
 			setStyle2(form_wb, itemType2[1] ,4, 4);
 			setStyle2(form_wb, infoData.get("isiLotno")+"" ,5, 4);

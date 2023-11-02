@@ -47,7 +47,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">엘보우 검사결과</h1>
+                    <h1 class="h3 mb-2 text-gray-800">STUB-END 검사결과</h1>
                     <form action="${pageContext.request.contextPath}/sl/process/inspect/detailInspect.do" name="detailForm" method="post">
                    					 <input type="hidden" name="isiId">
 									<input type="hidden" name="isiItemType">
@@ -94,84 +94,47 @@
 	                                <table class="table table-bordered" id="dataTable">
                                     <tbody>
                                     	<tr>
-                                    		<th>OD1 검사값</th>
+                                    		<th>OD1-1 검사값</th>
                                     		<td><span class="form-control val-area" id="longC1">${eDataInfo.iehOd1}</span></td>
-                                    		<th>OD1 기준값</th>
+                                    		<th>OD1-1 기준값</th>
                                     		<td><span class="form-control val-area">${spcInfo.ssiOd01}</span></td>
-                                    		<th>OD1 상하한</th>
+                                    		<th>OD1-1 상하한</th>
                                     		<td><span class="form-control val-area" id="longG1">${spcInfo.ssiOd01Min}~${spcInfo.ssiOd01Max}</span></td>
                                     		<th>합격여부</th>
                                     		<td><span class="form-control val-area" id="longF1">${detail.iehOd4}</span></td>
                                     	</tr>
-                                    	<tr>
-                                    		<th>OD1-2 검사값</th>
-                                    		<td><span class="form-control val-area" id="longC2">${eDataInfo.iehOd2}</span></td>
-                                    		<th>OD1-2 기준값</th>
-                                    		<td><span class="form-control val-area">${spcInfo.ssiOd01}</span></td>
-                                    		<th>OD1-2 상하한</th>
-                                    		<td><span class="form-control val-area" id="longG2">${spcInfo.ssiOd01Min}~${spcInfo.ssiOd01Max}</span></td>
-                                    		<th>합격여부</th>
-                                    		<td><span class="form-control val-area" id="longF2">${detail.iehId4}</span></td>
-                                    	</tr>
+                                    	
 										<tr>
 											<th>OD2-1 검사값</th>
-											<td><span class="form-control val-area" id="longC3">${eDataInfo.iehOd3}</span></td>
+											<td><span class="form-control val-area" id="longC2">${eDataInfo.iehOd2}</span></td>
 											<th>OD2-1 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiOd01}</span></td>
+											<td><span class="form-control val-area">${spcInfo.ssiOd02}</span></td>
 											<th>OD2-1 상하한</th>
-											<td><span class="form-control val-area" id="longG3">${spcInfo.ssiOd01Min}~${spcInfo.ssiOd01Max}</span></td>
+											<td><span class="form-control val-area" id="longG2">${spcInfo.ssiOd02Min}~${spcInfo.ssiOd02Max}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="longF3">${detail.iheId6}</span></td>
+											<td><span class="form-control val-area" id="longF2">${detail.iheId6}</span></td>
 										</tr>
-										<tr>
-											<th>OD2-2 검사값</th>
-											<td><span class="form-control val-area" id="longC4">${eDataInfo.iehOd4}</span></td>
-											<th>OD2-2 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiOd01}</span></td>
-											<th>OD2-2 상하한</th>
-											<td><span class="form-control val-area" id="longG4">${spcInfo.ssiOd01Min}~${spcInfo.ssiOd01Max}</span></td>
-											<th>합격여부</th>
-											<td><span class="form-control val-area" id="longF4">${detail.iehT14}</span></td>
-										</tr>
+										
 										<tr>
 											<th>ID1-1 검사값</th>
-											<td><span class="form-control val-area" id="longC5">${eDataInfo.iehId1}</span></td>
+											<td><span class="form-control val-area" id="longC3">${eDataInfo.iehId1}</span></td>
 											<th>ID1-1 기준값</th>
 											<td><span class="form-control val-area">${spcInfo.ssiId01}</span></td>
 											<th>ID1-1 상하한</th>
-											<td><span class="form-control val-area" id="longG5">${spcInfo.ssiId01Min}~${spcInfo.ssiId01Max}</span></td>
+											<td><span class="form-control val-area" id="longG3">${spcInfo.ssiId01Min}~${spcInfo.ssiId01Max}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="longF5">${detail.iehT24}</span></td>
+											<td><span class="form-control val-area" id="longF3">${detail.iehT24}</span></td>
 										</tr>
-										<tr>
-											<th>ID1-2 검사값</th>
-											<td><span class="form-control val-area" id="longC6">${eDataInfo.iehId2}</span></td>
-											<th>ID1-2 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiId01}</span></td>
-											<th>ID1-2 상하한</th>
-											<td><span class="form-control val-area" id="longG6">${spcInfo.ssiId01Min}~${spcInfo.ssiId01Max}</span></td>
-											<th>합격여부</th>
-											<td><span class="form-control val-area" id="longF6">${detail.iehT24}</span></td>
-										</tr>
-										<tr>
-											<th>ID2-1 검사값</th>
-											<td><span class="form-control val-area" id="longC7">${eDataInfo.iehId3}</span></td>
-											<th>ID2-1 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiId01}</span></td>
-											<th>ID2-1 상하한</th>
-											<td><span class="form-control val-area" id="longG7">${spcInfo.ssiId01Min}~${spcInfo.ssiId01Max}</span></td>
-											<th>합격여부</th>
-											<td><span class="form-control val-area" id="longF7">${detail.iehT24}</span></td>
-										</tr>
+										
 										<tr>
 											<th>ID2-2 검사값</th>
-											<td><span class="form-control val-area" id="longC8">${eDataInfo.iehId4}</span></td>
+											<td><span class="form-control val-area" id="longC4">${eDataInfo.iehId2}</span></td>
 											<th>ID2-2 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiId01}</span></td>
+											<td><span class="form-control val-area">${spcInfo.ssiId02}</span></td>
 											<th>ID2-2 상하한</th>
-											<td><span class="form-control val-area" id="longG8">${spcInfo.ssiId01Min}~${spcInfo.ssiId01Max}</span></td>
+											<td><span class="form-control val-area" id="longG4">${spcInfo.ssiId02Min}~${spcInfo.ssiId02Max}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="longF8">${detail.iehT24}</span></td>
+											<td><span class="form-control val-area" id="longF4">${detail.iehT24}</span></td>
 										</tr>
 										<tr>
 											<th>T1-1 검사값</th>
@@ -213,46 +176,7 @@
 											<th>합격여부</th>
 											<td><span class="form-control val-area" id="tF4">${detail.iehT34}</span></td>
 										</tr>
-										<tr>
-											<th>T2-1 검사값</th>
-											<td><span class="form-control val-area" id="tC5">${eDataInfo.iehT21}</span></td>
-											<th>T2-1 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiT1Bevel}</span></td>
-											<th>T2-1 하한</th>
-											<td><span class="form-control val-area" id="tG5">${spcInfo.ssiT1BevelMin}</span></td>
-											<th>합격여부</th>
-											<td><span class="form-control val-area" id="tF5">${detail.iehT34}</span></td>
-										</tr>
-										<tr>
-											<th>T2-2 검사값</th>
-											<td><span class="form-control val-area" id="tC6">${eDataInfo.iehT22}</span></td>
-											<th>T2-2 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiT1Bevel}</span></td>
-											<th>T2-2 하한</th>
-											<td><span class="form-control val-area" id="tG6">${spcInfo.ssiT1BevelMin}</span></td>
-											<th>합격여부</th>
-											<td><span class="form-control val-area" id="tF6">${detail.iehT34}</span></td>
-										</tr>
-										<tr>
-											<th>T2-3 검사값</th>
-											<td><span class="form-control val-area" id="tC7">${eDataInfo.iehT23}</span></td>
-											<th>T2-3 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiT1Bevel}</span></td>
-											<th>T2-3 하한</th>
-											<td><span class="form-control val-area" id="tG7">${spcInfo.ssiT1BevelMin}</span></td>
-											<th>합격여부</th>
-											<td><span class="form-control val-area" id="tF7">${detail.iehT34}</span></td>
-										</tr>
-										<tr>
-											<th>T2-4 검사값</th>
-											<td><span class="form-control val-area" id="tC8">${eDataInfo.iehT24}</span></td>
-											<th>T2-4 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiT1Bevel}</span></td>
-											<th>T2-4 하한</th>
-											<td><span class="form-control val-area" id="tG8">${spcInfo.ssiT1BevelMin}</span></td>
-											<th>합격여부</th>
-											<td><span class="form-control val-area" id="tF8">${detail.iehT34}</span></td>
-										</tr>
+										
 										
 										<tr>
 											<th>BL1-1 검사값</th>
@@ -294,56 +218,147 @@
 											<th>합격여부</th>
 											<td><span class="form-control val-area" id="blF4">${detail.iehBl34}</span></td>
 										</tr>
+										
 										<tr>
-											<th>BL2-1 검사값</th>
-											<td><span class="form-control val-area" id="blC5">${eDataInfo.iehBl21}</span></td>
-											<th>BL2-1 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiBevelEnd}</span></td>
-											<th>BL2-1 상하한</th>
-											<td><span class="form-control val-area" id="blG5">${spcInfo.ssiBevelEndMin}~${spcInfo.ssiBevelEndMax}</span></td>
+											<th>F 검사값</th>
+											<td><span class="form-control val-area" id="fC">${eDataInfo.iehF}</span></td>
+											<th>F 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubF}</span></td>
+											<th>F 상하한</th>
+											<td><span class="form-control val-area" id="fG">${spcInfo.ssiStubFMin}~${spcInfo.ssiStubFMax}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="blF5">${detail.iehBl34}</span></td>
+											<td><span class="form-control val-area" id="fF">${detail.iehE}</span></td>
 										</tr>
 										<tr>
-											<th>BL2-2 검사값</th>
-											<td><span class="form-control val-area" id="blC6">${eDataInfo.iehBl22}</span></td>
-											<th>BL2-2 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiBevelEnd}</span></td>
-											<th>BL2-2 상하한</th>
-											<td><span class="form-control val-area" id="blG6">${spcInfo.ssiBevelEndMin}~${spcInfo.ssiBevelEndMax}</span></td>
+											<th>R1 검사값</th>
+											<td><span class="form-control val-area" id="rC1">${eDataInfo.iehR1}</span></td>
+											<th>R1 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubR}</span></td>
+											<th>R1 상하한</th>
+											<td><span class="form-control val-area" id="rG1">${spcInfo.ssiStubRMin}~${spcInfo.ssiStubRMax}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="blF6">${detail.iehBl34}</span></td>
+											<td><span class="form-control val-area" id="rF1">${detail.iehE}</span></td>
 										</tr>
 										<tr>
-											<th>BL2-3 검사값</th>
-											<td><span class="form-control val-area" id="blC7">${eDataInfo.iehBl23}</span></td>
-											<th>BL2-3 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiBevelEnd}</span></td>
-											<th>BL2-3 상하한</th>
-											<td><span class="form-control val-area" id="blG7">${spcInfo.ssiBevelEndMin}~${spcInfo.ssiBevelEndMax}</span></td>
+											<th>R2 검사값</th>
+											<td><span class="form-control val-area" id="rC2">${eDataInfo.iehR2}</span></td>
+											<th>R2 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubR}</span></td>
+											<th>R2 상하한</th>
+											<td><span class="form-control val-area" id="rG2">${spcInfo.ssiStubRMin}~${spcInfo.ssiStubRMax}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="blF7">${detail.iehBl34}</span></td>
+											<td><span class="form-control val-area" id="rF2">${detail.iehE}</span></td>
 										</tr>
 										<tr>
-											<th>BL2-4 검사값</th>
-											<td><span class="form-control val-area" id="blC8">${eDataInfo.iehBl24}</span></td>
-											<th>BL2-4 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiBevelEnd}</span></td>
-											<th>BL2-4 상하한</th>
-											<td><span class="form-control val-area" id="blG8">${spcInfo.ssiBevelEndMin}~${spcInfo.ssiBevelEndMax}</span></td>
+											<th>R3 검사값</th>
+											<td><span class="form-control val-area" id="rC3">${eDataInfo.iehR3}</span></td>
+											<th>R3 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubR}</span></td>
+											<th>R3 상하한</th>
+											<td><span class="form-control val-area" id="rG3">${spcInfo.ssiStubRMin}~${spcInfo.ssiStubRMax}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="blF8">${detail.iehBl34}</span></td>
+											<td><span class="form-control val-area" id="rF3">${detail.iehE}</span></td>
 										</tr>
 										<tr>
-											<th>A 검사값</th>
-											<td><span class="form-control val-area" id="aC">${eDataInfo.iehA}</span></td>
-											<th>A 기준값</th>
-											<td><span class="form-control val-area">${spcInfo.ssiElbowA}</span></td>
-											<th>A 상하한</th>
-											<td><span class="form-control val-area" id="aG">${spcInfo.ssiElbowAMin}~${spcInfo.ssiElbowAMax}</span></td>
+											<th>R4 검사값</th>
+											<td><span class="form-control val-area" id="rC4">${eDataInfo.iehR1}</span></td>
+											<th>R4 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubR}</span></td>
+											<th>R4 상하한</th>
+											<td><span class="form-control val-area" id="rG4">${spcInfo.ssiStubRMin}~${spcInfo.ssiStubRMax}</span></td>
 											<th>합격여부</th>
-											<td><span class="form-control val-area" id="aF">${detail.iehE}</span></td>
+											<td><span class="form-control val-area" id="rF4">${detail.iehE}</span></td>
 										</tr>
+										<tr>
+											<th>G1 검사값</th>
+											<td><span class="form-control val-area" id="rC5">${eDataInfo.iehG11}</span></td>
+											<th>G1 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubG}</span></td>
+											<th>G1 상하한</th>
+											<td><span class="form-control val-area" id="rG5">${spcInfo.ssiStubGMin}~${spcInfo.ssiStubGMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF5">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>G2 검사값</th>
+											<td><span class="form-control val-area" id="rC6">${eDataInfo.iehG12}</span></td>
+											<th>G2 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubG}</span></td>
+											<th>G2 상하한</th>
+											<td><span class="form-control val-area" id="rG6">${spcInfo.ssiStubGMin}~${spcInfo.ssiStubGMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF6">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>GT1 검사값</th>
+											<td><span class="form-control val-area" id="rC7">${eDataInfo.iehGt11}</span></td>
+											<th>GT1 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubGt}</span></td>
+											<th>GT1 상하한</th>
+											<td><span class="form-control val-area" id="rG7">${spcInfo.ssiStubGtMin}~${spcInfo.ssiStubGtMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF7">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>GT2 검사값</th>
+											<td><span class="form-control val-area" id="rC8">${eDataInfo.iehGt12}</span></td>
+											<th>GT2 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubGt}</span></td>
+											<th>GT2 상하한</th>
+											<td><span class="form-control val-area" id="rG8">${spcInfo.ssiStubGtMin}~${spcInfo.ssiStubGtMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF8">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>GT1 검사값</th>
+											<td><span class="form-control val-area" id="rC9">${eDataInfo.iehGt11}</span></td>
+											<th>GT1 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubGt}</span></td>
+											<th>GT1 상하한</th>
+											<td><span class="form-control val-area" id="rG9">${spcInfo.ssiStubGtMin}~${spcInfo.ssiStubGtMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF9">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>GT2 검사값</th>
+											<td><span class="form-control val-area" id="rC10">${eDataInfo.iehGt12}</span></td>
+											<th>GT2 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubGt}</span></td>
+											<th>GT2 상하한</th>
+											<td><span class="form-control val-area" id="rG10">${spcInfo.ssiStubGtMin}~${spcInfo.ssiStubGtMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF10">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>GT3 검사값</th>
+											<td><span class="form-control val-area" id="rC11">${eDataInfo.iehGt13}</span></td>
+											<th>GT3 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubGt}</span></td>
+											<th>GT3 상하한</th>
+											<td><span class="form-control val-area" id="rG11">${spcInfo.ssiStubGtMin}~${spcInfo.ssiStubGtMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF11">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>GT4 검사값</th>
+											<td><span class="form-control val-area" id="rC12">${eDataInfo.iehGt14}</span></td>
+											<th>GT4 기준값</th>
+											<td><span class="form-control val-area">${spcInfo.ssiStubGt}</span></td>
+											<th>GT4 상하한</th>
+											<td><span class="form-control val-area" id="rG12">${spcInfo.ssiStubGtMin}~${spcInfo.ssiStubGtMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="rF12">${detail.iehE}</span></td>
+										</tr>
+										<tr>
+											<th>Q 검사값</th>
+											<td><span class="form-control val-area" id="qC">${eDataInfo.iehQ}</span></td>
+											
+											<th>Q 상한</th>
+											<td><span class="form-control val-area" id="qG">${spcInfo.ssiOaQMax}</span></td>
+											<th>합격여부</th>
+											<td><span class="form-control val-area" id="qF">${detail.iehE}</span></td>
+										</tr>
+										
 										
 									</tbody>
                                	</table>
@@ -428,10 +443,13 @@
 		jugment2();
 		jugment3();
 		jugment4();
+		jugment5();
+		jugment6();
+		jugment7();
 		
 	});
 	
-	function jugment1 () {
+	function jugment1() {
 		var longC;
 		var longG;
 		var arr1;
@@ -501,6 +519,57 @@
 		}
 		
 	}
+	
+	function jugment5(){
+		var fC = $('#fC').text();
+		var fG = $('#fG').text();
+		
+		arr4 = fG.split('~');
+		var downVal4 = arr4[0];
+		var upVal4 = arr4[1];
+		
+		if(fC < downVal4 || fC > upVal4){
+			$('#fF').text("불합격");
+		}else{
+			$('#fF').text("합격");
+		}
+		
+	}
+	
+	function jugment6() {
+		var rC;
+		var rG;
+		var arr5;
+		for(var i=1; i<13; i++){
+			rC = parseFloat($('#rC' + i).text());
+			rG = $('#rG' + i).text();
+			var llr = parseFloat(rC);
+			arr5 = rG.split('~');
+			var downVal5 = parseFloat(arr5[0]);
+			var upVal5 = parseFloat(arr5[1]);
+			if(llr > upVal5 || llr<downVal5){
+				$('#rF' + i).text('불합격');
+			}else{
+				$('#rF' + i).text('합격');
+			}
+		}
+	}
+	
+	function jugment7(){
+		var qC = $('#qC').text();
+		var qG = $('#qG').text();
+		
+		arr6 = qG.split('~');
+		var downVal6 = arr6[0];
+		var upVal6 = arr6[1];
+		
+		if(qC > upVal6){
+			$('#qF').text("불합격");
+		}else{
+			$('#qF').text("합격");
+		}
+		
+	}
 	function fn_search_excel(isiId,isiItemType,isiSpcSpec,isiFile,cFile){
 		detailForm.isiId.value = isiId;
 		detailForm.isiItemType.value = isiItemType;
@@ -509,6 +578,8 @@
 		detailForm.cFile.value = cFile;
 		detailForm.submit();
 	}
+	
+	
 	
 	function fn_Ok_ins(isiId,stat){
 		detailForm.isiId.value = isiId;

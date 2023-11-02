@@ -106,9 +106,21 @@ public class InspectServieImpl implements InspectService {
 	}
 
 	@Override
-	public Map<String, Object> registSiid(Map<String, Object> map) {
-		return inspectMapper.registSiid(map);
+	public Map<String, Object> registSiId(Map<String, Object> map) {
+		return inspectMapper.registSiId(map);
 	}
+
+	@Override
+	public List<?> waterList(SearchVO searchVO) {
+		return inspectMapper.waterList(searchVO);
+	}
+
+	@Override
+	public int waterListToCnt(SearchVO searchVO) {
+		return inspectMapper.waterListToCnt(searchVO);
+	}
+
+
 
 	
 }

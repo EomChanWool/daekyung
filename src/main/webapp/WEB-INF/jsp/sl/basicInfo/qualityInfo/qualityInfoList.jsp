@@ -54,9 +54,11 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do" method="post">
+
 									<input type="hidden" name="qiCode">
 									<input type="hidden" name="ssiId">
 									<input type="hidden" name="giGroupcode">
+
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="관리항목명을 입력해 주세요"
@@ -100,10 +102,10 @@
 	                                            <td>${result.qiIsuse}</td>
 	                                            
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_qualityInfo_go('${result.qiCode}')">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_qualityInfo_go('${result.ssiId}')">
 				                                        <span class="text">수정</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_qualityInfo('${result.qiCode}')">
+				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_qualityInfo('${result.ssiId}','${result.piId}')">
 				                                        <span class="text">삭제</span>
 				                                    </a>
 	                                            </td>
@@ -180,9 +182,9 @@
 			listForm.submit();
 		}
 	
-		function fn_modify_qualityInfo_go(qiCode){
-			listForm.qiCode.value = qiCode;
-			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifyQualityInfo.do";
+		function fn_modify_qualityInfo_go(id){
+			listForm.ssiId.value = id;
+			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifySpcInfo.do";
 			listForm.submit();
 		}
 		function fn_detail_qualityInfo(ssiId){
@@ -191,9 +193,10 @@
 			listForm.submit();
 		}
 	
-		function fn_delete_qualityInfo(idx){
+		function fn_delete_qualityInfo(idx,piId){
 			if(confirm('해당 내역을 삭제 하시겠습니까?')) {
-				listForm.qiCode.value = idx;
+				listForm.ssiId.value = idx;
+				listForm.piId.value = piId;
 				listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/deleteQualityInfo.do";
 				listForm.submit();
 			}

@@ -17,6 +17,10 @@ public interface ExcelReaderService {
 	
 	void registProc(Map<String, String> map);
 	
+
+	void updateMm(Map<String, Object> map);
+	
+
 	void deletedb();
 	
 	void deleteMm();
@@ -25,6 +29,13 @@ public interface ExcelReaderService {
 	
 	void testRegist(Map<String,String> map);
 	
+
+	void registCutpro(Map<String,String> map);
+	
+	void registPi(Map<String, String> map);
+	
+	List<?> outProList();
+
 	Map<String, Object> inspCount(String edDate);
 	
 	List<Map<String, Object>> noUpList(String edDate);
@@ -36,5 +47,11 @@ public interface ExcelReaderService {
 	Map<String, Object> sublList(Map<String, String> linee);
 
 	Map<String, Object> clgoList(Map<String, String> map);
+
+	void insFileStateUpdate(Map<String,Object> map);
 	
+	Map<String, Object> sublList(Map<String, String> linee);
+
+	Map<String, Object> clgoList(Map<String, String> map);
+
 }

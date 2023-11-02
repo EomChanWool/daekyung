@@ -6,14 +6,11 @@
 <%@ include file="../../header.jsp" %>
 
 <body id="page-top">
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
     <!-- Page Wrapper -->
     <div id="wrapper">
+
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <!-- Side Menu Section -->
-			<%@ include file="../../menu/sideMenu.jsp" %>
-        </ul>
+      
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -33,12 +30,12 @@
                     </form>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                 <%--    <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav kpi - User Information -->
+                        <!-- Nav inspect - User Information -->
                         <%@ include file="../../menu/logout/nav_user.jsp" %>
 
-                    </ul>
+                    </ul> --%>
 
                 </nav>
                 <!-- End of Topbar -->
@@ -47,23 +44,20 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">수압시험정보관리</h1>
+                    <h1 class="h3 mb-2 text-gray-800">수압측정값 등록</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
 							<div class="search">
-								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/collectInfo/waterPressure/waterPressureList.do" method="post">
-									<input type="hidden" name="wpId">
-									<input type="hidden" name="orIdx">
+								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/process/inspect/registInspectPopup.do" method="post">
+									<input type="hidden" name="cwpCode" id="cwpCode">
+									<input type="hidden" name="cwpValue" id="cwpValue">
+									
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
+						    									value="${searchVO.searchKeyword}" placeholder="코드를 입력해 주세요"
 						    									style="background-color:#eaecf4; width: 25%; float: left;">
-						    		
-						    		<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
-									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
-									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_water()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
@@ -71,9 +65,7 @@
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_water()">
 	                                <span class="text">전체목록</span>
 	                            </a>
-	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_water()" style="float: right;">
-	                                <span class="text">등록</span>
-	                            </a>
+	                           
 							</div>
                         </div>
                         <div class="card-body">
@@ -81,33 +73,28 @@
                                 <table class="table table-bordered" id="dataTable"  >
                                     <thead>
                                         <tr>
-                                            <th>코드명</th>
-											<th>측정값</th>
-											<th>측정시간</th>
-											<th>사용유무</th>
+                                            <th>코드</th>
+                                            <th>측정값</th>
+                                            <th>측정날자</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${waterPressureList}" varStatus="status">
-	                                   		<tr>
+                                    	<c:forEach var="result" items="${waterList}" varStatus="status">
+	                                   	<tr>
 	                                            <td>${result.wpCode}</td>
-												<td>${result.wpValue}</td>
-												<td><fmt:formatDate value="${result.wpTime}" pattern="yyyy-MM-dd HH:mm"/></td>
-												<c:if test="${result.wpState == 0 }"><td>사용가능</td></c:if>
-												<c:if test="${result.wpState == 1 }"><td>사용불가</td></c:if>
-											
-	                                            <td style="padding: 5px 0px;">
-	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_water_go('${result.wpId}')">
-				                                        <span class="text">수정</span>
+	                                            <td>${result.wpValue}</td>
+	                                            <td><fmt:formatDate value="${result.wpTime}" pattern="yyyy-MM-dd HH:mm"/></td>
+	                                           
+	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px; cursor: default;">
+	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_regist_water_go('${result.wpCode}','${result.wpValue}')">
+				                                        <span class="text">등록</span>
 				                                    </a>
-				                                    <a href="#" class="btn btn-danger btn-icon-split" onclick="fn_delete_water('${result.wpId}')">
-				                                        <span class="text">삭제</span>
-				                                    </a>
+				                                    
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty waterPressureList}"><tr><td colspan='6'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty waterList}"><tr><td colspan='11'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">
@@ -151,52 +138,42 @@
 			listForm.pageIndex.value = pageNo;
 		   	listForm.submit();
 		}
-		
+	
 		function fn_search_water(){
-			listForm.submit();
-		}
-		
-		function fn_searchAll_water(){
-			listForm.searchKeyword.value = "";
-			listForm.searchStDate.value = "";
-			listForm.searchEdDate.value = "";
 			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
-		
-		function fn_regist_water(){
-			listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/waterPressure/registWaterPressure.do";
+	
+		function fn_searchAll_water(){
+			listForm.searchKeyword.value = "";
+			listForm.pageIndex.value = 1;
 			listForm.submit();
 		}
-		
-		function fn_modify_water_go(id){
-			listForm.wpId.value = id;
-			listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/waterPressure/modifyWaterPressure.do";
+	
+		function fn_regist_water_go(code,val){
+			listForm.cwpCode.value = code;
+			listForm.cwpValue.value = val;
 			listForm.submit();
+			setPatentTest();
 		}
 		
-		function fn_delete_water(id){
-			if(confirm('해당 내역을 삭제하시겠습니까?')) {
-				listForm.wpId.value = id;
-				listForm.action = "${pageContext.request.contextPath}/sl/collectInfo/waterPressure/deleteWaterPressure.do";
-				listForm.submit();
-			}
+		function setPatentTest(){
+			opener.document.getElementById("wpCode").value = document.getElementById("cwpCode").value;
+			opener.document.getElementById("wpValue").value = document.getElementById("cwpValue").value;
+			window.close();
 		}
 		
+	
 		$(function() {
-			$('#collectInfoMenu').addClass("active");
-			$('#collectInfo').addClass("show");
-			$('#waterPressureList').addClass("active");
+			$('#processMenu').addClass("active");
+			$('#process').addClass("show");
+			$('#inspectList').addClass("active");
 			
 			let msg = '${msg}';
 			if(msg) {
 				alert(msg);
 			}
-			
-			
 		});
-			
-		
 	</script>
 </body>
 

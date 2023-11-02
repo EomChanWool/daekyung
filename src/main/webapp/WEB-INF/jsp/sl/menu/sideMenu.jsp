@@ -148,7 +148,7 @@
 		    <c:if test="${mLevel.P0027 <= memberVO.mLev}"><a class="collapse-item" id="ordersOutput" href="${pageContext.request.contextPath}/sl/monitoring/ordersOutput/ordersOutput.do">수주대실적현황</a></c:if>
 		    <c:if test="${mLevel.P0028 <= memberVO.mLev}"><a class="collapse-item" id="lineRunning" href="${pageContext.request.contextPath}/sl/monitoring/lineRunning/lineRunning.do">라인가동현황</a></c:if>
 		    <c:if test="${mLevel.P0029 <= memberVO.mLev}"><a class="collapse-item" id="actualOutput" href="${pageContext.request.contextPath}/sl/monitoring/actualOutput/actualOutput.do">생산집계현황</a></c:if>
-		    <c:if test="${mLevel.P0028 <= memberVO.mLev}"><a class="collapse-item" id="capabilityList" href="${pageContext.request.contextPath}/sl/monitoring/capability/capabilityList.do">공정능력추이현황</a></c:if>
+		 <%--    <c:if test="${mLevel.P0028 <= memberVO.mLev}"><a class="collapse-item" id="capabilityList" href="${pageContext.request.contextPath}/sl/monitoring/capability/capabilityList.do">공정능력추이현황</a></c:if> --%>
 		     <c:if test="${mLevel.P0030 <= memberVO.mLev}"><a class="collapse-item" id="sysLog" href="${pageContext.request.contextPath}/sl/monitoring/sysLog/sysLogList.do">시스템사용로그</a></c:if>
 		     <c:if test="${mLevel.P0030 <= memberVO.mLev}"><a class="collapse-item" id="monitorSetting" href="${pageContext.request.contextPath}/sl/monitoring/monitorSetting/monitorSettingList.do">모니터링설정</a></c:if>
 		 <%--    <c:if test="${mLevel.P0028 <= memberVO.mLev}"><a class="collapse-item" id="noticeList" href="${pageContext.request.contextPath}/sl/monitoring/notice/noticeList.do">공지사항</a></c:if>

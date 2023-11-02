@@ -19,8 +19,10 @@
 	</select>
 
 	<select id="selectPrPerformanceList" resultType="egovMap">
+
 		SELECT rel_idx, po_lotno, rel_clgo, rel_compony, rel_prod,
 		rel_qty FROM sm_release_info
+
 		WHERE 1=1
 		<if test="searchCondition == 1 and searchKeyword != ''">and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
 		<!-- <if test="searchKeyword != ''">

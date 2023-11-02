@@ -53,7 +53,6 @@ public class KpiController {
 		  List<?> kpiList = kpiService.selectKpiList(searchVO); 
 		  model.put("kpiList", kpiList);
 		  model.put("date", getYears());
-		  
 		  List<?> kpiGraphList = kpiService.selectKpiGraphList(searchVO);
 		  model.put("kpiGraphList", kpiGraphList);
 		  //생산량
@@ -83,6 +82,7 @@ public class KpiController {
 		  
 		  //리드타임
 		  List<?> leadTime = kpiService.selectLeadtime(searchVO);
+		  System.out.println("확인7");
 		  model.put("leadTimeList", leadTime);
 		 
 		return "sl/kpi/kpiState/kpiGraph";

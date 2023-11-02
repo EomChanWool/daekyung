@@ -31,6 +31,29 @@
 		NEXT
 		#{recordCountPerPage} ROWS ONLY
 	</select>
+	
+	<select id="waterListToCnt" resultType="int">
+	SELECT COUNT(*) FROM sm_water_press
+	WHERE 1=1
+	and wp_state = 0
+	<if test="searchKeyword != ''">
+		AND wp_code =#{searchKeyword}
+		</if>
+	</select>
+	
+	<select id="waterList" resultType="egovMap">
+		SELECT * FROM sm_water_press
+		WHERE 1=1 
+		and wp_state = 0
+		<if test="searchKeyword != ''">
+		AND wp_code =#{searchKeyword}
+		</if>
+		ORDER BY wp_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
 
 
 	<select id="selectMfList" resultType="egovMap">
@@ -106,7 +129,9 @@
 		isi_file3,
 		isi_file4,
 		isi_file5,
-		isi_qty)
+		isi_qty,
+		wp_code,
+		wp_value)
 		values
 		(#{orId},
 		#{isiLotno},
@@ -123,7 +148,9 @@
 		#{isiFile3},
 		#{isiFile4},
 		#{isiFile5},
-		#{isiQty}
+		#{isiQty},
+		#{wpCode},
+		#{wpValue}
 		)
 	</insert>
 	<select id="excelData" resultType="egovMap">
@@ -132,7 +159,7 @@
 		WHERE id_doc = #{str}
 	</select>
 	
-	<select id="registSiid" resultType="egovMap">
+	<select id="registSiId" resultType="egovMap">
 	SELECT si_id FROM sm_spc_specinfo
 	WHERE pi_id = #{isiSpcSpec}
 	</select>
@@ -145,6 +172,8 @@
 	isi_date = #{isiDate}
 	WHERE isi_id = #{isiId}
 	</update>
+	
+	
 	
 	<update id="updateReportFileName">
 	update sm_inspection_info set

@@ -231,6 +231,67 @@ public class Scheduler {
 		}
 	}
 	
+
+public void readClgo() throws Exception{
+		
+		
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Date now = new Date();
+		
+		now =  new Date(now.getTime()+(1000*60*60*24*-1));
+		
+		String edDate = format.format(now);
+		
+		
+		File note = new File("C:\\test4\\clgo-"+edDate+".txt");
+		
+		Map<String,String> linee = new HashMap<String, String>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(note));
+			String line = "";
+			
+			while ((line= br.readLine()) !=null) {
+				String[] line2 = line.split(",");
+				Map<String, Object> clgoChk = new HashMap<>();
+				
+				
+				linee.put("orId", line2[0].trim()); //수주번호
+				linee.put("relCompony", line2[1].trim()); //거래처
+				linee.put("relDel", line2[2].trim()); //납품처
+				linee.put("relEsno", line2[3].trim()); //주문번호
+				linee.put("relPrno", line2[4].trim()); //공정번호
+				linee.put("relOrType", line2[5].trim()); //수주구분
+				linee.put("relNabgi", line2[6].trim()); //납기일자
+				linee.put("relQty", line2[7].trim()); //수량
+				linee.put("relUnit", line2[8].trim()); //단가
+				linee.put("relPrice", line2[9].trim()); //금액
+				linee.put("relProd", line2[10].trim()); //품명
+				linee.put("relTexture", line2[11].trim()); //재질
+				linee.put("relThickness", line2[12].trim()); //두께
+				linee.put("relState", line2[13].trim()); //상태
+				linee.put("poLotno", line2[14].trim()); //로트번호
+				linee.put("relReport", line2[15].trim()); //성적서일자
+				linee.put("relCompletion", line2[16].trim()); //완료일자
+				linee.put("relPerson", line2[17].trim()); //담당자
+				linee.put("relNote1", line2[18].trim()); //비고
+				linee.put("relNote2", line2[19].trim()); //비고
+
+
+				clgoChk = excelReaderService.clgoList(linee);
+				if (clgoChk != null) {
+					linee.clear();
+				}
+					excelReaderService.registRelease(linee);
+			}
+			br.close();
+			EgovFileUtil.delete(note);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
 	@Scheduled(cron = "30 10 21 * * *")
 //	@Scheduled(cron = "20 26 09 * * *")
 	public void readSubl() throws Exception{
@@ -324,7 +385,6 @@ public class Scheduler {
 		} catch (Exception e) {
 		}
 	}
-
 	
 	
 //	@Scheduled(cron = "20 00 21 * * *")
@@ -499,6 +559,7 @@ public class Scheduler {
 		
 	}
 	
+
 	@Scheduled(cron = "20 04 21 * * *")
 //	@Scheduled(cron = "30 21 09 * * *")
 	public void openSubl() {
@@ -672,7 +733,7 @@ public class Scheduler {
 		
 		
 	}
-	
+
 	
 	
 	//@Scheduled(cron = "20 * * * * *")
@@ -791,7 +852,7 @@ public class Scheduler {
 		 
 		
 	}
-	
+
 	public String comparisonSubl(int nowqty, float nowkg, int addqty, float addkg) {
 		String result = "";
 		if (nowqty == addqty && nowkg == addkg) {
@@ -818,6 +879,7 @@ public class Scheduler {
 	
 	public String qtyStr(String qty) {
 
+
 		int piRemainQty = 0;
 		try {
 		    String numericPartQty = qty.replaceAll("[^0-9.]", "");
@@ -832,6 +894,7 @@ public class Scheduler {
 		    e.printStackTrace();
 		}
 		return Integer.toString(piRemainQty);
+
 	}
 	
 	public String kgStr(String kg) {

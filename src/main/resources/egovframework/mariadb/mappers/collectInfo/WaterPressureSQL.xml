@@ -2,52 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="apc.sl.collectInfo.waterPressure.service.impl.WaterPressureMapper">
 	<select id="selectWaterPressureListToCnt" resultType="int">
-		SELECT
-			COUNT(*) 
-		FROM sm_collect
-		WHERE 1=1
-		<if test="searchCondition != ''">
-			AND co_state = #{searchCondition}
+		SELECT COUNT(*) FROM sm_water_press
+	WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND wp_code = #{searchKeyword}
 		</if>
 		<if test="searchStDate != ''">
-			AND co_dte >= #{searchStDate}
+			AND wp_time >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND co_dte <![CDATA[<=]]> #{searchEdDate}
+			AND wp_time <![CDATA[<=]]> #{searchEdDate}
 		</if>
 	</select>
 	
 	<select id="selectWaterPressureList" resultType="egovMap">
-		SELECT
-			a.co_idx,
-			a.or_idx,
-			a.co_state,
-			a.co_dte,
-			FORMAT(a.co_tot_price,0) AS co_tot_price,
-			b.a_idx,
-			b.a_name,
-			b.a_tel,
-			c.de_idx,
-			d.or_name
-		FROM sm_collect a
-		JOIN sm_account b
-		ON a.a_idx = b.a_idx
-		JOIN sm_delivery c
-		ON a.or_idx = c.or_idx
-		JOIN sm_orders d
-		ON a.or_idx = d.or_idx
+		SELECT * FROM sm_water_press
 		WHERE 1=1
-		<if test="searchCondition != ''">
-			AND co_state = #{searchCondition}
+		<if test="searchKeyword != ''">
+			AND wp_code = #{searchKeyword}
 		</if>
 		<if test="searchStDate != ''">
-			AND co_dte >= #{searchStDate}
+			AND wp_time >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND co_dte <![CDATA[<=]]> #{searchEdDate}
+			AND wp_time <![CDATA[<=]]> #{searchEdDate}
 		</if>
-		ORDER BY or_idx DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		ORDER BY wp_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
 	</select>
 	
 	<select id="selectDeliveryList" resultType="egovMap">
@@ -74,97 +58,41 @@
 		WHERE or_idx = #{orIdx}
 	</select>
 	
-	<select id="selectExistsDeliveryIdx" resultType="int">
-		SELECT COUNT(*) FROM sm_delivery WHERE de_idx = #{deIdx}
-	</select>
+
 	
 	<select id="selectAlreadyRegistDeIdx" resultType="int">
-		SELECT COUNT(*) FROM sm_collect WHERE or_idx = #{orIdx}
+		SELECT COUNT(*) FROM sm_water_press WHERE wp_code = #{wpCode}
 	</select>
 	
-<!-- 	<insert id="registWaterPressure"> -->
-<!-- 		INSERT INTO sm_collect -->
-<!-- 			( -->
-<!-- 			or_idx, -->
-<!-- 			a_idx, -->
-<!-- 			co_state, -->
-<!-- 			<if test="coDueDte != ''">co_due_dte,</if> -->
-<!-- 			<if test="coDte != ''">co_dte,</if> -->
-<!-- 			<if test="coComManager != ''">co_com_manager,</if> -->
-<!-- 			co_tot, -->
-<!-- 			co_vat, -->
-<!-- 			co_tot_price, -->
-<!-- 			co_tax_use, -->
-<!-- 			<if test="coNote != ''">co_note,</if> -->
-<!-- 			co_reg_dte, -->
-<!-- 			co_reg_mem -->
-<!-- 			) -->
-<!-- 		VALUES -->
-<!-- 			( -->
-<!-- 			#{orIdx}, -->
-<!-- 			#{aIdx}, -->
-<!-- 			#{coState}, -->
-<!-- 			<if test="coDueDte != ''">#{coDueDte},</if> -->
-<!-- 			<if test="coDte != ''">#{coDte},</if> -->
-<!-- 			<if test="coComManager != ''">#{coComManager},</if> -->
-<!-- 			#{coTot}, -->
-<!-- 			#{coVat}, -->
-<!-- 			#{coTotPrice}, -->
-<!-- 			#{coTaxUse}, -->
-<!-- 			<if test="coNote != ''">#{coNote},</if> -->
-<!-- 			NOW(), -->
-<!-- 			#{userId}			 -->
-<!-- 			) -->
-<!-- 	</insert> -->
+	<insert id="registWaterPressure">
+	INSERT INTO sm_water_press (
+	wp_value,
+	wp_code,
+	wp_state,
+	wp_time
+	) values (
+	#{wpValue},
+	#{wpCode},
+	#{wpState},
+	GETDATE()
+	)
 	
-<!-- 	<update id="updateDelivery"> -->
-<!-- 		UPDATE sm_delivery SET -->
-<!-- 			de_state = #{state} -->
-<!-- 		WHERE or_idx = #{orIdx} -->
-<!-- 	</update> -->
+	</insert>
+	
 	
 	<select id="selectCollectInfo" resultType="egovMap">
-		SELECT
-			a.co_idx,
-			a.or_idx,
-			a.a_idx,
-			a.co_state,
-			a.co_due_dte,
-			a.co_dte,
-			a.co_com_manager,
-			a.co_tot,
-			a.co_vat,
-			a.co_tot_price,
-			a.co_tax_use,
-			a.co_note,
-			b.a_name,
-			b.a_manager,
-			c.or_name
-		FROM sm_collect a
-		JOIN sm_account b
-		ON a.a_idx = b.a_idx
-		JOIN sm_orders c
-		ON a.or_idx = c.or_idx
-		WHERE co_idx = #{coIdx}
+		SELECT * FROM sm_water_press
+		WHERE wp_id = #{wpId}
 	</select>
 	
-<!-- 	<update id="modifyWaterPressure"> -->
-<!-- 		UPDATE sm_collect SET -->
-<!-- 			a_idx = #{aIdx}, -->
-<!-- 			co_state = #{coState}, -->
-<!-- 			<if test="coDte != ''">co_dte = #{coDte},</if> -->
-<!-- 			<if test="coComManager != ''">co_com_manager = #{coComManager},</if> -->
-<!-- 			co_tot = #{coTot}, -->
-<!-- 			co_vat = #{coVat}, -->
-<!-- 			co_tot_price = #{coTotPrice}, -->
-<!-- 			co_tax_use = #{coTaxUse}, -->
-<!-- 			co_note = #{coNote}, -->
-<!-- 			co_edt_dte = NOW(), -->
-<!-- 			co_edt_mem = #{userId} -->
-<!-- 		WHERE co_idx = #{coIdx} -->
-<!-- 	</update> -->
+	<update id="modifyWaterPressure">
+	update sm_water_press set
+	wp_value = #{wpValue},
+	wp_state = #{wpState}
+	where wp_id = #{wpId}
+	</update>
 	
-<!-- 	<delete id="deleteCollect"> -->
-<!-- 		DELETE FROM sm_collect WHERE co_idx = #{coIdx} -->
-<!-- 	</delete> -->
+	<delete id="deleteCollect">
+		DELETE FROM sm_water_press WHERE wp_id = #{wpId}
+	</delete>
 </mapper>

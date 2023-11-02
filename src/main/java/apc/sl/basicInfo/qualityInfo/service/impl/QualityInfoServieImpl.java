@@ -109,6 +109,26 @@ public class QualityInfoServieImpl implements QualityInfoService {
 		qualityInfoMapper.spcUpLowReg(map);
 	}
 
+	@Override
+	public void deleteQualityInfo2(Map<String, Object> map) {
+		qualityInfoMapper.deleteQualityInfo2(map);
+	}
+
+	@Override
+	public void deleteQualityInfo3(Map<String, Object> map) {
+		qualityInfoMapper.deleteQualityInfo3(map);
+	}
+
+	@Override
+	public List<Map<String,Object>> spcCodeList(Map<String, Object> map) {
+		return qualityInfoMapper.spcCodeList(map);
+	}
+
+	@Override
+	public Map<String, Object> selectSpcInfo(Map<String, Object> map) {
+		return qualityInfoMapper.selectSpcInfo(map);
+	}
+
 
 	
 

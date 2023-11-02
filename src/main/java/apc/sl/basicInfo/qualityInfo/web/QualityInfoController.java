@@ -108,6 +108,15 @@ public class QualityInfoController {
 	@RequestMapping("/sl/basicInfo/qualityInfo/deleteQualityInfo.do")
 	public String deleteQualityInfo(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		qualityInfoService.deleteQualityInfo(map);
+		
+		List<Map<String,Object>> spcCodeList = qualityInfoService.spcCodeList(map);
+		
+		for(int i=0; i<spcCodeList.size(); i++) {
+			Map<String,Object> codeMap = spcCodeList.get(i);
+			qualityInfoService.deleteQualityInfo3(codeMap);
+		}
+		
+		qualityInfoService.deleteQualityInfo2(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";
 	}
@@ -144,7 +153,6 @@ public class QualityInfoController {
 	}
 	@RequestMapping("/sl/basicInfo/qualityInfo/registStandardOk.do")
 	public String registStandardOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		System.out.println("맵 : " + map);
 		String type = "";
 		//엘보우
 		if(map.get("ithType").equals("90E(L)") || map.get("ithType").equals("90E(S)") || map.get("ithType").equals("45E(L)")) {
@@ -187,7 +195,7 @@ public class QualityInfoController {
 			String [] elbowItem = {"Od01","Od02","Id01","Id02","T1Bevel","T2Bevel","T1Body","T2Body","BevelEnd","RootFace","StubF","StubG","StubGt","StubR","OaQ","OpP"};
 			spcDb(type,elbowItem,map,codeNum);
 		}
-		
+		System.out.println("map: " + map.get("ithType"));
 		qualityInfoService.registStandard(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";
@@ -197,6 +205,26 @@ public class QualityInfoController {
 		qualityInfoService.deleteStandardInfo(map);
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/basicInfo/qualityInfo/listStandard.do";
+	}
+	
+	@RequestMapping("/sl/basicInfo/qualityInfo/modifySpcInfo.do")
+	public String modifySpcInfo(@RequestParam Map<String,Object>map,ModelMap model) {
+		
+		
+		Map<String,Object> spcInfo = qualityInfoService.selectSpcInfo(map);
+		
+		model.put("spcInfo", spcInfo);
+		
+		return "sl/basicInfo/qualityInfo/spcInfoModify";
+	}
+	
+	@RequestMapping("/sl/basicInfo/qualityInfo/modifySpcInfoOk.do")
+	public String modifySpcInfoOk(@RequestParam Map<String,Object>map,RedirectAttributes redirectAttributes) {
+		
+		System.out.println(map);
+		
+		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
+		return "redirect:/sl/basicInfo/qualityInfo/qualityInfoList.do";
 	}
 	
 	public void spcDb(String type, String[] item, Map<String,Object> map, int num) {

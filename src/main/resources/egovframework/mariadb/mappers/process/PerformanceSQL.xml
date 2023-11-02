@@ -81,11 +81,9 @@
 		#{ptInsDate},
 		GETDATE()
 		)
-
-
 	</insert>
 	
-	<select id="checkExist" resultType="int">
+	<select id="checkExists" resultType="int">
 	SELECT COUNT(*) FROM sm_perf_test
 	WHERE PT_LOTNO = #{ptLotno}
 	</select>

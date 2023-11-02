@@ -44,85 +44,54 @@ public class WaterPressureController {
 		return "sl/collectInfo/waterPressure/waterPressureList";
 	}
 	
-	@RequestMapping("/sl/collectInfo/waterPressure/registCollect.do")
+	@RequestMapping("/sl/collectInfo/waterPressure/registWaterPressure.do")
 	public String registCollect(ModelMap model) {
-		List<?> deliveryList = waterPressureService.selectDeliveryList();
-		model.put("deliveryList", deliveryList);
+		
 		return "sl/collectInfo/waterPressure/waterPressureRegist";
 	}
 	
-	@RequestMapping(value="/sl/collectInfo/waterPressure/deliveryInfoAjax.do", method=RequestMethod.POST)
-	public ModelAndView deliveryInfoAjax(@RequestParam Map<String, Object> map) {
-		ModelAndView mav = new ModelAndView();
-		List<?> list = waterPressureService.selectDeliveryInfo(map);
-		mav.setViewName("jsonView");
-		mav.addObject("de_info", list);
-		return mav;
-	}
 	
-	@RequestMapping("/sl/collectInfo/waterPressure/registCollectOk.do")
+	@RequestMapping("/sl/collectInfo/waterPressure/registWaterPressureOk.do")
 	public String registWaterPressureOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		//이미 존재여부
 		int exists = waterPressureService.selectAlreadyRegistDeIdx(map);
 		if(exists != 0) {
-			redirectAttributes.addFlashAttribute("msg", "이미 등록된 내역입니다.");
-			redirectAttributes.addFlashAttribute("waterPressureVO", map);
-			return "redirect:/sl/collectInfo/waterPressure/registCollect.do";
+			redirectAttributes.addFlashAttribute("msg", "이미 등록된  코드명입니다.");
+			return "redirect:/sl/collectInfo/waterPressure/registWaterPressure.do";
 		}
 		
 		map.put("userId", session.getAttribute("user_id"));
 		waterPressureService.registWaterPressure(map);
-		//납품 상태 변경
-		if(map.get("coState").equals("1")) {
-			map.put("state","3");
-			waterPressureService.updateDelivery(map);
-		}
+		
 		
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
 		return "redirect:/sl/collectInfo/waterPressure/waterPressureList.do";
 	}
 	
-	@RequestMapping("/sl/collectInfo/waterPressure/modifyCollect.do")
+	@RequestMapping("/sl/collectInfo/waterPressure/modifyWaterPressure.do")
 	public String modifyWaterPressure(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = waterPressureService.selectCollectInfo(map);
 		model.put("waterPressureVO", detail);
-		List<?> deliveryList = waterPressureService.selectDeliveryList();
-		model.put("deliveryList", deliveryList);
 		
 		return "sl/collectInfo/waterPressure/waterPressureModify";
 	}
 	
-	@RequestMapping("/sl/collectInfo/waterPressure/modifyCollectOk.do")
+	@RequestMapping("/sl/collectInfo/waterPressure/modifyWaterPressureOk.do")
 	public String modifyWaterPressureOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
-		map.put("userId", session.getAttribute("user_id"));
-		waterPressureService.modifyWaterPressure(map);
 		
-		//납품번호가 다르면 납품 상태 변경
-		if(map.get("coState").equals("1")) {
-			map.put("state", "3");
-			waterPressureService.updateDelivery(map);
-		}else if(map.get("coState").equals("0")){
-			map.put("state", "1");
-			waterPressureService.updateDelivery(map);
-		}
+		
+		waterPressureService.modifyWaterPressure(map);
 		
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		return "redirect:/sl/collectInfo/waterPressure/waterPressureList.do";
 	}
 	
-	@RequestMapping("/sl/collectInfo/waterPressure/detailCollect.do")
-	public String detailWaterPressure(@RequestParam Map<String, Object> map, ModelMap model) {
-		Map<String, Object> detail = waterPressureService.selectCollectInfo(map);
-		model.put("waterPressureVO", detail);
-		return "sl/collectInfo/waterPressure/waterPressureDetail";
-	}
+
 	
-	@RequestMapping("/sl/collectInfo/waterPressure/deleteCollect.do")
+	@RequestMapping("/sl/collectInfo/waterPressure/deleteWaterPressure.do")
 	public String deleteWaterPressure(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		waterPressureService.deleteCollect(map);
-		//납품 상태 변경
-		map.put("state","1");
-		waterPressureService.updateDelivery(map);
+		
 		redirectAttributes.addFlashAttribute("msg","삭제 되었습니다.");
 		return "redirect:/sl/collectInfo/waterPressure/waterPressureList.do";
 	}
