@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.pop.manufacture.service.impl.PopManufactureMapper">
+
+	<select id="selectMfListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_mf_proc
+		WHERE 1=1
+		AND mp_pr_state IN (0,1)
+
+		<if test="searchKeyword != ''">
+			AND or_id LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+
+	</select>
+
+	<select id="selectMfList" resultType="egovMap">
+		SELECT
+		a.or_id
+		, MAX(a.MP_MFNO) AS mp_mfno
+		, MAX(a.MP_PROD_NAME) AS mp_prod_name
+		, MAX(a.MP_QTY) AS mp_qty , MAX(a.MP_PR_STATE) AS mp_pr_state
+		, ISNULL(
+		(
+		SELECT TOP 1 mfs_state
+		FROM
+		sm_mf_process_stop
+		WHERE OR_ID = a.OR_ID
+		ORDER BY mfs_idx DESC
+		),
+		0) AS mfs_state
+		, MAX(b.mfs_idx) AS mfs_idx
+		, MAX(c.MFL_MANAGER) AS mfl_manager
+		FROM sm_mf_proc a
+		LEFT JOIN
+		sm_mf_process_stop b
+		ON a.OR_ID = b.OR_ID LEFT
+		JOIN sm_mf_proc_log c
+		ON a.or_id = c.or_id
+		WHERE 1=1
+		AND a.mp_pr_state IN (0,1)
+		<if test="searchKeyword != ''">
+			AND a.or_id LIKE CONCAT('%',#{searchKeyword},'%')
+		</if>
+		GROUP BY a.or_id
+		ORDER BY or_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectCheckStop" resultType="int">
+		SELECT COUNT(*) FROM
+		sm_mf_process_stop
+		WHERE or_id = #{orId}
+		AND mfs_state = 1
+	</select>
+
+	<select id="selectMfManager" resultType="egovMap">
+		select mi_name from sm_member_info
+		where mi_department = '가공팀'
+	</select>
+
+	<insert id="registMfLog">
+		INSERT INTO sm_mf_proc_log (
+		or_id,
+		mfl_manager,
+		mfl_st_date,
+		mfl_reg_id,
+		mfl_reg_date,
+		mfl_person
+		) VALUES
+		(
+		#{orId},
+		#{mflManager},
+		GETDATE(),
+		#{userId},
+		GETDATE(),
+		1
+		)
+	</insert>
+
+	<insert id="registMfStopLog">
+		INSERT INTO sm_mf_process_stop (
+		or_id,
+		mfs_state,
+		mfs_stop_time
+		) VALUES
+		(
+		#{orId},
+		1,
+		GETDATE()
+		)
+	</insert>
+
+	<update id="updateOrState">
+		UPDATE sm_mf_proc SET
+		MP_PR_STATE = 1
+		WHERE or_id =
+		#{orId}
+	</update>
+
+	<update id="updateProcess3">
+		UPDATE sm_mf_proc SET
+		MP_PR_STATE = 2
+		WHERE or_id
+		=#{orId}
+	</update>
+
+	<update id="updateLogEdtime">
+		UPDATE sm_mf_proc_log SET
+		mfl_ed_date = GETDATE(),
+		mfl_work_time =
+		DATEDIFF(MINUTE,mfl_st_date,getdate())
+		WHERE or_id = #{orId}
+		AND mfl_idx
+		= (
+		SELECT TOP 1 mfl_idx
+		FROM
+		sm_mf_proc_log
+		WHERE or_id = #{orId}
+		ORDER BY
+		mfl_idx DESC
+		)
+	</update>
+
+	<update id="updateMfStopLog2">
+		UPDATE sm_mf_process_stop SET
+		mfs_state = 2,
+		mfs_re_time = GETDATE(),
+		MFS_REST_TIME = DATEDIFF(MINUTE,
+		MFS_STOP_TIME, GETDATE())
+		where mfs_idx
+		= #{mfsIdx}
+	</update>
+
+	<select id="outData" resultType="egovMap">
+		SELECT a.OR_ID, a.PO_LOTNO,a.mp_qty ,a.mp_prod_name,a.mp_mfno, CONVERT(VARCHAR(8), c.MFL_ED_DATE, 112) AS MFL_ED_DATE, mfl_manager from sm_mf_proc a 
+JOIN sm_mf_proc_log c ON a.OR_ID = c.OR_ID
+WHERE a.OR_ID = #{str}
+	</select>
+	
+	<select id="countFinish" resultType="int">
+	SELECT COUNT(*) as total FROM sm_mf_proc_log
+WHERE CONVERT(DATE, mfl_ed_date) = CONVERT(DATE, GETDATE());
+	
+	</select>
+
+</mapper>

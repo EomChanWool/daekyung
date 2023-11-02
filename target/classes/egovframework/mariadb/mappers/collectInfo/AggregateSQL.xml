@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.sales.aggregate.service.impl.AggregateMapper">
+	<select id="selectEstimateList" resultType="egovMap">
+		SELECT
+			COUNT(*) AS count,
+			DATE_FORMAT(es_fnl_qut_dte, '%m') AS MONTH
+		FROM sm_estimate
+		WHERE DATE_FORMAT(es_fnl_qut_dte, '%Y') = #{searchCondition}
+		GROUP BY month
+	</select>
+	<select id="selectOrdersList" resultType="egovMap">
+		SELECT
+			COUNT(*) AS count,
+			DATE_FORMAT(or_dte, '%m') AS month,
+			ROUND(SUM(or_money)/10000,0) AS money
+		FROM sm_orders
+		WHERE 1=1
+		AND DATE_FORMAT(or_dte, '%Y') = #{searchCondition}
+		GROUP BY month
+	</select>
+	<select id="selectDeliveryList" resultType="egovMap">
+		SELECT
+			COUNT(*) AS count,
+			DATE_FORMAT(de_dte, '%m') AS month,
+			ROUND(SUM(de_money)/10000,0) AS money
+		FROM sm_delivery
+		WHERE 1=1
+		AND DATE_FORMAT(de_dte, '%Y') = #{searchCondition}
+		GROUP BY month
+	</select>
+	<select id="selectCollectList" resultType="egovMap">
+		SELECT
+			COUNT(*) AS count,
+			DATE_FORMAT(co_dte, '%m') AS month,
+			ROUND(SUM(co_tot_price)/10000,0) AS money
+		FROM sm_collect
+		WHERE 1=1
+		AND co_state = '1'
+		AND DATE_FORMAT(co_dte, '%Y') = #{searchCondition}
+		GROUP BY month
+	</select>
+</mapper>

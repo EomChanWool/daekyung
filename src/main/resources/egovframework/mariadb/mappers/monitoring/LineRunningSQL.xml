@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.monitoring.lineRunning.service.impl.LineRunningMapper">
+	<select id="selectLineRunningListToCnt" resultType="int">
+		SELECT
+		COUNT(*) AS tnt
+		FROM (
+		SELECT COUNT(*) AS cnt FROM sm_daq_data
+		WHERE 1=1
+		AND CONVERT(DATE, DAQ_ED_DATE) = #{searchEdDate}
+		GROUP BY DAQ_NAME
+		) a
+
+
+	</select>
+
+	<select id="selectLineRunningList" resultType="egovMap">
+		SELECT COUNT(*) AS
+		counting , DAQ_NAME, convert(date,DAQ_ED_DATE) AS
+		daq_ed_date, SUM(DAQ_WORK_TIME) AS work_time
+		FROM
+		sm_daq_data
+		WHERE 1=1
+
+		AND CONVERT(DATE, DAQ_ED_DATE) = #{searchEdDate}
+		<if test="searchKeyword != ''">AND daq_name like concat('%', '${searchKeyword}', '%')</if>
+		GROUP BY daq_name, daq_ed_date
+		ORDER BY DAQ_NAME
+		OFFSET
+		(#{firstIndex}) ROWS
+		FETCH NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectLineYear" resultType="egovMap">
+		SELECT COUNT(*) AS counting , MONTH(daq_ed_date) AS months, SUM(DAQ_WORK_TIME) AS work_time
+		FROM sm_daq_data
+		WHERE 1=1
+		AND YEAR(DAQ_ED_DATE) = #{searchCondition}
+		<if test="searchCondition2 != ''">AND daq_name = #{searchCondition2}</if>
+		GROUP BY MONTH(daq_ed_date)
+		ORDER BY months
+		
+	</select>
+
+	<select id="selectDaqName" resultType="egovMap">
+		SELECT EQ_SENSORID FROM sm_equipment
+	</select>
+
+</mapper>

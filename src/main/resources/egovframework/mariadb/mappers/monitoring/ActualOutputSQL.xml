@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.monitoring.actualOutput.service.impl.ActualOutputMapper">
+	<select id="selectPressBendingCnt" resultType="egovMap">
+		SELECT
+			DATE_FORMAT(pr_re_ed_time, '%Y') AS year,
+			DATE_FORMAT(pr_re_ed_time, '%m') AS month,
+			DATE_FORMAT(pr_re_ed_time, '%d') AS day,
+			SUM(pr_re_cnt) AS pr_re_cnt
+		FROM sm_prod_result
+		WHERE 1=1
+		AND DATE_FORMAT(pr_re_ed_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+		AND pr_list_nm = #{processNm}
+	</select>
+	
+	<select id="selectPlcCnt" resultType="egovMap">
+		SELECT
+			DATE_FORMAT(pl_st_dte, '%Y') AS year,
+			DATE_FORMAT(pl_st_dte, '%m') AS month,
+			DATE_FORMAT(pl_st_dte, '%d') AS day,
+			pl_cnt
+		FROM sm_plc_data
+		WHERE 1=1
+		AND DATE_FORMAT(pl_st_dte, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+		AND pl_cnt = (SELECT MAX(pl_cnt) FROM sm_plc_data 
+						WHERE DATE_FORMAT(pl_st_dte, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d'))
+	</select>
+	
+	<select id="selectProdCnt" resultType="egovMap">
+		SELECT
+		YEAR(mfl_ed_date) AS years,
+		MONTH(mfl_ed_date) AS months,
+		SUM(mfl_work_time -
+		ISNULL(b.total_rest_time, 0)) AS total_real_time,
+		count(DISTINCT mfl_manager) AS
+		total_mfl_person,
+		AVG(mfl_work_time - ISNULL(b.total_rest_time,0)) AS avg_real_time
+		FROM
+		sm_mf_proc_log a
+		LEFT JOIN (
+		SELECT
+		or_id,
+		SUM(mfs_rest_time) AS total_rest_time
+		FROM
+		sm_mf_process_stop
+		WHERE
+		YEAR(mfs_stop_time) = #{searchCondition}
+		GROUP BY
+		or_id
+		) b ON a.or_id =
+		b.or_id
+		WHERE
+		YEAR(mfl_ed_date) = #{searchCondition}
+		GROUP BY
+		YEAR(mfl_ed_date), MONTH(mfl_ed_date)
+		ORDER BY months
+	</select>
+	<select id="selectProdCnt2" resultType="egovMap">
+	<!-- SELECT
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		AVG(cs_work_time) AS avg_work_time,
+		SUM(cs_work_time) AS sum_cs_work_time
+		FROM (
+		SELECT
+		MIN(cs_reg_date) AS cs_reg_date,
+		eq_sensorid,
+		MAX(cs_data06) AS cs_data06,
+		DATEDIFF(MINUTE, MIN(cs_reg_date), MAX(cs_reg_date)) AS cs_work_time
+		FROM
+		sm_cut_sensor_data
+		WHERE
+		1=1
+		AND YEAR(cs_reg_date) = #{searchCondition}
+		GROUP BY
+		eq_sensorid, cs_data09
+		HAVING
+		MAX(cs_data08) = 1
+		) AS grouped_data
+		GROUP BY
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months asc -->
+		SELECT
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		SUM(cs_work_time)AS total_time,
+		AVG(cs_work_time)AS avg_time
+		FROM sm_cut_sensor_data
+		WHERE 1=1
+		AND YEAR(cs_reg_date) = #{searchCondition}
+		AND cs_state = 0
+		GROUP BY
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months
+	</select>
+</mapper>

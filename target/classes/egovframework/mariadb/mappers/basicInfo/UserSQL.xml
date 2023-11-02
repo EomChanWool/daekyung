@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.basicInfo.user.service.impl.UserMapper">
+
+	<select id="selectUserListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_member_info
+		WHERE 1=1
+		<if test="searchCondition == '이름'">
+			AND mi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '아이디'">
+			AND mi_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '전화번호'">
+			AND mi_phone LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	
+	<select id="selectUserList" resultType="egovMap">
+		SELECT
+			mi_userid,
+			mi_name,
+			mi_id,
+			mi_department,
+			mi_position,
+			mi_email,
+			mi_phone,
+			mi_login_cnt
+		FROM sm_member_info
+		WHERE 1=1
+		<if test="searchCondition == '이름'">
+			AND mi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '아이디'">
+			AND mi_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == '전화번호'">
+			AND mi_phone LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY mi_userid DESC
+<!-- 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} -->
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+		
+	</select>
+	
+	<insert id="registUser">
+		INSERT INTO sm_member_info
+			(
+			mi_id,
+			mi_pass,
+			mi_name,
+			mi_department,
+			mi_position,
+			mi_email,
+			mi_phone,
+			mi_level,
+			mi_reg_date
+			)
+		VALUES
+			(
+			#{miId},
+			#{miPass},
+			#{miName},
+			#{miDepartment},
+			#{miPosition},
+			#{miEmail},
+			#{miPhone},
+			#{miLevel},
+			GETDATE()
+			)
+	</insert>
+	
+	<select id="selectUserInfo" resultType="egovMap">
+		SELECT
+			mi_userid,
+			mi_id,
+			mi_pass,
+			mi_name,
+			mi_department,
+			mi_position,
+			mi_email,
+			mi_phone,
+			mi_level,
+			mi_reg_date
+		FROM sm_member_info
+		WHERE mi_userid = #{miUserid}
+	</select>
+	
+	<select id="checkId" resultType="int">
+	SELECT COUNT(*) FROM sm_member_info
+WHERE mi_id = #{miId}
+	</select>
+	
+	<update id="modifyUser">
+		UPDATE sm_member_info SET
+		<if test="miPass != ''">mi_pass = #{miPass},</if>
+			mi_name = #{miName},
+			mi_department = #{miDepartment},
+			mi_position = #{miPosition},
+			mi_email = #{miEmail},
+			mi_phone = #{miPhone},
+			mi_level = #{miLevel}
+		WHERE mi_userid = #{miUserid}
+	</update>
+	
+	<delete id="deleteUser">
+		DELETE FROM sm_member_info WHERE mi_userid = #{miUserid}
+	</delete>
+</mapper>

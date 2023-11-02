@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.basicInfo.materialMove.service.impl.MaterialMoveMapper">
+	<select id="selectMaterialMoveListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_material_move
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND pi_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			 AND CAST(MM_REG_DATE AS DATE) >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			 AND CAST(MM_REG_DATE AS DATE) <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectMaterialMoveList" resultType="egovMap">
+		SELECT
+			mm_id,
+			pi_id,
+			mm_in,
+			mm_out,
+			mm_in_kg,
+			mm_out_kg
+		FROM sm_material_move
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND pi_id LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			 AND CAST(MM_REG_DATE AS DATE) >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			 AND CAST(MM_REG_DATE AS DATE) <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+		ORDER BY mm_id DESC
+		OFFSET (#{firstIndex}) ROWS
+		FETCH NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+	
+	<insert id="registMaterialMove">
+		DECLARE @CurrentDate VARCHAR(8) = CONVERT(VARCHAR(8), GETDATE(), 112)
+		DECLARE @MaxID INT
+
+		SELECT @MaxID = MAX(CAST(SUBSTRING(a.mm_id, 10, 4) AS INT)) + 1
+		FROM sm_material_move a
+		WHERE a.mm_id LIKE 'MM' + SUBSTRING(@CurrentDate, 3, 8) + '%'
+
+		SET @MaxID = ISNULL(@MaxID, 1)
+
+		INSERT INTO sm_material_move (
+		mm_id,
+		pi_id,
+		mm_in,
+		mm_in_kg,
+		mm_out,
+		mm_out_kg,
+		mm_cnt,
+		mm_cnt_kg,
+		mm_reg_id,
+		mm_reg_date,
+		pi_item_name
+		)
+		VALUES (
+		'MM' + SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID AS
+		VARCHAR(4)), 4),
+		#{piId},
+		CONVERT(INT, CONVERT(FLOAT, #{mmIn})),
+		CONVERT(FLOAT, #{mmInKg}),
+		CONVERT(INT, CONVERT(FLOAT, #{mmOut})),
+		CONVERT(FLOAT, #{mmOutKg}),
+		CONVERT(INT, CONVERT(FLOAT, #{mmCnt})),
+		CONVERT(FLOAT, #{mmCntKg}),
+		#{userId},
+		GETDATE(),
+		#{piItemName}
+		)
+	</insert>
+	
+	<select id="selectMaterialMoveInfo" resultType="egovMap">
+		SELECT
+			*
+		FROM sm_material_move a
+		JOIN sm_product_info b
+		ON a.PI_ID = b.PI_ID
+		WHERE mm_id = #{mmId}
+	</select>
+	
+	<select id="selectExistCode" resultType="int">
+	SELECT COUNT(*) FROM sm_product_info where pi_id = #{piId}
+	</select>
+	
+	<update id="modifyMaterialMove">
+		UPDATE sm_material_move SET
+			pi_id = #{piId},
+			mm_in = #{mmIn},
+			mm_in_kg = #{mmInKg},
+			mm_out = #{mmOut},
+			mm_out_kg = #{mmOutKg},
+			mm_cnt = #{mmCnt},
+			mm_cnt_kg = #{mmCntKg},
+			mm_edt_id = #{userId},
+			mm_edt_date = GETDATE(),
+			pi_item_name = #{piItemName}
+		WHERE mm_id = #{mmId}
+	</update>
+	
+	<delete id="deleteMaterialMove">
+		DELETE FROM sm_material_move WHERE mm_id = #{mmId}
+	</delete>
+</mapper>

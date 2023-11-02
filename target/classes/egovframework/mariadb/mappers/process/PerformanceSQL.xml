@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.process.performance.service.impl.PerformanceMapper">
+	<select id="selectPerformanceListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_perf_test
+		WHERE 1=1
+		<if test="searchKeyword">
+			AND pt_lotno = #{searchKeyword}
+		</if>
+
+	</select>
+
+	<select id="selectPerformanceList" resultType="egovMap">
+		SELECT *
+		FROM
+		sm_perf_test
+		WHERE 1=1
+		<if test="searchKeyword !=''">
+			AND pt_lotno = #{searchKeyword}
+		</if>
+
+		ORDER BY pt_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<!-- <insert id="registDocument"> -->
+	<!-- INSERT INTO sm_document -->
+	<!-- ( -->
+	<!-- do_idx, -->
+	<!-- do_type, -->
+	<!-- do_name, -->
+	<!-- do_manager, -->
+	<!-- do_dte, -->
+	<!-- do_origin_fil_nm, -->
+	<!-- do_fil_nm, -->
+	<!-- <if test="doNote">do_note,</if> -->
+	<!-- do_reg_dte, -->
+	<!-- do_reg_mem -->
+	<!-- ) -->
+	<!-- VALUES -->
+	<!-- ( -->
+	<!-- (SELECT CONCAT(CONCAT('DO',SUBSTRING(DATE_FORMAT(#{doDte},'%Y%m%d'),3,6)),'-', -->
+	<!-- (SELECT LPAD((SELECT IFNULL(MAX(SUBSTRING(a.do_idx,10,12)),0)+1 -->
+	<!-- FROM sm_document a -->
+	<!-- WHERE a.do_idx -->
+	<!-- LIKE CONCAT(CONCAT('DO',SUBSTRING(DATE_FORMAT(#{doDte},'%Y%m%d'),3,8)), 
+		'%')),3,0))) AS DO), -->
+	<!-- #{type}, -->
+	<!-- #{doName}, -->
+	<!-- #{doManager}, -->
+	<!-- #{doDte}, -->
+	<!-- #{doOriginFilNm}, -->
+	<!-- #{doFilNm}, -->
+	<!-- <if test="doNote">#{doNote},</if> -->
+	<!-- NOW(), -->
+	<!-- #{userId} -->
+	<!-- ) -->
+	<!-- </insert> -->
+
+	<insert id="registcheckPr">
+		INSERT INTO sm_perf_test(
+		pt_lotno,
+		or_id,
+		pt_prod_name,
+		pt_qty,
+		pt_bad_qty,
+		pt_reg_id,
+		pt_ins_date,
+		pt_reg_date
+		)
+		VALUES (
+		#{ptLotno},
+		#{orId},
+		#{ptProdName},
+		#{ptQty},
+		#{ptBadQty},
+		#{ptRegId},
+		#{ptInsDate},
+		GETDATE()
+		)
+	</insert>
+	
+	<select id="checkExists" resultType="int">
+	SELECT COUNT(*) FROM sm_perf_test
+	WHERE PT_LOTNO = #{ptLotno}
+	</select>
+
+	<select id="selectFmList" resultType="egovMap">
+		SELECT *
+		FROM sm_equipment
+		where eq_type = '가공'
+	</select>
+
+	<select id="selectOrderList" resultType="egovMap">
+		SELECT a.or_id
+		FROM
+		sm_mf_proc_log a
+		WHERE MFL_ED_DATE IS NOT NULL
+		AND NOT EXISTS (
+		SELECT 1
+		FROM sm_perf_test
+		WHERE or_id = a.or_id
+		)
+	</select>
+
+	<select id="performanceInfo" resultType="egovMap">
+		SELECT DISTINCT
+		a.isi_lotno, a.or_id, a.isi_item_name, b.MP_QTY
+		FROM sm_inspection_info
+		a
+		JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+		WHERE a.isi_lotno = #{ptLotno}
+	</select>
+
+	<select id="checkOrid" resultType="int">
+		SELECT COUNT(*) FROM
+		sm_inspection_info WHERE or_id = #{orId}
+	</select>
+
+	<select id="selectCheckPrInfo" resultType="egovMap">
+		SELECT * FROM
+		sm_perf_test
+		WHERE pt_id = #{ptId}
+	</select>
+
+	<select id="inspectList" resultType="egovMap">
+		SELECT isi_id, isi_lotno, isi_date, isi_report_image FROM
+		sm_inspection_info
+		WHERE isi_lotno = #{ptLotno}
+	</select>
+
+	<update id="modifyCheckPr">
+		update sm_perf_test set
+		pt_bad_qty = #{ptBadQty},
+		pt_ins_date = #{ptInsDate},
+		pt_reg_id = #{ptRegId},
+		pt_reg_date =
+		GETDATE()
+		where pt_id = #{ptId}
+	</update>
+
+	<!-- <update id="modifyDocument"> -->
+	<!-- UPDATE sm_document SET -->
+	<!-- do_name = #{doName}, -->
+	<!-- <if test="doFilNm != ''"> -->
+	<!-- do_origin_fil_nm = #{orginFileName}, -->
+	<!-- do_fil_nm = #{doFilNm}, -->
+	<!-- </if> -->
+	<!-- do_manager = #{doManager}, -->
+	<!-- <if test="doNote != ''">do_note = #{doNote},</if><if test="doNote == 
+		''">do_note = null,</if> -->
+	<!-- do_edt_dte = NOW(), -->
+	<!-- do_edt_mem = #{userId} -->
+	<!-- WHERE do_idx = #{doIdx} -->
+	<!-- </update> -->
+
+	<delete id="deletePerformance">
+		DELETE FROM sm_perf_test WHERE pt_id = #{ptId}
+	</delete>
+</mapper>

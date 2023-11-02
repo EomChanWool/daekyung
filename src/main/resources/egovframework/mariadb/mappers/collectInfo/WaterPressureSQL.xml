@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.collectInfo.waterPressure.service.impl.WaterPressureMapper">
+	<select id="selectWaterPressureListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_water_press
+	WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND wp_code = #{searchKeyword}
+		</if>
+		<if test="searchStDate != ''">
+			AND wp_time >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND wp_time <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectWaterPressureList" resultType="egovMap">
+		SELECT * FROM sm_water_press
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND wp_code = #{searchKeyword}
+		</if>
+		<if test="searchStDate != ''">
+			AND wp_time >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND wp_time <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY wp_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+	
+	<select id="selectDeliveryList" resultType="egovMap">
+		SELECT
+			a.or_idx,
+			b.a_name,
+			c.or_name
+		FROM sm_delivery a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		JOIN sm_orders c
+		ON a.or_idx = c.or_idx
+		WHERE de_state = '1'
+	</select>
+	
+	<select id="selectDeliveryInfo" resultType="egovMap">
+		SELECT 
+			a.a_idx, 
+			a.de_money,
+			b.a_name 
+		FROM sm_delivery a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		WHERE or_idx = #{orIdx}
+	</select>
+	
+
+	
+	<select id="selectAlreadyRegistDeIdx" resultType="int">
+		SELECT COUNT(*) FROM sm_water_press WHERE wp_code = #{wpCode}
+	</select>
+	
+	<insert id="registWaterPressure">
+	INSERT INTO sm_water_press (
+	wp_value,
+	wp_code,
+	wp_state,
+	wp_time
+	) values (
+	#{wpValue},
+	#{wpCode},
+	#{wpState},
+	GETDATE()
+	)
+	
+	</insert>
+	
+	
+	<select id="selectCollectInfo" resultType="egovMap">
+		SELECT * FROM sm_water_press
+		WHERE wp_id = #{wpId}
+	</select>
+	
+	<update id="modifyWaterPressure">
+	update sm_water_press set
+	wp_value = #{wpValue},
+	wp_state = #{wpState}
+	where wp_id = #{wpId}
+	</update>
+	
+	<delete id="deleteCollect">
+		DELETE FROM sm_water_press WHERE wp_id = #{wpId}
+	</delete>
+</mapper>

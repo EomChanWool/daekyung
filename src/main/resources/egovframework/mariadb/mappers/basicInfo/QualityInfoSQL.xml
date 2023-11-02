@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.basicInfo.qualityInfo.service.impl.QualityInfoMapper">
+	<select id="selectQualityInfoToCnt" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM sm_spc_specinfo
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND PI_ID LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+
+	<select id="selectQualityInfoList" resultType="egovMap">
+		SELECT a.ssi_id, a.si_id, a.pi_id,b.qi_type,qi_isuse FROM
+		sm_spc_specinfo a
+		JOIN sm_quality_info b
+		ON a.SI_ID = b.QI_NAME
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND PI_ID LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY SSI_ID DESC
+		OFFSET (#{firstIndex}) ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectExistsQualInfo" resultType="int">
+		SELECT COUNT(*)
+		FROM sm_quality_info
+		WHERE GI_GROUPCODE = #{giGroupcode}
+	</select>
+
+	<select id="selectStandard" resultType="egovMap">
+		SELECT * FROM
+		sm_quality_info
+	</select>
+
+	<insert id="registQualityInfo">
+		DECLARE @str NVARCHAR(50) = 'QI'
+		DECLARE @seq INT
+		DECLARE @padding INT =
+		5;
+
+		SET @seq = NEXT VALUE FOR qi_seq
+
+		INSERT INTO sm_quality_info
+		(
+		qi_code,
+		qi_name,
+		qi_trust_type,
+		qi_type,
+		<if test="qiComment !=''">qi_comment,</if>
+
+		qi_isuse,
+		<if test="qiRemark !=''">qi_remark,</if>
+
+		qi_reg_id,
+		qi_reg_date
+		)
+		VALUES
+		(
+		@str + RIGHT('00000' + CAST(@seq AS
+		VARCHAR(10)), @padding),
+		#{qiName},
+		#{qiTrustType},
+		#{qiType},
+		<if test="qiComment !=''">#{qiComment},</if>
+
+		#{qiIsuse},
+		<if test="qiRemark !=''">#{qiRemark},</if>
+
+		#{userId},
+		GETDATE()
+		)
+	</insert>
+
+	<insert id="registStandard">
+		INSERT INTO sm_spc_specinfo
+		(
+		si_id, pi_id,
+		ssi_od01, ssi_od01_max, ssi_od01_min,
+		<if
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			ssi_od02, ssi_od02_max, ssi_od02_min,
+		</if>
+		ssi_id01, ssi_id01_max, ssi_id01_min,
+		<if
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			ssi_id02, ssi_id02_max, ssi_id02_min,
+		</if>
+		ssi_t1_bevel, ssi_t1_bevel_max, ssi_t1_bevel_min,
+		<if
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			ssi_t1_body, ssi_t1_body_max, ssi_t1_body_min,
+		</if>
+		<if test="ithType == 'STUD'">
+			ssi_t2_bevel, ssi_t2_bevel_max, ssi_t2_bevel_min,
+			ssi_t2_body, ssi_t2_body_max, ssi_t2_body_min,
+		</if>
+		ssi_bevel_end, ssi_bevel_end_max, ssi_bevel_end_min,
+		ssi_root_face,
+		ssi_root_face_max, ssi_root_face_min,
+		ssi_oa_q_max,
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'T(R)' or  ithType == 'T(S)'">ssi_op_p_max,</if>
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)'">
+			ssi_elbow_a, ssi_elbow_a_max, ssi_elbow_a_min
+		</if>
+		<if test="ithType == 'T(S)' or ithType == 'T(R)'">
+			ssi_tee_c, ssi_tee_c_max, ssi_tee_c_min,
+			ssi_tee_m, ssi_tee_m_max, ssi_tee_m_min
+		</if>
+		<if test="ithType == 'R(C)' or  ithType == 'R(E)'">
+			ssi_redu_h, ssi_redu_h_max, ssi_redu_h_min
+		</if>
+		<if test="ithType == 'CAP'">
+			ssi_cap_limit_t,
+			ssi_cap_e, ssi_cap_e_max, ssi_cap_e_min,
+			ssi_cap_e1, ssi_cap_e1_max, ssi_cap_e1_min
+		</if>
+		<if test="ithType == 'STUD'">
+			ssi_stub_f, ssi_stub_f_max, ssi_stub_f_min,
+			ssi_stub_g, ssi_stub_g_max, ssi_stub_g_min,
+			ssi_stub_gt, ssi_stub_gt_max, ssi_stub_gt_min,
+			ssi_stub_r, ssi_stub_r_max, ssi_stub_r_min
+		</if>
+		, ssi_type)
+		VALUES
+		(
+		#{siId}, #{piId},
+		#{ssiOd01}, #{ssiOd01Max}, #{ssiOd01Min},
+		<if
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			#{ssiOd02}, #{ssiOd02Max}, #{ssiOd02Min},
+		</if>
+		#{ssiId01}, #{ssiId01Max}, #{ssiId01Min},
+		<if
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			#{ssiId02}, #{ssiId02Max}, #{ssiId02Min},
+		</if>
+		#{ssiT1Bevel}, #{ssiT1BevelMax}, #{ssiT1BevelMin},
+		<if
+			test="ithType == 'T(S)' or ithType == 'T(R)' or  ithType == 'R(C)' or  ithType == 'R(E)' or  ithType == 'STUD'">
+			#{ssiT1Body}, #{ssiT1BodyMax}, #{ssiT1BodyMin},
+		</if>
+		<if test="ithType == 'STUD'">
+			#{ssiT2Bevel}, #{ssiT2BevelMax}, #{ssiT2BevelMin},
+			#{ssiT2Body}, #{ssiT2BodyMax}, #{ssiT2BodyMin},
+		</if>
+		#{ssiBevelEnd}, #{ssiBevelEndMax}, #{ssiBevelEndMin},
+		#{ssiRootFace},
+		#{ssiRootFaceMax}, #{ssiRootFaceMin},
+		#{ssiOaQMax},
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)' or  ithType == 'T(R)' or  ithType == 'T(S)'"> #{ssiOpPMax},</if>
+		<if
+			test="ithType == '90E(L)' or ithType == '90E(S)' or  ithType == '45E(L)'">
+			#{ssiElbowA}, #{ssiElbowAMax}, #{ssiElbowAMin}
+		</if>
+		<if test="ithType == 'T(S)' or ithType == 'T(R)'">
+			#{ssiTeeC}, #{ssiTeeCMax}, #{ssiTeeCMin},
+			#{ssiTeeM}, #{ssiTeeMMax}, #{ssiTeeMMin}
+		</if>
+		<if test="ithType == 'R(C)' or  ithType == 'R(E)'">
+			#{ssiReduH}, #{ssiReduHMax}, #{ssiReduHMin}
+		</if>
+		<if test="ithType == 'CAP'">
+			#{ssiCapLimitT},
+			#{ssiCapE}, #{ssiCapEMax}, #{ssiCapEMin},
+			#{ssiCapE1}, #{ssiCapE1Max}, #{ssiCapE1Min}
+		</if>
+		<if test="ithType == 'STUD'">
+			#{ssiStubF}, #{ssiStubFMax}, #{ssiStubFMin},
+			#{ssiStubG}, #{ssiStubGMax}, #{ssiStubGMin},
+			#{ssiStubGt}, #{ssiStubGtMax}, #{ssiStubGtMin},
+			#{ssiStubR}, #{ssiStubRMax}, #{ssiStubRMin}
+		</if>
+		,#{ithType})
+	</insert>
+
+	<select id="selectQualityInfoInfo" resultType="egovMap">
+		SELECT qi_code,qi_name, qi_trust_type, qi_type,
+		qi_isuse, qi_comment,
+		qi_remark FROM
+		sm_quality_info
+		WHERE 1=1
+		and qi_code
+		= #{qiCode}
+	</select>
+
+	<select id="codeNum" resultType="int">
+		SELECT COUNT(*) AS code FROM sm_spc_code
+		WHERE sc_code LIKE CONCAT(#{str},'%')
+
+	</select>
+
+	<select id="selectStandardInfoToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_quality_info
+		
+		where 1=1
+		<if test="searchKeyword != ''">
+			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+
+	<select id="selectStandardInfo" resultType="egovMap">
+		SELECT * FROM sm_quality_info
+		
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND qi_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY qi_code DESC
+		OFFSET (#{firstIndex}) ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectStandardList" resultType="egovMap">
+		SELECT * FROM
+		sm_standard_info
+
+	</select>
+
+	<select id="selectStandardAjaxInfo" resultType="egovMap">
+		SELECT si_id,
+		si_type, si_name FROM sm_standard_info
+		WHERE si_id = #{giGroupcode}
+	</select>
+	
+	<select id="spcCodeList" resultType="egovMap">
+	SELECT * FROM sm_spc_code
+	WHERE sc_prod = #{piId}
+	</select>
+	
+	<select id="selectSpcInfo" resultType="egovMap">
+	SELECT * FROM sm_spc_specinfo
+	WHERE ssi_id = #{ssiId}
+	</select>
+	
+	<update id="modifyQualityInfo">
+		UPDATE sm_quality_info SET
+		qi_type = #{qiType},
+		qi_isuse = #{qiIsuse}
+		<if test="qiComment != ''">,qi_comment = #{qiComment}</if>
+		<if test="qiRemark != ''">,qi_remark = #{qiRemark}</if>
+		,qi_edt_id = #{userId},
+		qi_edt_date = getdate()
+		WHERE qi_code =
+		#{qiCode}
+	</update>
+
+	<delete id="deleteQualityInfo">
+		DELETE FROM sm_spc_specinfo WHERE ssi_id = #{ssiId}
+	</delete>
+	<delete id="deleteQualityInfo2">
+		DELETE FROM sm_spc_code WHERE sc_prod = #{piId}
+	</delete>
+	
+	<delete id="deleteQualityInfo3">
+		DELETE FROM sm_spc_up_low WHERE sc_code = #{scCode}
+	</delete>
+	
+
+	<delete id="deleteStandardInfo">
+		DELETE FROM sm_quality_info WHERE qi_code = #{qiCode}
+	</delete>
+
+	<select id="selectDetailQualInfo" resultType="egovMap">
+		SELECT
+			*
+		FROM
+			sm_spc_specinfo a
+		JOIN 
+			sm_quality_info b
+		ON 
+			a.SI_ID = b.QI_NAME
+		WHERE
+			a.ssi_id = #{ssiId};
+	</select>
+
+	<select id="selectAccessLevel" resultType="int">
+		SELECT
+		a.a_lev
+		FROM
+		sm_authority a
+		JOIN sm_program b
+		ON a.p_idx = b.p_idx
+		WHERE 1=1
+		AND
+		p_url
+		LIKE CONCAT('%',#{str},'%')
+	</select>
+	
+	<insert id="spcCodeReg">
+	INSERT INTO sm_spc_code
+	(
+	sc_prod,
+	sc_item,
+	sc_code) VALUES
+	(
+	#{scProd},
+	#{scItem},
+	#{scCode})
+	</insert>
+	
+	<insert id="spcUpLowReg">
+	INSERT INTO sm_spc_up_low
+	(
+	sc_code,
+	sul_base_val,
+	sul_max_val,
+	sul_min_val
+	) values
+	(
+	#{scCode},
+	#{sulBaseVal},
+	#{sulMaxVal},
+	#{sulMinVal}
+	)
+	</insert>
+</mapper>
