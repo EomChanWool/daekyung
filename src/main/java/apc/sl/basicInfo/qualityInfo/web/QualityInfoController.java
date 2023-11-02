@@ -210,7 +210,6 @@ public class QualityInfoController {
 	@RequestMapping("/sl/basicInfo/qualityInfo/modifySpcInfo.do")
 	public String modifySpcInfo(@RequestParam Map<String,Object>map,ModelMap model) {
 		
-		System.out.println(map);
 		
 		Map<String,Object> spcInfo = qualityInfoService.selectSpcInfo(map);
 		
