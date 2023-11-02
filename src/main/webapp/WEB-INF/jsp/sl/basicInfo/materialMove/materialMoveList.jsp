@@ -83,6 +83,8 @@
                                             <th>바코드번호</th>
 											<th>입고수량</th>
 											<th>출고수량</th>
+											<th>입고중량</th>
+											<th>출고중량</th>
 											<th>수정/삭제</th>
                                         </tr>
                                     </thead>
@@ -92,6 +94,8 @@
 	                                            <td>${result.piId}</td>
 	                                            <td>${result.mmIn}</td>
 	                                            <td>${result.mmOut }</td>
+	                                            <td>${result.mmInKg }</td>
+	                                            <td>${result.mmOutKg }</td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_materialMove_go('${result.mmId}')">
 				                                        <span class="text">수정</span>

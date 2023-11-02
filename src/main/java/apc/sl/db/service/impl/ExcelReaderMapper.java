@@ -10,6 +10,8 @@ public interface ExcelReaderMapper {
 
 	void registdb(Map<String, Object> map);
 	
+	void registPi(Map<String, String> map);
+
 	void registMm(Map<String, String> map);
 	
 	void registOrder(Map<String, String> map);
@@ -18,17 +20,13 @@ public interface ExcelReaderMapper {
 	
 	void registProc(Map<String, String> map);
 	
-	void updateMm(Map<String, String> map);
-
 	void deleteMm();
 	
 	void deletedb();
 	
+	void updateMm(Map<String, Object> map);
+
 	void testRegist(Map<String,String> map);
-	
-	void registCutpro(Map<String,String> map);
-	
-	List<?> outProList();
 	
 	Map<String, Object> inspCount(String edDate);
 	
@@ -38,11 +36,7 @@ public interface ExcelReaderMapper {
 	
 	void registinspData(Map<String,Object> map);
 	
-	int checkjungbok(Map<String,String> map);
-	
-	Map<String,Object> idTestTime(Map<String,Object> map);
-	
-	int checkVision(Map<String,Object> map);
-	
-	void insFileStateUpdate(Map<String,Object> map);
+	Map<String, Object> sublList(Map<String, String> map);
+
+	Map<String, Object> clgoList(Map<String, String> map);
 }

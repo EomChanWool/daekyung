@@ -75,6 +75,7 @@ public class PrPerformanceController {
 	@RequestMapping("/sl/basicInfo/prPerformance/modifyPrPerformanceOk.do")
 	public String modifyPrPerfomanceOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId", session.getAttribute("user_id"));
+		System.out.println(map);
 		prPerformanceService.modifyPrPerformance(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		ModifyFile(map);
@@ -89,23 +90,9 @@ public class PrPerformanceController {
 		String relUnit = a.substring(0, a.length()-2);
 		String b = detail.get("relPrice")+"";
 		String relPrice = b.substring(0, b.length()-2);
-		String c = detail.get("relTax")+"";
-		String relTax = c.substring(0, c.length()-2);
-		String d = detail.get("relTotalPrice")+"";
-		String relTotalPrice = d.substring(0, d.length()-2);
 		
 		detail.replace("relUnit", relUnit);
 		detail.replace("relPrice", relPrice);
-		detail.replace("relTax", relTax);
-		detail.replace("relTotalPrice", relTotalPrice);
-		
-		if(detail.get("relNego").equals("")) {
-			detail.replace("relNego", 0);
-		}else {
-			String e = detail.get("relNego")+"";
-			String relNego = e.substring(0, e.length()-2);
-			detail.replace("relNego", relNego);
-		}
 		
 		model.put("prPerVo", detail);
 		

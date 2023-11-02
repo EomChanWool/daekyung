@@ -55,80 +55,71 @@
 											<tr>
 												<th>로트번호<span class="req">*</span></th>
 												<td><span class="form-control val-area">${prPerVo.poLotno}</span></td>
-												<th>일자<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relDate}</span></td>
+												<th>수주번호<span class="req">*</span></th>
+												<td><span class="form-control val-area">${prPerVo.orId}</span></td>
+												
 											</tr>
 											<tr>
 												<th>거래처<span class="req">*</span></th>
 												<td><span class="form-control val-area">${prPerVo.relCompony}</span></td>
-												<th>수량<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relQty}</span></td>
+												<th>납품처</th>
+												<td><span class="form-control val-area">${prPerVo.relDel}</span></td>
 											</tr>
 											<tr>
-												<th>협가</th>
-												<td><span class="form-control val-area" id="relNego">${prPerVo.relNego}원</span></td>
-												<th>%</th>
-												<td><span class="form-control val-area">${prPerVo.relPercent}%</span></td>
+												<th>주문번호<span class="req">*</span></th>
+												<td><span class="form-control val-area">${prPerVo.relEsno}</span></td>
+												<th>공정번호<span class="req">*</span></th>
+												<td><span class="form-control val-area">${prPerVo.relPrno}</span></td>
+											</tr>
+											<tr>
+												<th>출고일<span class="req">*</span></th>
+												<td><span class="form-control val-area">${prPerVo.relClgo}</span></td>
+												<th>납기일<span class="req">*</span></th>
+												<td><span class="form-control val-area">${prPerVo.relNabgi}</span></td>
+											</tr>
+											<tr>
+												<th>수주구분<span class="req">*</span></th>
+												<td><span class="form-control val-area">${prPerVo.relOrType}</span></td>
+												<th>수량<span class="req">*</span></th>
+												<td><span class="form-control val-area">${prPerVo.relQty}</span></td>
 											</tr>
 											<tr>
 												<th>판매단가(원)</th>
 												<td><span class="form-control val-area" id="relUnit">${prPerVo.relUnit}원</span></td>
 												<th>금액(원)<span class="req">*</span></th>
 												<td><span class="form-control val-area" id="relPrice">${prPerVo.relPrice}원</span></td>
+											
 											</tr>
 											<tr>
-												<th>부가세(원)<span class="req">*</span></th>
-												<td><span class="form-control val-area" id="relTax">${prPerVo.relTax}원</span></td>
-												<th>합계(원)<span class="req">*</span></th>
-												<td><span class="form-control val-area" id="relTotalPrice">${prPerVo.relTotalPrice}원</span></td>
-											</tr>
-											<tr>
-												<th>납품처</th>
-												<td><span class="form-control val-area">${prPerVo.relDel}</span></td>
-												<th>주문번호<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relEsno}</span></td>
-											</tr>
-											<tr>
-												<th>공정번호<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relPrno}</span></td>
-												<th>히트번호</th>
-												<td><span class="form-control val-area">${prPerVo.relHeatno}</span></td>
-											</tr>
-											<tr>
-												<th>과목</th>
-												<td><span class="form-control val-area">${prPerVo.relSub}</span></td>
-												<th>수주구분<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relOrType}</span></td>
-											</tr>
-											<tr>
-												<th>수주번호<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.orId}</span></td>
-												<th>성적서 재질</th>
-												<td><span class="form-control val-area">${prPerVo.relReport}</span></td>
-											</tr>
-											<tr>
-												<th>계산서<span class="req">*</span></th>
-												<td><span class="form-control val-area">${prPerVo.relBill}</span></td>
 												<th>품명<span class="req">*</span></th>
 												<td><span class="form-control val-area">${prPerVo.relProd}</span></td>
-											</tr>
-											<tr>
 												<th>재질<span class="req">*</span></th>
 												<td><span class="form-control val-area">${prPerVo.relTexture}</span></td>
+											</tr>
+											<tr>
 												<th>두께<span class="req">*</span></th>
 												<td><span class="form-control val-area">${prPerVo.relThickness}</span></td>
-											</tr>
-											<tr>
 												<th>규격</th>
 												<td><span class="form-control val-area">${prPerVo.relStandard}</span></td>
-												<th>상태</th>
-												<td><span class="form-control val-area">${prPerVo.relState}</span></td>
 											</tr>
 											<tr>
-												<th>비고</th>
-												<td colspan="3"><textArea name="relNote" id="relNote" disabled="disabled">${prPerVo.relNote}</textArea></td>
+												<th>상태</th>
+												<td><span class="form-control val-area">${prPerVo.relState}</span></td>
+												<th>담당자</th>
+												<td><span class="form-control val-area">${prPerVo.relPerson}</span></td>
 											</tr>
-											
+											<tr>
+												<th>성적서 일자</th>
+												<td><span class="form-control val-area">${prPerVo.relReport}</span></td>
+												<th>완료 일자</th>
+												<td><span class="form-control val-area">${prPerVo.relCompletion}</span></td>
+											</tr>
+											<tr>
+												<th>비고1</th>
+												<td><textArea name="relNote1" id="relNote2" disabled="disabled">${prPerVo.relNote1}</textArea></td>
+												<th>비고2</th>
+												<td><textArea name="relNote1" id="relNote2" disabled="disabled">${prPerVo.relNote2}</textArea></td>
+											</tr>
 										</tbody>
 	                                </table>
                                 </form>

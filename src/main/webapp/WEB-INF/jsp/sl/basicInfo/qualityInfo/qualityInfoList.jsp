@@ -55,6 +55,7 @@
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do" method="post">
 									<input type="hidden" name="qiCode">
+									<input type="hidden" name="ssiId">
 									<input type="hidden" name="giGroupcode">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
@@ -92,7 +93,7 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${qualityInfoList}" varStatus="status">
-	                                   		<tr onclick="fn_detail_qualityInfo('${result.qiCode}')" style="cursor: pointer;">
+	                                   		<tr onclick="fn_detail_qualityInfo('${result.ssiId}')" style="cursor: pointer;">
 	                                            <td>${result.siId}</td>
 	                                            <td>${result.piId}</td>
 	                                            <td>${result.qiType}</td>
@@ -184,8 +185,8 @@
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifyQualityInfo.do";
 			listForm.submit();
 		}
-		function fn_detail_qualityInfo(qiCode){
-			listForm.qiCode.value = qiCode;
+		function fn_detail_qualityInfo(ssiId){
+			listForm.ssiId.value = ssiId;
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/detailQualityInfo.do";
 			listForm.submit();
 		}

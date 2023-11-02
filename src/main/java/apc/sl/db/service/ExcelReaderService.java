@@ -9,23 +9,21 @@ public interface ExcelReaderService {
 	
 	void registOrder(Map<String, String> map);
 	
+	void registPi(Map<String, String> map);
+
 	void registMm(Map<String, String> map);
 	
 	void registRelease(Map<String, String> map);
 	
 	void registProc(Map<String, String> map);
 	
-	void updateMm(Map<String, String> map);
-	
 	void deletedb();
 	
 	void deleteMm();
+
+	void updateMm(Map<String, Object> map);
 	
 	void testRegist(Map<String,String> map);
-	
-	void registCutpro(Map<String,String> map);
-	
-	List<?> outProList();
 	
 	Map<String, Object> inspCount(String edDate);
 	
@@ -34,14 +32,9 @@ public interface ExcelReaderService {
 	Map<String, Object> mfProc(String str);
 	
 	void registinspData(Map<String,Object> map);
+	
+	Map<String, Object> sublList(Map<String, String> linee);
 
-	void updaeMm(Map<String, String> map);
+	Map<String, Object> clgoList(Map<String, String> map);
 	
-	int checkjungbok(Map<String,String> map);
-	
-	Map<String,Object> idTestTime(Map<String,Object> map);
-	
-	int checkVision(Map<String,Object> map);
-	
-	void insFileStateUpdate(Map<String,Object> map);
 }
