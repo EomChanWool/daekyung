@@ -52,84 +52,74 @@
                             		<input type="hidden" name="relIdx" value="${prPerVo.relIdx}">
 	                                <table class="table table-bordered" id="dataTable">
 	                                    <tbody>
-											<tr>
-												<th>로트번호<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="poLotno" id="poLotno" value="${prPerVo.poLotno}"/></td>
-												<th>일자<span class="req">*</span></th>
-												<td><input type="date" class="form-control" name="relDate" id="relDate" value="${prPerVo.relDate}"/></td>
-											</tr>
-											<tr>
-												<th>거래처<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relCompony" id="relCompony" value="${prPerVo.relCompony}"/></td>
-												<th>수량<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relQty" id="relQty" value="${prPerVo.relQty}"/></td>
-											</tr>
-											<tr>
-												<th>협가</th>
-												<td><input type="text" class="form-control" name="relNego" id="relNego" value="${prPerVo.relNego}"/></td>
-												<th>%</th>
-												<td><input type="text" class="form-control" name="relPercent" id="relPercent" value="${prPerVo.relPercent}"/></td>
-											</tr>
-											<tr>
-												<th>판매단가(원)</th>
-												<td><input type="text" class="form-control" name="relUnit" id="relUnit" value="${prPerVo.relUnit}"/></td>
-												<th>금액(원)<span class="req">*</span></th>
-												<td><input type="text" class="form-control relPrice" name="relPrice" id="relPrice" value="${prPerVo.relPrice}"/></td>
-											</tr>
-											<tr>
-												<th>부가세(원)<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relTax" id="relTax" value="${prPerVo.relTax}"/></td>
-												<th>합계(원)<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relTotalPrice" id="relTotalPrice" value="${prPerVo.relTotalPrice}"/></td>
-											</tr>
-											<tr>
-												<th>납품처</th>
-												<td><input type="text" class="form-control" name="relDel" id="relDel" value="${prPerVo.relDel}"/></td>
-												<th>주문번호<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relEsno" id="relEsno" value="${prPerVo.relEsno}"/></td>
-											</tr>
-											<tr>
-												<th>공정번호<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relPrno" id="relPrno" value="${prPerVo.relPrno}"/></td>
-												<th>히트번호</th>
-												<td><input type="text" class="form-control" name="relHeatno" id="relHeatno" value="${prPerVo.relHeatno}"/></td>
-											</tr>
-											<tr>
-												<th>과목</th>
-												<td><input type="text" class="form-control" name="relSub" id="relSub" value="${prPerVo.relSub}"/></td>
-												<th>수주구분<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relOrType" id="relOrType" value="${prPerVo.relOrType}"/></td>
-											</tr>
-											<tr>
-												<th>수주번호<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="orId" id="orId" value="${prPerVo.orId}"/></td>
-												<th>성적서 재질</th>
-												<td><input type="text" class="form-control" name="relReport" id="relReport" value="${prPerVo.relReport}"/></td>
-											</tr>
-											<tr>
-												<th>계산서<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relBill" id="relBill" value="${prPerVo.relBill}"/></td>
-												<th>품명<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relProd" id="relProd" value="${prPerVo.relProd}"/></td>
-											</tr>
-											<tr>
-												<th>재질<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relTexture" id="relTexture" value="${prPerVo.relTexture}"/></td>
-												<th>두께<span class="req">*</span></th>
-												<td><input type="text" class="form-control" name="relThickness" id="relThickness" value="${prPerVo.relThickness}"/></td>
-											</tr>
-											<tr>
-												<th>규격</th>
-												<td><input type="text" class="form-control" name="relStandard" id="relStandard" value="${prPerVo.relStandard}"/></td>
-												<th>상태</th>
-												<td><input type="text" class="form-control" name="relState" id="relState" value="${prPerVo.relState}"/></td>
-											</tr>
-											<tr>
-												<th>비고</th>
-												<td colspan="3"><textArea name="relNote" id="relNote" >${prPerVo.relNote}</textArea></td>
-											</tr>
-											
+										    <tr>
+										        <th>로트번호<span class="req" >*</span></th>
+										        <td><input type="text" class="form-control" name="poLotno" id="poLotno" disabled="disabled" value="${prPerVo.poLotno}"/></td>
+										        <th>수주번호<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="orId" id="orId" disabled="disabled" value="${prPerVo.orId}"/></td>
+										    </tr>
+										    <tr>
+										        <th>거래처<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relCompony" id="relCompony" value="${prPerVo.relCompony}"/></td>
+										        <th>납품처</th>
+										        <td><input type="text" class="form-control" name="relDel" id="relDel" value="${prPerVo.relDel}"/></td>
+										    </tr>
+										    <tr>
+										        <th>주문번호<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relEsno" id="relEsno" value="${prPerVo.relEsno}"/></td>
+										        <th>공정번호<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relPrno" id="relPrno" value="${prPerVo.relPrno}"/></td>
+										    </tr>
+										    <tr>
+										        <th>출고일<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relClgo" id="relClgo" value="${prPerVo.relClgo}"/></td>
+										        <th>납기일<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relNabgi" id="relNabgi" value="${prPerVo.relNabgi}"/></td>
+										    </tr>
+										    <tr>
+										        <th>수주구분<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relOrType" id="relOrType" value="${prPerVo.relOrType}"/></td>
+										        <th>수량<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relQty" id="relQty" value="${prPerVo.relQty}"/></td>
+										    </tr>
+										    <tr>
+										        <th>판매단가(원)</th>
+										        <td><input type="text" class="form-control" name="relUnit" id="relUnit" value="${prPerVo.relUnit}"/></td>
+										        <th>금액(원)<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relPrice" id="relPrice" value="${prPerVo.relPrice}"/></td>
+										    </tr>
+										    <tr>
+										        <th>품명<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relProd" id="relProd" value="${prPerVo.relProd}"/></td>
+										        <th>재질<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relTexture" id="relTexture" value="${prPerVo.relTexture}"/></td>
+										    </tr>
+										    <tr>
+										        <th>두께<span class="req">*</span></th>
+										        <td><input type="text" class="form-control" name="relThickness" id="relThickness" value="${prPerVo.relThickness}"/></td>
+										        <th>규격</th>
+										        <td><input type="text" class="form-control" name="relStandard" id="relStandard" value="${prPerVo.relStandard}"/></td>
+										    </tr>
+										    <tr>
+										        <th>상태</th>
+										        <td><input type="text" class="form-control" name="relState" id="relState" value="${prPerVo.relState}"/></td>
+										        <th>담당자</th>
+										        <td><input type="text" class="form-control" name="relPerson" id="relPerson" value="${prPerVo.relPerson}"/></td>
+										    </tr>
+										    <tr>
+										        <th>성적서 일자</th>
+										        <td><input type="text" class="form-control" name="relReport" id="relReport" value="${prPerVo.relReport}"/></td>
+										        <th>완료 일자</th>
+										        <td><input type="text" class="form-control" name="relCompletion" id="relCompletion" value="${prPerVo.relCompletion}"/></td>
+										    </tr>
+										    <tr>
+										        <th>비고1</th>
+										        <td><textarea class="form-control" name="relNote1" id="relNote1">${prPerVo.relNote1}</textarea></td>
+										        <th>비고2</th>
+										        <td><textarea class="form-control" name="relNote2" id="relNote2">${prPerVo.relNote2}</textarea></td>
+										    </tr>
 										</tbody>
+
 	                                </table>
                                 </form>
                                 <div class="btn_bottom_wrap">
@@ -203,6 +193,7 @@
  			alert("금액은 숫자만 입력가능합니다.");
 			return;
  		}
+<<<<<<< HEAD
 		if($('#relTax').val() == "" ){
 			alert("부가세를 입력해주세요.");
 			return;
@@ -219,6 +210,8 @@
  			alert("합계는 숫자만 입력가능합니다.");
 			return;
  		}
+=======
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 		if($('#relEsno').val() == "" ){
 			alert("주문번호를 입력해주세요.");
 			return;
@@ -235,11 +228,14 @@
 			alert("수주번호를 입력해주세요.");
 			return;
 		}
+<<<<<<< HEAD
 		
 		if($('#relBill').val() == "" ){
 			alert("계산서를 입력해주세요.");
 			return;
 		}
+=======
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 		if($('#relProd').val() == "" ){
 			alert("품명을 입력해주세요.");
 			return;

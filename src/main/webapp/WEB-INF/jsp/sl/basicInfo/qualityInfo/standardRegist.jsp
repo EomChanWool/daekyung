@@ -419,7 +419,7 @@
 										</tbody>
 										
 										<tbody id="STUD_END">
-												<tr>
+											<tr>
 												<th>OD1</th>
 												<td><input type="text" class="form-control" name="ssiOd01" id="ssiOd01"/></td>
 												<th>OD1 상한</th>

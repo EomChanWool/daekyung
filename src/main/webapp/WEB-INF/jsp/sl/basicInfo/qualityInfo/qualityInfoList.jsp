@@ -54,8 +54,11 @@
                         <div class="card-header py-3">
 							<div class="search">
 								<form name ="listForm" class="listForm" action="${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/qualityInfoList.do" method="post">
+
+									<input type="hidden" name="qiCode">
 									<input type="hidden" name="ssiId">
-									<input type="hidden" name="piId">
+									<input type="hidden" name="giGroupcode">
+
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 						    		<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
 						    									value="${searchVO.searchKeyword}" placeholder="관리항목명을 입력해 주세요"
@@ -92,7 +95,11 @@
                                     </thead>
                                     <tbody>
                                     	<c:forEach var="result" items="${qualityInfoList}" varStatus="status">
+<<<<<<< HEAD
 	                                   		<tr onclick="fn_detail_qualityInfo('${result.qiCode}')" style="cursor: pointer;">
+=======
+	                                   		<tr onclick="fn_detail_qualityInfo('${result.ssiId}')" style="cursor: pointer;">
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 	                                            <td>${result.siId}</td>
 	                                            <td>${result.piId}</td>
 	                                            <td>${result.qiType}</td>
@@ -184,8 +191,13 @@
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/modifySpcInfo.do";
 			listForm.submit();
 		}
+<<<<<<< HEAD
 		function fn_detail_qualityInfo(qiCode){
 			listForm.qiCode.value = qiCode;
+=======
+		function fn_detail_qualityInfo(ssiId){
+			listForm.ssiId.value = ssiId;
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 			listForm.action = "${pageContext.request.contextPath}/sl/basicInfo/qualityInfo/detailQualityInfo.do";
 			listForm.submit();
 		}

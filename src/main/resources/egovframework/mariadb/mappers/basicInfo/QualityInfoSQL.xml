@@ -273,9 +273,16 @@
 	</delete>
 
 	<select id="selectDetailQualInfo" resultType="egovMap">
-		SELECT * FROM
-		sm_quality_info
-		WHERE qi_code = #{qiCode}
+		SELECT
+			*
+		FROM
+			sm_spc_specinfo a
+		JOIN 
+			sm_quality_info b
+		ON 
+			a.SI_ID = b.QI_NAME
+		WHERE
+			a.ssi_id = #{ssiId};
 	</select>
 
 	<select id="selectAccessLevel" resultType="int">

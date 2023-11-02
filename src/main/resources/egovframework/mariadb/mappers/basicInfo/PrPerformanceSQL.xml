@@ -19,10 +19,10 @@
 	</select>
 
 	<select id="selectPrPerformanceList" resultType="egovMap">
-	
-		SELECT rel_idx,po_lotno, rel_date, rel_compony, 
-		rel_sub, rel_prod,
-		rel_qty,rel_bill FROM sm_release_info
+
+		SELECT rel_idx, po_lotno, rel_clgo, rel_compony, rel_prod,
+		rel_qty FROM sm_release_info
+
 		WHERE 1=1
 		<if test="searchCondition == 1 and searchKeyword != ''">and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
 		<!-- <if test="searchKeyword != ''">
@@ -30,10 +30,10 @@
 		</if> -->
 		<if test="searchCondition == 2 and searchKeyword != ''">and or_id LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
 		<if test="searchStDate != ''">
-			AND rel_date >= #{searchStDate}
+			AND rel_clgo >= #{searchStDate}
 		</if>
 		<if test="searchEdDate !=''">
-			AND rel_date <![CDATA[<=]]>
+			AND rel_clgo <![CDATA[<=]]>
 			#{searchEdDate}
 		</if>
 		ORDER BY rel_idx DESC
@@ -57,6 +57,7 @@
 		insert into sm_release_info
 		(
 		po_lotno,
+<<<<<<< HEAD
 		rel_date,
 		rel_compony,
 		rel_qty,
@@ -76,11 +77,25 @@
 		or_id,
 		rel_report,
 		rel_bill,
+=======
+		or_id,
+		rel_compony,
+		rel_del,
+		rel_esno,
+		rel_prno,
+		rel_clgo,
+		rel_nabgi,
+		rel_or_type,
+		rel_qty,
+		rel_unit,
+		rel_price,
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 		rel_prod,
 		rel_texture,
 		rel_thickness,
 		rel_standard,
 		rel_state,
+<<<<<<< HEAD
 		rel_reg_id,
 		rel_reg_date
 		) values
@@ -105,18 +120,48 @@
 		#{orId},
 		#{relReport},
 		#{relBill},
+=======
+		rel_person,
+		rel_report,
+		rel_completion,
+		rel_note1,
+		rel_note2
+		) values
+		(
+		#{poLotno},
+		#{orId},
+		#{relCompony},
+		#{relDel},
+		#{relEsno},
+		#{relPrno},
+		GETDATE(),
+		#{relNabgi},
+		#{relOrType},
+		#{relQty},
+		#{relUnit},
+		#{relPrice},
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 		#{relProd},
 		#{relTexture},
 		#{relThickness},
 		#{relStandard},
 		#{relState},
+<<<<<<< HEAD
 		#{userId},
 		GETDATE()
+=======
+		#{relPerson},
+		#{relReport},
+		#{relCompletion},
+		#{relNote1},
+		#{relNote2}
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 		)
 	</insert>
 	
 	<update id="modifyPrPerformance">
 	UPDATE sm_release_info SET
+<<<<<<< HEAD
 po_lotno = #{poLotno},
 rel_date = #{relDate},
 rel_compony = #{relCompony},
@@ -145,6 +190,29 @@ rel_note = #{relNote},
 rel_edt_id = #{userId},
 rel_edt_date = GETDATE()
 WHERE rel_idx = #{relIdx}
+=======
+		rel_compony = #{relCompony},
+		rel_del = #{relDel},
+		rel_esno = #{relEsno},
+		rel_prno = #{relPrno},
+		rel_clgo = #{relClgo},
+		rel_nabgi = #{relNabgi},
+		rel_or_type = #{relOrType},
+		rel_qty = #{relQty},
+		rel_unit = #{relUnit},
+		rel_price = #{relPrice},
+		rel_prod = #{relProd},
+		rel_texture = #{relTexture},
+		rel_thickness = #{relThickness},
+		rel_standard = #{relStandard},
+		rel_state = #{relState},
+		rel_person = #{relPerson},
+		rel_report = #{relReport},
+		rel_completion = #{relCompletion},
+		rel_note1 = #{relNote1},
+		rel_note2 = #{relNote2}
+	WHERE rel_idx = #{relIdx}
+>>>>>>> 74368e11a436b725288443d476399dddea3c5d91
 	</update>
 	
 	<delete id="deletePrPerfomance">
