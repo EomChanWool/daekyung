@@ -68,39 +68,46 @@
 											<td><span class="form-control val-area">${materialMoveVO.mmOut}</span></td>
 											<th>출고중량(kg)</th>
 											<td><span class="form-control val-area">${materialMoveVO.mmOutKg}kg</span></td>
-											
 										</tr>
-										<tr>
+										<!--  <tr>
 											<th>재고수량</th>
 											<td><span class="form-control val-area">${materialMoveVO.mmCnt}</span></td>
 											<th>재고중량(kg)</th>
 											<td><span class="form-control val-area">${materialMoveVO.mmCntKg}kg</span></td>
-											
-										</tr>
+										</tr>-->
 										<tr>
 											<th>제품구분</th>
 											<td><span class="form-control val-area">${materialMoveVO.piItemType}</span></td>
 											<th>재질</th>
-											<td><span class="form-control val-area">${materialMoveVO.piItemCode01}</span></td>
-											
+											<td><span class="form-control val-area">${materialMoveVO.piItemTexture}</span></td>
 										</tr>
 										<tr>
 											<th>규격</th>
-											<td><span class="form-control val-area">${materialMoveVO.piItemCode02}</span></td>
+											<td><span class="form-control val-area">${materialMoveVO.piItemStandard}</span></td>
 											<th>두께</th>
-											<td><span class="form-control val-area">${materialMoveVO.piItemCode03}</span></td>
-											
-										</tr>
-											<tr>
-											<th>길이</th>
-											<td><span class="form-control val-area">${materialMoveVO.piItemCode04}</span></td>
-											<th>상태조건</th>
-											<td><span class="form-control val-area">${materialMoveVO.piItemState}</span></td>
-											
+											<td><span class="form-control val-area">${materialMoveVO.piItemThickness}</span></td>
 										</tr>
 										<tr>
-											<th>등록ID</th>
-											<td><span class="form-control val-area">${materialMoveVO.mmRegId}</span></td>
+											<th>길이</th>
+											<td><span class="form-control val-area">${materialMoveVO.piItemLong}</span></td>
+											<th>히트</th>
+											<td><span class="form-control val-area">${materialMoveVO.piItemHeat}</span></td>
+										</tr>
+										<tr>
+											<th>단중</th>
+											<td><span class="form-control val-area">${materialMoveVO.piMiddle}</span></td>
+											<th>단가</th>
+											<td><span class="form-control val-area">${materialMoveVO.piItemUnit}</span></td>
+										</tr>
+										<tr>
+											<th>재고수량</th>
+											<td><span class="form-control val-area">${materialMoveVO.piRemainQty}</span></td>
+											<th>재고중량</th>
+											<td><span class="form-control val-area">${materialMoveVO.piRemainKg}kg</span></td>
+										</tr>
+										<tr>
+											<!-- <th>등록ID</th>
+											<td><span class="form-control val-area">${materialMoveVO.mmRegId}</span></td> -->
 											<th>등록일</th>
 											<td>
 												<span class="form-control val-area">

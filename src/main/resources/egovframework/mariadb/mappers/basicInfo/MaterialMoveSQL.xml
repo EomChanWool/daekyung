@@ -21,7 +21,9 @@
 			mm_id,
 			pi_id,
 			mm_in,
-			mm_out
+			mm_out,
+			mm_in_kg,
+			mm_out_kg
 		FROM sm_material_move
 		WHERE 1=1
 		<if test="searchKeyword != ''">
@@ -81,25 +83,7 @@
 	
 	<select id="selectMaterialMoveInfo" resultType="egovMap">
 		SELECT
-			a.mm_id,
-			a.pi_id,
-			a.mm_in,
-			a.mm_in_kg,
-			a.mm_out,
-			a.mm_out_kg,
-			a.mm_cnt,
-			a.mm_cnt_kg,
-			a.mm_reg_id,
-			a.mm_reg_date,
-			a.mm_edt_id,
-			a.mm_edt_date,
-			a.pi_item_name,
-			b.pi_item_type,
-			b.pi_item_code01,
-			b.pi_item_code02,
-			b.pi_item_code03,
-			b.pi_item_code04,
-			b.pi_item_state
+			*
 		FROM sm_material_move a
 		JOIN sm_product_info b
 		ON a.PI_ID = b.PI_ID
