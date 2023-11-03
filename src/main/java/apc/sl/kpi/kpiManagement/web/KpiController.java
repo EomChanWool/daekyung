@@ -82,7 +82,6 @@ public class KpiController {
 		  
 		  //리드타임
 		  List<?> leadTime = kpiService.selectLeadtime(searchVO);
-		  System.out.println("확인7");
 		  model.put("leadTimeList", leadTime);
 		 
 		return "sl/kpi/kpiState/kpiGraph";

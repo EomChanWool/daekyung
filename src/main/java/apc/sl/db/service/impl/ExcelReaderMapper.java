@@ -30,7 +30,7 @@ public interface ExcelReaderMapper {
 	
 	void registPi(Map<String, String> map);
 	
-	List<?> outProList();
+	List<Map<String,Object>> outProList();
 	
 	Map<String, Object> inspCount(String edDate);
 	

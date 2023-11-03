@@ -98,7 +98,7 @@ public class ExcelReaderServieImpl implements ExcelReaderService {
 	}
 
 	@Override
-	public List<?> outProList() {
+	public List<Map<String,Object>> outProList() {
 		return excelReaderMapper.outProList();
 	}
 

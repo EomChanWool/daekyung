@@ -78,9 +78,10 @@ public class Scheduler {
 	
 	//끝난 가공공정 txt파일로 생성
 	@Scheduled(cron = "20 55 20 * * *")
+	//@Scheduled(cron = "20 * * * * *")
 	public void outPro() {
 		
-		List<?> outProList = excelReaderService.outProList();
+		List<Map<String,Object>> outProList = excelReaderService.outProList();
 		
 		System.out.println(outProList);
 		
@@ -90,8 +91,10 @@ public class Scheduler {
 			BufferedWriter fw = new BufferedWriter(new FileWriter(fileName,true));
 			
 			for(int i=0; i<outProList.size(); i++) {
-				System.out.println(i +" : "+outProList.get(i));
-				fw.write(outProList.get(i).toString() + "\n");
+				
+				String outdata = outProList.get(i).get("orId")+"," + outProList.get(i).get("mflManager")+","+outProList.get(i).get("mflEdDate")+","+
+						outProList.get(i).get("mpMfno")+","+outProList.get(i).get("poLotno")+","+outProList.get(i).get("mpQty")+"";
+				fw.write(outdata + "\n");
 				
 			}
 			fw.flush();
