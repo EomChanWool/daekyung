@@ -31,16 +31,16 @@
 	</select>
 
 	<select id="selectProdCnt" resultType="egovMap">
-		SELECT YEAR(rel_date) AS
-		years, MONTH(rel_date) AS months,
+		SELECT YEAR(rel_clgo) AS
+		years, MONTH(rel_clgo) AS months,
 		ISNULL(SUM(rel_qty), 0)AS prod_cnt,
 		SUM(CASE WHEN CONVERT(float,
 		rel_price) >= 0 THEN CONVERT(float, rel_price) ELSE 0 END) AS
 		rel_price
 		FROM sm_release_info a
-		WHERE YEAR(rel_date) = #{str1}
+		WHERE YEAR(rel_clgo) = #{str1}
 		GROUP BY
-		YEAR(rel_date), MONTH(rel_date)
+		YEAR(rel_clgo), MONTH(rel_clgo)
 		ORDER BY months
 	</select>
 
