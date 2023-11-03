@@ -285,8 +285,8 @@ public class Scheduler {
 		} catch (Exception e) {
 		}
 	}
-	
-public void readClgo() throws Exception{
+	@Scheduled(cron = "50 59 20 * * *")
+	public void readClgo() throws Exception{
 		
 		
 		
@@ -703,7 +703,7 @@ public void readClgo() throws Exception{
 		
 	}
 
-		@Scheduled(cron = "20 06 21 * * *")
+		@Scheduled(cron = "20 58 20 * * *")
 //		@Scheduled(cron = "20 20 09 * * *")
 	public void openClgo() {
 		ftp = new FTPClient();

@@ -42,7 +42,6 @@ public class PrPerformanceController {
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> prPerList = prPerformanceService.selectPrPerformanceList(searchVO);
 		model.put("prPerList",prPerList);
-		System.out.println("리스트 ㅣ " + prPerList);
 		model.put("paginationInfo", paginationInfo);
 		
 		return "sl/basicInfo/prPerformance/prPerformanceList";
@@ -90,23 +89,9 @@ public class PrPerformanceController {
 		String relUnit = a.substring(0, a.length()-2);
 		String b = detail.get("relPrice")+"";
 		String relPrice = b.substring(0, b.length()-2);
-		String c = detail.get("relTax")+"";
-		String relTax = c.substring(0, c.length()-2);
-		String d = detail.get("relTotalPrice")+"";
-		String relTotalPrice = d.substring(0, d.length()-2);
 		
 		detail.replace("relUnit", relUnit);
 		detail.replace("relPrice", relPrice);
-		detail.replace("relTax", relTax);
-		detail.replace("relTotalPrice", relTotalPrice);
-		
-		if(detail.get("relNego").equals("")) {
-			detail.replace("relNego", 0);
-		}else {
-			String e = detail.get("relNego")+"";
-			String relNego = e.substring(0, e.length()-2);
-			detail.replace("relNego", relNego);
-		}
 		
 		model.put("prPerVo", detail);
 		
