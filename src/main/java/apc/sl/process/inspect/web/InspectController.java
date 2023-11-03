@@ -1460,8 +1460,6 @@ if(type.equals("CAP")) {
 	
 	public void setStyle(XSSFWorkbook form_wb, String str, int x, int y) throws Exception {
 		
-		
-		
 		//XSSFWorkbook form_wb = new XSSFWorkbook(fis);
         XSSFSheet form_sheet = form_wb.getSheetAt(0);
         CellStyle cellStyle = form_wb.createCellStyle();
