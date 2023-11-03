@@ -90,7 +90,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach var="result" items="${mfList}" varStatus="status">
+                                    	<c:forEach var="result" items="${lineRunningList}" varStatus="status">
 	                                   		<tr>
 	                                   		<td>${result.daqEdDate}</td>
 	                                   		<td>${result.daqName}</td>
@@ -98,7 +98,7 @@
 	                                   		<td>${result.workTime}초</td>
 	                                   		</tr>
                                     	</c:forEach>
-                                    	<c:if test="${empty mfList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
+                                    	<c:if test="${empty lineRunningList}"><tr><td colspan='4'>결과가 없습니다.</td><del></del></c:if>
                                     </tbody>
                                 </table>
                                 <div class="btn_page">

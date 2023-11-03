@@ -309,6 +309,20 @@ public class Scheduler {
 				String[] line2 = line.split(",");
 				Map<String, Object> clgoChk = new HashMap<>();
 				
+				String relUnit = line2[8];
+				String relPrice = line2[9];
+				
+				if(line2[8].contains("}")) {
+					relUnit = relUnit.replaceAll("}", "");
+					
+				}
+				
+				if(line2[9].contains("}")) {
+					relPrice = relPrice.replaceAll("}", "");
+					
+				}
+				
+				
 				
 				linee.put("orId", line2[0].trim()); //수주번호
 				linee.put("relCompony", line2[1].trim()); //거래처
@@ -318,8 +332,8 @@ public class Scheduler {
 				linee.put("relOrType", line2[5].trim()); //수주구분
 				linee.put("relNabgi", line2[6].trim()); //납기일자
 				linee.put("relQty", line2[7].trim()); //수량
-				linee.put("relUnit", line2[8].trim()); //단가
-				linee.put("relPrice", line2[9].trim()); //금액
+				linee.put("relUnit", relUnit.trim()); //단가
+				linee.put("relPrice", relPrice.trim()); //금액
 				linee.put("relProd", line2[10].trim()); //품명
 				linee.put("relTexture", line2[11].trim()); //재질
 				linee.put("relThickness", line2[12].trim()); //두께

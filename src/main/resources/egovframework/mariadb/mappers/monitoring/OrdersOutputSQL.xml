@@ -56,16 +56,16 @@
 	</select>
 
 	<select id="selectProdCnt" resultType="egovMap">
-		SELECT YEAR(rel_date) AS
-		years, MONTH(rel_date) AS months, ISNULL(SUM(rel_qty), 0)AS prod_cnt,
+		SELECT YEAR(rel_clgo) AS
+		years, MONTH(rel_clgo) AS months, ISNULL(SUM(rel_qty), 0)AS prod_cnt,
 		SUM(CASE WHEN CONVERT(float, rel_price) >= 0 THEN CONVERT(float, rel_price) ELSE 0 END) AS rel_price
-		<if test="searchCondition2 != ''"> , day(rel_date) as rel_day</if>
+		<if test="searchCondition2 != ''"> , day(rel_clgo) as rel_day</if>
 		<if test="searchCondition2 == ''"> , '' AS rel_day</if>
 		FROM sm_release_info a
-		WHERE YEAR(rel_date) = #{searchCondition}
-		<if test="searchCondition2 != ''">AND MONTH(rel_date) = #{searchCondition2}</if>
-		GROUP BY YEAR(rel_date), MONTH(rel_date)<if test="searchCondition2 != ''"> , rel_date</if>
-		ORDER BY months <if test="searchCondition2 != ''"> , rel_date</if>
+		WHERE YEAR(rel_clgo) = #{searchCondition}
+		<if test="searchCondition2 != ''">AND MONTH(rel_clgo) = #{searchCondition2}</if>
+		GROUP BY YEAR(rel_clgo), MONTH(rel_clgo)<if test="searchCondition2 != ''"> , rel_clgo</if>
+		ORDER BY months <if test="searchCondition2 != ''"> , rel_clgo</if>
 	</select>
 
 	<select id="selectSales" resultType="egovMap">
