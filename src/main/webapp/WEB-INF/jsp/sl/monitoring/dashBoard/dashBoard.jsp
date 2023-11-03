@@ -166,7 +166,7 @@
 	}
 	
 	function autoScroll(obj, interval){
-		;
+		
 		setInterval(function(){
 			obj.scrollTop = obj.scrollTop + 50;
 			

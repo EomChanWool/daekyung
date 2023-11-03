@@ -135,7 +135,6 @@ public class InspectController {
 		
 		map.put("siId", siIdMap.get("siId"));
 		
-		System.out.println("맵 : " + map);
 		inspectService.registInspect(map);
 		
 		redirectAttributes.addFlashAttribute("msg", "등록 되었습니다.");
@@ -145,11 +144,9 @@ public class InspectController {
 	
 	@RequestMapping("/sl/process/inspect/modifyInspect.do")
 	public String modifyInspect(@RequestParam Map<String,Object> map, ModelMap model) {
-		System.out.println(map);
 		Map<String, Object> list = inspectService.selectInco(map);
 		
 		model.put("incoVO", list);
-		System.out.println("리스트 : " + list);
 		
 		return "sl/process/inspect/inspectModify";
 	}
@@ -360,7 +357,7 @@ public class InspectController {
 				}}
 			
 			if(i ==1) {
-				
+				setStyle2(form_wb, "GOOD" ,14, 11);
 				setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 11);
 				setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 11);
 				
@@ -399,7 +396,7 @@ public class InspectController {
 			}
 			
 			if(i ==2) {
-				
+				setStyle2(form_wb, "GOOD" ,14, 13);
 				setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 13);
 				setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 13);
 				
@@ -438,7 +435,7 @@ public class InspectController {
 			}
 			
 			if(i ==3) {
-				
+				setStyle2(form_wb, "GOOD" ,14, 15);
 				setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 15);
 				setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 15);
 				
@@ -477,7 +474,7 @@ public class InspectController {
 			}
 			
 			if(i ==4) {
-				
+				setStyle2(form_wb, "GOOD" ,14, 17);
 				setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 17);
 				setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 17);
 				
@@ -516,7 +513,7 @@ public class InspectController {
 			}
 			
 			if(i ==5) {
-				
+				setStyle2(form_wb, "GOOD" ,14, 19);
 				setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 19);
 				setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 19);
 				
@@ -563,7 +560,6 @@ public class InspectController {
 		
 		
 		if(type.equals("TEE")) {
-			
 			setStyle2(form_wb, docNo ,2, 4);
 			setStyle2(form_wb,infoData.get("wpValue")+""  ,41, 11);
 			setStyle2(form_wb, infoData.get("isiItemType")+"" ,3, 4);
@@ -671,7 +667,7 @@ public class InspectController {
 					}
 				
 				if(i ==1) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 11);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 11);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 11);
 					setStyle(form_wb, exInfo.get("iehOd5")+""+","+ exInfo.get("iehOd6")+"" ,17, 11);
@@ -716,7 +712,7 @@ public class InspectController {
 				}
 				
 				if(i ==2) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 13);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 13);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 13);
 					setStyle(form_wb, exInfo.get("iehOd5")+""+","+ exInfo.get("iehOd6")+"" ,17, 13);
@@ -760,7 +756,7 @@ public class InspectController {
 				}
 				
 				if(i ==3) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 15);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 15);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 15);
 					setStyle(form_wb, exInfo.get("iehOd5")+""+","+ exInfo.get("iehOd6")+"" ,17, 15);
@@ -805,7 +801,7 @@ public class InspectController {
 				}
 				
 				if(i ==4) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 17);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 17);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 17);
 					setStyle(form_wb, exInfo.get("iehOd5")+""+","+ exInfo.get("iehOd6")+"" ,17, 17);
@@ -849,7 +845,7 @@ public class InspectController {
 				}
 				
 				if(i ==5) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 19);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 19);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+ exInfo.get("iehOd4")+"",16, 19);
 					setStyle(form_wb, exInfo.get("iehOd5")+""+","+ exInfo.get("iehOd6")+"" ,17, 19);
@@ -1005,7 +1001,7 @@ public class InspectController {
 				
 				
 				if(i ==1) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 11);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 11);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 11);
 					
@@ -1040,7 +1036,7 @@ public class InspectController {
 				}
 				
 				if(i ==2) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 13);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 13);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 13);
 					
@@ -1075,7 +1071,7 @@ public class InspectController {
 				}
 				
 				if(i ==3) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 15);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 15);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 15);
 					
@@ -1109,7 +1105,7 @@ public class InspectController {
 				}
 				
 				if(i ==4) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 17);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 17);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 17);
 					
@@ -1144,7 +1140,7 @@ public class InspectController {
 				}
 				
 				if(i ==5) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 19);
 					setStyle(form_wb, exInfo.get("iehOd3")+""+","+exInfo.get("iehOd4")+"" ,15, 19);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,17, 19);
 					
@@ -1264,7 +1260,7 @@ if(type.equals("CAP")) {
 				
 				
 				if(i ==1) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 11);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 11);
 					
 					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 11);
@@ -1291,7 +1287,7 @@ if(type.equals("CAP")) {
 				}
 				
 				if(i ==2) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 13);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 13);
 					
 					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 13);
@@ -1318,7 +1314,7 @@ if(type.equals("CAP")) {
 				}
 				
 				if(i ==3) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 15);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 15);
 					
 					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 15);
@@ -1344,7 +1340,7 @@ if(type.equals("CAP")) {
 				}
 				
 				if(i ==4) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 17);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 17);
 					
 					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 17);
@@ -1371,7 +1367,7 @@ if(type.equals("CAP")) {
 				}
 				
 				if(i ==5) {
-					
+					setStyle2(form_wb, "GOOD" ,14, 19);
 					setStyle(form_wb, exInfo.get("iehOd1")+""+","+exInfo.get("iehOd2")+"" ,15, 19);
 					
 					setStyle(form_wb, exInfo.get("iehId1")+""+","+exInfo.get("iehId2")+"" ,19, 19);

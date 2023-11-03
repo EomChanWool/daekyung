@@ -83,7 +83,6 @@ public class DashBoardController {
 		}
 		
 		List<?> lineRunningList = dashBoardService.selectLineRunningList(searchVO);
-		System.out.println(lineRunningList);
 		model.put("lineRunningList", lineRunningList);
 		
 		return "sl/monitoring/dashBoard/dashBoard";
