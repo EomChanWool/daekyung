@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +77,38 @@ public class Scheduler {
 //		System.out.println("ini맵 : " + rowMap);
 //		System.out.println("ini맵2 : " + rowMap2);
 //	}
+	
+//	@Scheduled(cron = "20 * * * * *")
+//	public void test() {
+//		String aa = "000101";
+//		String[] aa2 = aa.split("");
+//		
+//		List<String> aa3 = new ArrayList<>(Arrays.asList(aa2));
+//		
+//		for(int i=0; i<aa3.size();i++) {
+//			
+//			
+//			
+//			if(aa3.get(i).equals("0")) {
+//				aa3.remove(i);
+//			}
+//			if(!aa3.get(i).equals("0")){
+//				System.out.println("브레이크");
+//				break;
+//			}
+//			
+//			
+//		}
+//		aa3.remove(0);
+//		
+//		String aa4 = "";
+//		for(String item : aa3) {
+//			aa4 += item;
+//		}
+//		System.out.println("a4 : " + aa4);
+//	}
+//	
+
 	
 	//끝난 가공공정 txt파일로 생성
 	@Scheduled(cron = "20 55 20 * * *")
