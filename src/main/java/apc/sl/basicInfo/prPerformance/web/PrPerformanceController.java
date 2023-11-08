@@ -2,6 +2,7 @@ package apc.sl.basicInfo.prPerformance.web;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.spire.ms.System.DateTime;
 
 import apc.sl.basicInfo.prPerformance.service.PrPerformanceService;
 import apc.util.SearchVO;
@@ -57,6 +60,18 @@ public class PrPerformanceController {
 	public String registPrPerformanceOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId", session.getAttribute("user_id"));
 		
+		String DateNabgi = (String) map.get("relNabgi");
+		String DateReport = (String) map.get("relReport");
+		String DateCompletion = (String) map.get("relCompletion");
+		    
+		String formattedDateNabgi = DateNabgi.replace("-", "");
+		String formattedDateReport = DateReport.replace("-", "");
+		String formattedDateCompletion = DateCompletion.replace("-", "");
+
+		map.put("relNabgi", formattedDateNabgi);
+		map.put("relReport", formattedDateReport);
+		map.put("relCompletion", formattedDateCompletion);
+		
 		prPerformanceService.registPrPerformance(map);
 		redirectAttributes.addFlashAttribute("msg","등록 되었습니다.");
 		CreateFile(map);
@@ -67,14 +82,31 @@ public class PrPerformanceController {
 	@RequestMapping("/sl/basicInfo/prPerformance/modifyPrPerformance.do")
 	public String modifyPrPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
 		Map<String, Object> detail = prPerformanceService.selectPrPerDetail(map);
-		model.put("prPerVo", detail);
 		
+	    String relReportStr = (String)map.get("relReport");
+	 
+	    
+		model.put("prPerVo", detail);
 		return "sl/basicInfo/prPerformance/prPerformanceModify";
 	}
 	
 	@RequestMapping("/sl/basicInfo/prPerformance/modifyPrPerformanceOk.do")
 	public String modifyPrPerfomanceOk(@RequestParam Map<String, Object> map, RedirectAttributes redirectAttributes, HttpSession session) {
 		map.put("userId", session.getAttribute("user_id"));
+		
+		String DateNabgi = (String) map.get("relNabgi");
+		String DateReport = (String) map.get("relReport");
+		String DateCompletion = (String) map.get("relCompletion");
+		    
+		String formattedDateNabgi = DateNabgi.replace("-", "");
+		String formattedDateReport = DateReport.replace("-", "");
+		String formattedDateCompletion = DateCompletion.replace("-", "");
+
+		map.put("relNabgi", formattedDateNabgi);
+		map.put("relReport", formattedDateReport);
+		map.put("relCompletion", formattedDateCompletion);
+		
+		
 		prPerformanceService.modifyPrPerformance(map);
 		redirectAttributes.addFlashAttribute("msg","수정 되었습니다.");
 		ModifyFile(map);
@@ -83,16 +115,22 @@ public class PrPerformanceController {
 	
 	@RequestMapping("/sl/basicInfo/prPerformance/detailPrPerformance.do")
 	public String detailPrPerformance(@RequestParam Map<String, Object> map, ModelMap model) {
-		
 		Map<String, Object> detail = prPerformanceService.selectPrPerDetail(map);
+		
+		System.out.println(detail);
 		String a = detail.get("relUnit")+"";
-		String relUnit = a.substring(0, a.length()-2);
-		String b = detail.get("relPrice")+"";
-		String relPrice = b.substring(0, b.length()-2);
-		
-		detail.replace("relUnit", relUnit);
-		detail.replace("relPrice", relPrice);
-		
+		String relUnit = a;
+		if (!a.equals("")) {
+//	        relUnit = a.substring(0, a.length() - 2);
+	        detail.replace("relUnit", relUnit);
+	    }
+//		String b = detail.get("relPrice")+"";
+//		String relPrice = "";
+//		if (b != null) {
+//		        relPrice = b.substring(0, b.length() - 2);
+//		}
+//		detail.replace("relPrice", relPrice);
+		System.out.println(detail);
 		model.put("prPerVo", detail);
 		
 		return "sl/basicInfo/prPerformance/prPerformanceDetail";

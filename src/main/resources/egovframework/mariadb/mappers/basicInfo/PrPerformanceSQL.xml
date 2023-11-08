@@ -21,7 +21,7 @@
 	<select id="selectPrPerformanceList" resultType="egovMap">
 	
 		SELECT rel_idx, po_lotno, rel_clgo, rel_compony, rel_prod,
-		rel_qty FROM sm_release_info
+		rel_qty, rel_price, rel_or_type  FROM sm_release_info
 
 		WHERE 1=1
 		<if test="searchCondition == 1 and searchKeyword != ''">and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
@@ -54,97 +54,77 @@
 
 
 	<insert id="registPrPerformance">
-		insert into sm_release_info
-		(
-		po_lotno,
-		rel_date,
-		rel_compony,
-		rel_qty,
-		rel_nego,
-		rel_percent,
-		rel_unit,
-		rel_price,
-		rel_tax,
-		rel_total_price,
-		rel_note,
-		rel_del,
-		rel_esno,
-		rel_prno,
-		rel_heatno,
-		rel_sub,
-		rel_or_type,
-		or_id,
-		rel_report,
-		rel_bill,
-		rel_prod,
-		rel_texture,
-		rel_thickness,
-		rel_standard,
-		rel_state,
-		rel_reg_id,
-		rel_reg_date
-		) values
-		(
-		#{poLotno},
-		#{relDate},
-		#{relCompony},
-		#{relQty},
-		#{relNego},
-		#{relPercent},
-		#{relUnit},
-		#{relPrice},
-		#{relTax},
-		#{relTotalPrice},
-		#{relNote},
-		#{relDel},
-		#{relEsno},
-		#{relPrno},
-		#{relHeatno},
-		#{relSub},
-		#{relOrType},
-		#{orId},
-		#{relReport},
-		#{relBill},
-		#{relProd},
-		#{relTexture},
-		#{relThickness},
-		#{relStandard},
-		#{relState},
-		#{userId},
-		GETDATE()
-		)
+	INSERT INTO sm_release_info(
+      or_id,
+      po_lotno,
+      rel_compony,
+      rel_del,
+      rel_esno,
+      rel_prno,
+      rel_or_type,
+      rel_nabgi,
+      rel_qty,
+      rel_unit,
+      rel_price,
+      rel_prod,
+      rel_texture,
+      rel_thickness,
+      rel_standard,
+      rel_state,
+      rel_report,
+      rel_completion,
+      rel_person,
+      rel_clgo,
+      rel_note1
+      ) VALUES(
+      #{orId},
+      #{poLotno},
+      #{relCompony},
+      #{relDel},
+      #{relEsno},
+      #{relPrno},
+      #{relOrType},
+      #{relNabgi},
+      #{relQty},
+      #{relUnit},
+      #{relPrice},
+      #{relProd},
+      #{relTexture},
+      #{relThickness},
+      #{relStandard},
+      #{relState},
+      #{relReport},
+      #{relCompletion},
+      #{relPerson},
+      #{relClgo},
+      #{relNote1}
+    )
 	</insert>
 	
 	<update id="modifyPrPerformance">
-	UPDATE sm_release_info SET
-po_lotno = #{poLotno},
-rel_date = #{relDate},
-rel_compony = #{relCompony},
-rel_qty = #{relQty},
-rel_nego = #{relNego},
-rel_percent = #{relPercent},
-rel_unit = #{relUnit},
-rel_price = #{relPrice},
-rel_tax = #{relTax},
-rel_total_price = #{relTotalPrice},
-rel_del = #{relDel},
-rel_esno = #{relEsno},
-rel_prno = #{relPrno},
-rel_heatno = #{relHeatno},
-rel_sub = #{relSub},
-rel_or_type = #{relOrType},
-or_id = #{orId},
-rel_report = #{relReport},
-rel_bill = #{relBill},
-rel_prod = #{relProd},
-rel_texture = #{relTexture},
-rel_thickness = #{relThickness},
-rel_standard = #{relStandard},
-rel_state = #{relState},
-rel_note = #{relNote},
-rel_edt_id = #{userId},
-rel_edt_date = GETDATE()
-WHERE rel_idx = #{relIdx}
+    UPDATE sm_release_info SET
+    or_id = #{orId},
+    po_lotno = #{poLotno},
+    rel_compony = #{relCompony},
+    rel_del = #{relDel},
+    rel_esno = #{relEsno},
+    rel_prno = #{relPrno},
+    rel_or_type = #{relOrType},
+    rel_nabgi = #{relNabgi},
+    rel_qty = #{relQty},
+    rel_unit = #{relUnit},
+    rel_price = #{relPrice},
+    rel_prod = #{relProd},
+    rel_texture = #{relTexture},
+    rel_thickness = #{relThickness},
+    rel_standard = #{relStandard},
+    rel_state = #{relState},
+    rel_report = #{relReport},
+    rel_completion = #{relCompletion},
+    rel_person = #{relPerson},
+    rel_clgo = #{relClgo},
+    rel_note1 = #{relNote1}
+    WHERE rel_idx = #{relIdx}
 	</update>
 	
 	<delete id="deletePrPerfomance">

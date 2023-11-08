@@ -88,9 +88,9 @@
                                             <th>LOT번호</th>
 											<th>출고일</th>
 											<th>거래처</th>
-											<th>과목</th>
+											<th>수주구분</th>
 											<th>제품명</th>
-											<th>계산서</th>
+											<th>금액</th>
 											<th>수량</th>
 											<th>수정/삭제</th>
                                         </tr>
@@ -99,11 +99,15 @@
                                     	<c:forEach var="result" items="${prPerList}" varStatus="status">
 	                                   		<tr onclick="fn_detail_prPerformance('${result.relIdx}')" style="cursor: pointer;">
 	                                            <td>${result.poLotno}</td>
-	                                            <td>${result.relDate}</td>
+	                                            <td>${result.relClgo}</td>
 	                                            <td>${result.relCompony}</td>
-	                                            <td>${result.relSub}</td>
+	                                            <td>${result.relOrType}</td>
 	                                            <td>${result.relProd}</td>
-	                                            <td>${result.relBill}</td>
+	                                            <td>
+												  <c:if test="${not empty result.relPrice}">
+												    <fmt:formatNumber value="${result.relPrice}"/>원
+												  </c:if>
+												</td>
 	                                            <td>${result.relQty}</td>
 	                                            <td onclick="event.cancelBubble=true" style="padding: 5px 0px;">
 	                                            	<a href="#" class="btn btn-warning btn-icon-split" onclick="fn_modify_prPerformance_go('${result.relIdx}')">
