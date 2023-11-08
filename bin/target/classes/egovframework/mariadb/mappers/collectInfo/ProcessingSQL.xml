@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.collectInfo.processing.service.impl.ProcessingMapper">
+	<select id="selectProcessingListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_mf_proc_log
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND or_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+
+	<select id="selectProcessingList" resultType="egovMap">
+		<!-- SELECT a.mfl_idx, a.or_id,a.mfl_st_date, a.mfl_ed_date, a.mfl_manager, 
+			a.mfl_work_time, b.po_lotno, b.mp_qty, b.mp_prod_name, b.mp_texture, b.mp_thickness, 
+			b.mp_state, b.mp_standard, DATEDIFF(MINUTE, a.mfl_st_date, a.mfl_ed_date) 
+			AS time_result FROM sm_mf_proc_log a JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID 
+			WHERE 1=1 -->
+		SELECT DISTINCT a.mfl_idx,a.or_id, a.mfl_st_date, a.mfl_ed_date,
+		a.mfl_manager,
+		a.mfl_work_time, b.po_lotno, b.mp_qty, b.mp_prod_name,
+		b.mp_texture,
+		b.mp_thickness, b.mp_state,
+		b.mp_standard,
+		(a.mfl_work_time - ISNULL((SELECT SUM (mfs_rest_time) FROM
+		sm_mf_process_stop c WHERE
+		a.or_id = c.or_id GROUP BY or_id), 0))
+		AS
+		real_time
+		FROM sm_mf_proc_log a
+		JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+		LEFT JOIN sm_mf_process_stop s ON a.OR_ID = s.OR_ID
+		WHERE b.MP_PR_STATE
+		= 2
+		<if test="searchKeyword != ''">
+			AND or_id LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY mfl_idx DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="checkStop" resultType="egovMap">
+		SELECT mfs_state, mfs_idx
+		FROM
+		sm_mf_process_stop
+		WHERE or_id = #{orId}
+		AND mfs_idx = (SELECT
+		MAX(mfs_idx) FROM sm_mf_process_stop WHERE or_id =
+		#{orId})
+
+	</select>
+
+	<select id="processingAjax" resultType="egovMap">
+		SELECT DISTINCT
+		a.mfl_idx,a.or_id, a.mfl_st_date, a.mfl_manager,
+		b.po_lotno,
+		b.mp_qty,
+		b.mp_prod_name, b.mp_texture,
+		b.mp_thickness, b.mp_state,
+		b.mp_standard
+		FROM sm_mf_proc_log a
+		JOIN sm_mf_proc b ON a.OR_ID =
+		b.OR_ID
+		WHERE
+		b.MP_PR_STATE IN(1,3)
+		AND a.or_id = #{orId}
+	</select>
+
+	<select id="existPro" resultType="int">
+		SELECT COUNT(*) FROM sm_mf_proc
+		WHERE or_id = #{orId}
+		AND mp_pr_state in (1,3)
+	</select>
+
+	<select id="processInfo" resultType="egovMap">
+		SELECT DISTINCT a.mfl_idx,
+		a.or_id,
+		LEFT(CONVERT(NVARCHAR, a.mfl_st_date, 120), 16) AS
+		mfl_st_date,
+		LEFT(CONVERT(NVARCHAR, a.mfl_ed_date, 120), 16) AS
+		mfl_ed_date,
+		a.mfl_manager, a.mfl_work_time, b.po_lotno, b.mp_qty,
+		b.mp_prod_name,
+		b.mp_texture, b.mp_thickness, b.mp_state, b.mp_standard
+		FROM sm_mf_proc_log a
+		JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+		where
+		mfl_idx = #{mflIdx}
+	</select>
+	
+	<select id="proState" resultType="egovMap">
+	SELECT mp_pr_state FROM sm_mf_proc
+WHERE or_id = #{orId}
+	</select>
+	
+	<select id="prodList" resultType="egovMap">
+	SELECT * FROM sm_mf_proc
+	WHERE mp_pr_state IN(1,3)
+	</select>
+
+
+	<update id="updatePro">
+		UPDATE sm_mf_proc_log SET
+		mfl_manager = #{mflManager},
+		mfl_st_date = #{mflStDate},
+		mfl_ed_date = #{mflEdDate}
+		WHERE mfl_idx = #{mflIdx}
+	</update>
+	
+	<update id="updateWorktime">
+	update sm_mf_proc_log set
+	mfl_work_time = DATEDIFF(MINUTE,
+		mfl_st_date, mfl_ed_date)
+		where mfl_idx = #{mflIdx}
+	</update>
+	
+	<delete id="deletePro">
+	
+	update sm_mf_proc set
+	MP_PR_STATE = 3
+	where or_id = #{orId}
+	
+	</delete>
+
+</mapper>

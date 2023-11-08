@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.basicInfo.prPerformance.service.impl.PrPerformanceMapper">
+
+	<select id="selectPrPerformanceToCnt" resultType="int">
+		select count(*) from sm_release_info 
+		where 1=1
+		<if test="searchKeyword != ''">
+			and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND rel_date >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND rel_date <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+	</select>
+
+	<select id="selectPrPerformanceList" resultType="egovMap">
+	
+		SELECT rel_idx, po_lotno, rel_clgo, rel_compony, rel_prod,
+		rel_qty, rel_price, rel_or_type  FROM sm_release_info
+
+		WHERE 1=1
+		<if test="searchCondition == 1 and searchKeyword != ''">and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
+		<!-- <if test="searchKeyword != ''">
+			and po_lotno LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if> -->
+		<if test="searchCondition == 2 and searchKeyword != ''">and or_id LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
+		<if test="searchStDate != ''">
+			AND rel_clgo >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND rel_clgo <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+		ORDER BY rel_idx DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+
+	</select>
+	
+	<select id="selectExistsPrPer" resultType="int">
+	SELECT COUNT(*) FROM sm_product_info
+	WHERE pi_id = #{piId}
+	</select>
+	
+	<select id="selectPrPerDetail" resultType="egovMap">
+	SELECT * FROM sm_release_info
+		WHERE rel_idx = #{relIdx}
+	</select>
+
+
+	<insert id="registPrPerformance">
+	INSERT INTO sm_release_info(
+      or_id,
+      po_lotno,
+      rel_compony,
+      rel_del,
+      rel_esno,
+      rel_prno,
+      rel_or_type,
+      rel_nabgi,
+      rel_qty,
+      rel_unit,
+      rel_price,
+      rel_prod,
+      rel_texture,
+      rel_thickness,
+      rel_standard,
+      rel_state,
+      rel_report,
+      rel_completion,
+      rel_person,
+      rel_clgo,
+      rel_note1
+      ) VALUES(
+      #{orId},
+      #{poLotno},
+      #{relCompony},
+      #{relDel},
+      #{relEsno},
+      #{relPrno},
+      #{relOrType},
+      #{relNabgi},
+      #{relQty},
+      #{relUnit},
+      #{relPrice},
+      #{relProd},
+      #{relTexture},
+      #{relThickness},
+      #{relStandard},
+      #{relState},
+      #{relReport},
+      #{relCompletion},
+      #{relPerson},
+      #{relClgo},
+      #{relNote1}
+    )
+	</insert>
+	
+	<update id="modifyPrPerformance">
+    UPDATE sm_release_info SET
+    or_id = #{orId},
+    po_lotno = #{poLotno},
+    rel_compony = #{relCompony},
+    rel_del = #{relDel},
+    rel_esno = #{relEsno},
+    rel_prno = #{relPrno},
+    rel_or_type = #{relOrType},
+    rel_nabgi = #{relNabgi},
+    rel_qty = #{relQty},
+    rel_unit = #{relUnit},
+    rel_price = #{relPrice},
+    rel_prod = #{relProd},
+    rel_texture = #{relTexture},
+    rel_thickness = #{relThickness},
+    rel_standard = #{relStandard},
+    rel_state = #{relState},
+    rel_report = #{relReport},
+    rel_completion = #{relCompletion},
+    rel_person = #{relPerson},
+    rel_clgo = #{relClgo},
+    rel_note1 = #{relNote1}
+    WHERE rel_idx = #{relIdx}
+	</update>
+	
+	<delete id="deletePrPerfomance">
+	delete from sm_release_info where rel_idx = #{relIdx}
+	</delete>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.monitoring.monitorSetting.service.impl.MonitorSettingMapper">
+
+<select id="selectSetting" resultType="egovMap">
+SELECT * FROM sm_set_monitor
+where set_status = 1
+</select>
+
+<select id="selectList" resultType="egovMap">
+
+select * from sm_set_monitor
+where set_status = 0
+
+</select>
+
+<select id="selectMList" resultType="egovMap">
+SELECT * FROM sm_set_monitor WHERE SET_ID = #{setId}
+</select>
+
+<update id="registGo">
+UPDATE sm_set_monitor SET
+set_year = #{setYear},
+set_status = 1
+where set_id = #{setId}
+</update>
+
+<update id="settingGo">
+UPDATE sm_set_monitor SET
+set_year = #{setYear}
+WHERE set_id = #{setId}
+</update>
+
+<update id="modifySet">
+UPDATE sm_set_monitor SET
+set_year = #{setYear}
+WHERE set_id = #{setId}
+</update>
+
+<update id="deleteSet">
+UPDATE sm_set_monitor SET
+set_status = 0
+where set_id = #{setId}
+</update>
+
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.basicInfo.goal.service.impl.GoalMapper">
+	<select id="selectGoalToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_goal_manager
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND GM_YEAR = #{searchCondition}
+		</if>
+		<if test="searchCondition2 != ''">
+			AND gm_month = #{searchCondition2}
+		</if>
+	</select>
+
+	<select id="selectGoalList" resultType="egovMap">
+		SELECT
+		gm_year,
+		gm_month,
+		gm_prod_qty,
+		gm_good_rate,
+		gm_bad_rate
+		FROM
+		sm_goal_manager
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND GM_YEAR = #{searchCondition}
+		</if>
+		<if test="searchCondition2 != ''">
+			AND gm_month = #{searchCondition2}
+		</if>
+		ORDER BY gm_year DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectGoalExists" resultType="int">
+		SELECT COUNT(*) FROM
+		sm_goal_manager
+		WHERE gm_year = #{gmYear}
+		AND gm_month = #{gmMonth}
+	</select>
+
+	<select id="selectGoalInfo" resultType="egovMap">
+		SELECT gm_year, gm_month,
+		gm_prod_qty, gm_good_rate,gm_bad_rate
+		FROM sm_goal_manager
+		WHERE gm_year
+		= #{gmYear}
+		AND gm_month = #{gmMonth}
+	</select>
+
+
+	<insert id="registGoal">
+		INSERT INTO sm_goal_manager (
+		gm_year,
+		gm_month,
+		gm_prod_qty,
+		gm_good_rate,
+		gm_bad_rate,
+		gm_reg_id,
+		gm_reg_date
+		)VALUES(
+		#{gmYear},
+		#{gmMonth},
+		#{gmProdQty},
+		#{gmGoodRate},
+		#{gmBadRate},
+		#{userId},
+		GETDATE()
+		)
+	</insert>
+
+	<update id="modifyGoal">
+		UPDATE sm_goal_manager SET
+		gm_prod_qty = #{gmProdQty},
+		gm_good_rate =
+		#{gmGoodRate},
+		gm_bad_rate = #{gmBadRate},
+		gm_edt_id =
+		#{userId},
+		gm_edt_date = GETDATE()
+		WHERE gm_year = #{gmYear}
+		AND gm_month
+		= #{gmMonth}
+	</update>
+
+	<delete id="deleteGoal">
+		DELETE FROM sm_goal_manager
+		WHERE gm_year = #{gmYear}
+		AND gm_month = #{gmMonth}
+	</delete>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- 마리아DB -->
+	<bean id="sqlSessionMaria" class="apc.util.RefreshableSqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceMaria" />
+		<property name="configLocation" value="classpath:/egovframework/mariadb/sql-mapper-config.xml" />
+		<property name="interval" value="500" />
+		<property name="mapperLocations" value="classpath*:/egovframework/mariadb/mappers/**/*.xml" />
+	</bean>
+	
+ 	<bean class="egovframework.rte.psl.dataaccess.mapper.MapperConfigurer">
+		<property name="basePackage" value="apc.sl.**.service.impl" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionMaria"/>
+	</bean>
+	
+</beans>

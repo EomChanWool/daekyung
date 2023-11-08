@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.monitoring.dashBoard.service.impl.DashBoardMapper">
+
+	<select id="selectYear1" resultType="egovMap">
+		SELECT set_year FROM sm_set_monitor
+		WHERE set_menu = 'ordersOutput'
+	</select>
+
+	<select id="selectYear2" resultType="egovMap">
+		SELECT set_year FROM sm_set_monitor
+		WHERE set_menu = 'lineRunning'
+	</select>
+
+	<select id="selectYear3" resultType="egovMap">
+		SELECT set_year FROM sm_set_monitor
+		WHERE set_menu = 'actualOutput'
+	</select>
+
+	<select id="selectOrdersCnt" resultType="egovMap">
+		SELECT YEAR(or_date) AS years, MONTH(or_date) AS months,
+		ISNULL(SUM(or_qty),
+		0)AS order_cnt
+		FROM sm_orders
+		WHERE YEAR(or_date) =
+		#{str1}
+		GROUP BY YEAR(or_date),
+		MONTH(or_date)
+		ORDER BY months
+	</select>
+
+	<select id="selectProdCnt" resultType="egovMap">
+		SELECT YEAR(rel_clgo) AS
+		years, MONTH(rel_clgo) AS months,
+		ISNULL(SUM(rel_qty), 0)AS prod_cnt,
+		SUM(CASE WHEN CONVERT(float,
+		rel_price) >= 0 THEN CONVERT(float, rel_price) ELSE 0 END) AS
+		rel_price
+		FROM sm_release_info a
+		WHERE YEAR(rel_clgo) = #{str1}
+		GROUP BY
+		YEAR(rel_clgo), MONTH(rel_clgo)
+		ORDER BY months
+	</select>
+
+	<select id="selectLineYear" resultType="egovMap">
+		SELECT COUNT(*) AS counting , MONTH(daq_ed_date) AS months,
+		SUM(DAQ_WORK_TIME) AS work_time
+		FROM sm_daq_data
+		WHERE 1=1
+		AND
+		YEAR(DAQ_ED_DATE) = #{str2}
+		GROUP BY MONTH(daq_ed_date)
+		ORDER BY months
+	</select>
+
+	<select id="selectProdCntAc" resultType="egovMap">
+		SELECT
+		YEAR(mfl_ed_date) AS years,
+		MONTH(mfl_ed_date) AS months,
+		SUM(mfl_work_time -
+		ISNULL(b.total_rest_time, 0)) AS total_real_time,
+		count(DISTINCT mfl_manager) AS
+		total_mfl_person,
+		AVG(mfl_work_time -
+		ISNULL(b.total_rest_time,0)) AS avg_real_time
+		FROM
+		sm_mf_proc_log a
+		LEFT
+		JOIN (
+		SELECT
+		or_id,
+		SUM(mfs_rest_time) AS total_rest_time
+		FROM
+		sm_mf_process_stop
+		WHERE
+		YEAR(mfs_stop_time) = #{str3}
+		GROUP BY
+		or_id
+		) b
+		ON a.or_id =
+		b.or_id
+		WHERE
+		YEAR(mfl_ed_date) = #{str3}
+		GROUP BY
+		YEAR(mfl_ed_date), MONTH(mfl_ed_date)
+		ORDER BY months
+
+	</select>
+	
+	<select id="selectProdCntAc2" resultType="egovMap">
+	<!-- SELECT
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		AVG(cs_work_time) AS avg_work_time,
+		SUM(cs_work_time) AS sum_cs_work_time
+		FROM (
+		SELECT
+		MIN(cs_reg_date) AS cs_reg_date,
+		eq_sensorid,
+		MAX(cs_data06) AS cs_data06,
+		DATEDIFF(MINUTE, MIN(cs_reg_date), MAX(cs_reg_date)) AS cs_work_time
+		FROM
+		sm_cut_sensor_data
+		WHERE
+		1=1
+		AND YEAR(cs_reg_date) = #{str3}
+		GROUP BY
+		eq_sensorid, cs_data09
+		HAVING
+		MAX(cs_data08) = 1
+		) AS grouped_data
+		GROUP BY
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months asc -->
+		SELECT
+		YEAR(cs_reg_date) AS years,
+		month(cs_reg_date) AS months,
+		SUM(cs_work_time)AS sum_cs_work_time,
+		AVG(cs_work_time)AS avg_work_time
+		FROM sm_cut_sensor_data
+		WHERE 1=1
+		AND YEAR(cs_reg_date) = 2023
+		AND cs_state = 0
+		GROUP BY
+		month(cs_reg_date), YEAR(cs_reg_date)
+		ORDER BY months
+	</select>
+	
+	<select id="selectLineRunningList" resultType="egovMap">
+		SELECT COUNT(*) AS
+		counting , DAQ_NAME, convert(date,DAQ_ED_DATE) AS
+		daq_ed_date, SUM(DAQ_WORK_TIME) AS work_time
+		FROM
+		sm_daq_data
+		WHERE 1=1
+		AND CONVERT(DATE, DAQ_ED_DATE) = #{searchEdDate}
+		GROUP BY daq_name, daq_ed_date
+		ORDER BY DAQ_NAME
+	</select>
+
+</mapper>

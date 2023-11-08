@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.collectInfo.cutting.service.impl.CuttingMapper">
+	<select id="selectCuttingListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_cut_sensor_data
+		WHERE cs_state = 0
+		<if test="searchKeyword != ''">
+			AND cs_data01 LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND CAST(cs_reg_date AS DATE) >= #{searchStDate}
+		</if>
+		<if test="searchEdDate != ''">
+			AND CAST(cs_reg_date AS DATE) <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+	</select>
+
+	<select id="selectCuttingList" resultType="egovMap">
+		<!-- SELECT cs_idx, cs_reg_date, eq_sensorid, cs_data01, cs_data02, cs_data03, 
+			cs_data04, cs_data05, cs_data06, cs_data07, cs_data08, DATEDIFF(MINUTE, cs_reg_date, 
+			(SELECT TOP 1 cs_reg_date FROM sm_cut_sensor_data WHERE cs_idx > t.cs_idx 
+			ORDER BY cs_idx)) AS cs_work_time FROM sm_cut_sensor_data t WHERE cs_idx 
+			% 2 = 1 -->
+		SELECT * FROM sm_cut_sensor_data
+		WHERE cs_state = 0
+		<if test="searchKeyword != ''">
+			AND cs_prod_name LIKE CONCAT ('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND CAST(cs_reg_date AS DATE) >= #{searchStDate}
+		</if>
+		<if test="searchEdDate != ''">
+			AND CAST(cs_reg_date AS DATE) <![CDATA[<=]]>
+			#{searchEdDate}
+		</if>
+		ORDER BY cs_idx desc
+		OFFSET #{firstIndex} ROWS
+		FETCH
+		NEXT
+		#{recordCountPerPage} ROWS ONLY
+	</select>
+
+	<select id="selectAccountList" resultType="egovMap">
+		SELECT
+		a_idx,
+		a_name
+		FROM sm_account
+	</select>
+
+	<select id="selectProdList" resultType="egovMap">
+		SELECT item_cd, item_name
+		FROM sm_item WHERE item_type = '제품'
+	</select>
+
+
+
+	<select id="selectComapnyInfo" resultType="egovMap">
+		SELECT
+		c_name,
+		c_addr,
+		c_tel,
+		c_fax,
+		c_regit_no,
+		c_owner,
+		c_email
+		FROM sm_company
+		WHERE c_idx = #{cIdx}
+	</select>
+
+	<select id="selectProdPerPrice" resultType="egovMap">
+		SELECT item_per_price
+		FROM sm_item WHERE item_cd = #{itemCd}
+	</select>
+
+	<select id="selectEqList" resultType="egovMap">
+		SELECT * FROM sm_equipment
+		WHERE EQ_TYPE = '절단'
+
+	</select>
+	
+	<select id="checkEq" resultType="int">
+	SELECT COUNT(*) FROM sm_equipment
+	WHERE EQ_SENSORID = #{eqSensorid}
+	</select>
+
+	<select id="selectCuttingInfo" resultType="egovMap">
+		SELECT
+		*
+		FROM
+		sm_cut_sensor_data
+		WHERE
+		cs_idx = #{csIdx}
+		
+	</select>
+	
+	<insert id="registCutting">
+	INSERT INTO sm_cut_sensor_data (
+	eq_sensorid,
+	cs_prod_name,
+	cs_model,
+	cs_radius,
+	cs_thickness,
+	cs_gap,
+	cs_qty,
+	cs_long,
+	cs_reg_date,
+	cs_ed_date,
+	cs_work_time,
+	cs_state
+	)values(
+	#{eqSensorid},
+	#{csProdName},
+	#{csModel},
+	#{csRadius},
+	#{csThickness},
+	#{csGap},
+	#{csQty},
+	#{csLong},
+	#{csRegDate},
+	#{csEdDate},
+	#{csWorkTime},
+	'0'
+	)
+	</insert>
+	
+	
+
+	<update id="modifyCutting">
+	update sm_cut_sensor_data set
+	cs_prod_name = #{csProdName},
+	cs_model = #{csModel},
+	cs_radius = #{csRadius},
+	cs_thickness = #{csThickness},
+	cs_gap = #{csGap},
+	cs_qty = #{csQty},
+	cs_long = #{csLong},
+	cs_reg_date = #{csRegDate},
+	cs_ed_date = #{csEdDate},
+	cs_work_time = #{csWorkTime}
+	where cs_idx = #{csIdx}
+	
+	</update>
+	
+	<update id="modifyCutting2">
+	update sm_cut_sensor_data set
+	cs_reg_date = #{csRegDate2}
+	where cs_idx = #{csIdx2}
+	
+	</update>
+
+	<delete id="deleteCutting">
+	DELETE FROM sm_cut_sensor_data
+	where cs_data09 = #{csData09}
+	</delete>
+</mapper>

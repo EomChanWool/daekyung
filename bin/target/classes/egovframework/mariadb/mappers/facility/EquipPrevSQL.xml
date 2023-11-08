@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.facility.equipPrev.service.impl.EquipPrevMapper">
+	<select id="selectEquipPrevListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_equip_prev_maintenance a
+		join sm_equipment b
+		on a.eq_id = b.eq_id
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND b.eq_id LIKE CONCAT('%', #{searchCondition}, '%')
+		</if>
+	</select>
+	
+	<select id="selectEquipPrevList" resultType="egovMap">
+		SELECT
+			a.epm_id,
+			b.eq_id,
+			a.epm_type,
+			a.epm_date,
+			a.epm_comment,
+			a.epm_manager,
+			a.epm_reg_date,
+			a.epm_reg_id,
+			a.epm_edt_date,
+			a.epm_edt_id
+		FROM sm_equip_prev_maintenance a
+		JOIN sm_equipment b
+		ON a.eq_id = b.eq_id
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND b.eq_id = #{searchCondition}
+		</if>
+		ORDER BY epm_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+	</select>
+	
+	<select id="selectEquipmentList" resultType="egovMap">
+		SELECT
+			eq_id, eq_name
+		FROM sm_equipment
+	</select>
+	
+	<insert id="registEquipPrev">
+	
+		DECLARE @str NVARCHAR(50) = 'EPM'
+		DECLARE @seq INT
+		DECLARE @padding INT = 5;
+	
+		SET @seq = NEXT VALUE FOR epm_seq
+		
+		INSERT INTO sm_equip_prev_maintenance
+			(
+			epm_id,
+			eq_id,
+			epm_type,
+			epm_manager,
+			epm_comment,
+			epm_date,
+			epm_reg_id,
+			epm_reg_date
+			)
+		VALUES
+			(
+			@str + RIGHT('00000' + CAST(@seq AS VARCHAR(10)), @padding),
+			#{eqId},
+			#{epmType},
+			#{epmManager},
+			#{epmComment},
+			#{epmDate},
+			#{userId},
+			GETDATE()
+			)
+	</insert>
+	
+	<select id="selectEquipPrevInfo" resultType="egovMap">
+		SELECT
+			epm_id,
+			eq_id,
+			epm_type,
+			epm_manager,
+			epm_comment,
+			epm_date,
+			epm_reg_id,
+			epm_reg_date,
+			epm_edt_id,
+			epm_edt_date
+		FROM sm_equip_prev_maintenance
+		WHERE epm_id = #{epmId}
+	</select>
+	
+<!-- 	<update id="failReportIscomp"> -->
+<!-- 		UPDATE sm_trouble_report SET -->
+<!-- 			tr_iscomp = 0 -->
+<!-- 		WHERE tr_id = #{trId} -->
+<!-- 	</update> -->
+	
+	<update id="modifyEquipPrev">
+		UPDATE sm_equip_prev_maintenance SET
+			epm_type = #{epmType},
+			epm_manager = #{epmManager},
+			epm_comment = #{epmComment},
+			epm_date = #{epmDate},
+			epm_edt_id = #{userId},
+			epm_edt_date = GETDATE()
+		WHERE epm_id = #{epmId}
+	</update>
+	
+	<delete id="deleteEquipPrev">
+		DELETE FROM sm_equip_prev_maintenance WHERE epm_id = #{epmId}
+	</delete>
+</mapper>

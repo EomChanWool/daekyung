@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.sales.document.service.impl.DocumentMapper">
+	<select id="selectDocumentListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_document
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND do_type = #{searchCondition}
+		</if>
+		<if test="searchKeyword != ''">
+			AND do_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+	</select>
+	
+	<select id="selectDocumentList" resultType="egovMap">
+		SELECT
+			do_idx,
+			do_type,
+			do_name,
+			do_fil_nm,
+			DATE_FORMAT(do_reg_dte, '%Y/%m/%d %H:%i:%s') AS do_reg_dte,
+			do_reg_mem
+		FROM sm_document
+		WHERE 1=1
+		<if test="searchCondition != ''">
+			AND do_type = #{searchCondition}
+		</if>
+		<if test="searchKeyword != ''">
+			AND do_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		ORDER BY do_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<insert id="registDocument">
+		INSERT INTO sm_document
+			(
+			do_idx,
+			do_type,
+			do_name,
+			do_origin_fil_nm,
+			do_fil_nm,
+			do_writer,
+			do_note,
+			do_reg_dte,
+			do_reg_mem
+			)
+		VALUES
+			(
+			(SELECT CONCAT('DO', LPAD((SELECT (SELECT REGEXP_REPLACE((SELECT IFNULL(MAX(a.do_idx),0) FROM sm_document a),'[a-z]','')))+1,10,0))),
+			#{doType},
+			#{doName},
+			#{orginFileName},
+			#{doFilNm},
+			#{doWriter},
+			#{doNote},
+			NOW(),
+			#{userId}
+			)
+	</insert>
+	
+	<select id="selectDocumentInfo" resultType="egovMap">
+		SELECT
+			do_idx,
+			do_type,
+			do_name,
+			do_origin_fil_nm,
+			do_fil_nm,
+			do_writer,
+			do_note,
+			DATE_FORMAT(do_reg_dte, '%Y/%m/%d %H:%i:%s') AS do_reg_dte
+		FROM sm_document
+		WHERE do_idx = #{doIdx}
+	</select>
+	
+	<update id="modifyDocument">
+		UPDATE sm_document SET
+			do_type = #{doType},
+			do_name = #{doName},
+			<if test="doFilNm != ''">
+				do_origin_fil_nm = #{orginFileName},
+				do_fil_nm = #{doFilNm},
+			</if>
+			do_writer = #{doWriter},
+			do_note = #{doNote},
+			do_edt_dte = NOW(),
+			do_edt_mem = #{userId}
+		WHERE do_idx = #{doIdx}
+	</update>
+	
+	<delete id="deleteDocument">
+		DELETE FROM sm_document WHERE do_idx = #{doIdx}
+	</delete>
+</mapper>

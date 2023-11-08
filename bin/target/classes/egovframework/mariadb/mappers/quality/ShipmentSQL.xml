@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.material.shipment.service.impl.ShipmentMapper">
+	<select id="selectShipmentListToCnt" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM sm_shipment a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		WHERE 1=1
+		<if test="searchKeyword != ''">
+			AND b.or_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND sh_req_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND sh_req_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+	</select>
+	
+	<select id="selectShipmentList" resultType="egovMap">
+		SELECT
+			a.sh_idx,
+			a.a_name,
+			a.or_idx,
+			b.or_name,
+			a.a_tel,
+			IF(LENGTH(a.sh_place) > 40, CONCAT(LEFT(a.sh_place, 13),'...'), a.sh_place) AS sh_place,
+			a.sh_req_dte
+		FROM sm_shipment a
+		JOIN sm_orders b
+		ON a.or_idx = b.or_idx
+		<if test="searchKeyword != ''">
+			AND b.or_name LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchStDate != ''">
+			AND sh_req_dte >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND sh_req_dte <![CDATA[<=]]> #{searchEdDate}
+		</if>
+		ORDER BY sh_idx DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectAccountList" resultType="egovMap">
+		SELECT a_idx, a_name, a_addr, a_tel FROM sm_account
+	</select>
+	
+	<select id="selectOrderList" resultType="egovMap">
+		SELECT or_idx, or_name FROM sm_orders WHERE or_state IN ('2', '4')
+	</select>
+	
+	<select id="selectAccountInfo" resultType="egovMap">
+		SELECT a_name, a_addr, a_tel FROM sm_account WHERE a_idx = #{aIdx}
+	</select>
+	
+	<select id="selectOrdersInfo" resultType="egovMap">
+		SELECT or_due_place FROM sm_orders WHERE or_idx = #{orIdx}
+	</select>
+	
+	<insert id="registShipment">
+		INSERT INTO sm_shipment
+			(
+			a_idx,
+			a_name,
+			a_tel,
+			sh_place,
+			or_idx,
+			sh_req_dte,
+			<if test="shManager != ''">sh_manager,</if>
+			sh_reg_dte,
+			sh_reg_mem
+			)
+		VALUES
+			(
+			#{aIdx},
+			#{aName},
+			#{aTel},
+			#{shPlace},
+			#{orIdx},
+			#{shReqDte},
+			<if test="shManager != ''">#{shManager},</if>
+			NOW(),
+			#{userId}
+			)
+	</insert>
+	
+	<select id="selectExistsOutSourcing" resultType="int">
+		SELECT COUNT(*) FROM sm_outso_info WHERE or_idx = #{orIdx}
+	</select>
+	
+	<update id="updateOrders">
+		UPDATE sm_orders SET
+			or_state = #{state}
+		WHERE or_idx = #{orIdx}
+	</update>
+	
+	<update id="updateDelivery">
+		UPDATE sm_delivery SET
+			sh_idx = (SELECT MAX(sh_idx) FROM sm_shipment)
+		WHERE or_idx = #{orIdx}
+	</update>
+	
+	<select id="selectShipmentInfo" resultType="egovMap">
+		SELECT
+			a.sh_idx,
+			a.a_idx,
+			a.a_name,
+			a.a_tel,
+			a.sh_place,
+			a.or_idx,
+			a.sh_req_dte,
+			a.sh_manager,
+			a.sh_picture,
+			a.sh_origin_picture,
+			b.a_addr,
+			c.or_name
+		FROM sm_shipment a
+		JOIN sm_account b
+		ON a.a_idx = b.a_idx
+		JOIN sm_orders c
+		ON a.or_idx = c.or_idx
+		WHERE sh_idx = #{shIdx}
+	</select>
+	
+	<update id="modifyShipment">
+		UPDATE sm_shipment SET
+			a_idx = #{aIdx},
+			a_name = #{aName},
+			a_tel = #{aTel},
+			sh_place = #{shPlace},
+			or_idx = #{orIdx},
+			sh_req_dte = #{shReqDte},
+			<if test="shManager != ''">sh_manager = #{shManager},</if>
+			sh_edt_dte = NOW(),
+			sh_edt_mem = #{userId}
+		WHERE sh_idx = #{shIdx}
+	</update>
+	
+	<delete id="deleteShipment">
+		DELETE FROM sm_shipment WHERE sh_idx = #{shIdx}
+	</delete>
+</mapper>

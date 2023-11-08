@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.db.service.impl.ExcelReaderMapper">
+
+
+
+	<select id="inspCount" resultType="egovMap">
+		SELECT
+		(SELECT COUNT(*) FROM sm_inspection_excel_history WHERE id_test_time =
+		#{edDate}) AS COUNT1,
+		(SELECT COUNT(*) FROM sm_inspection_data WHERE id_test_time = #{edDate}) AS
+		COUNT2
+	</select>
+
+	<select id="noUpList" resultType="egovMap">
+		SELECT a.id_doc, a.IEH_LOTNO
+		FROM sm_inspection_excel_history a
+		LEFT JOIN sm_inspection_data b ON a.id_doc = b.id_doc
+		WHERE b.id_doc IS NULL
+		and a.id_test_time = #{edDate}
+
+	</select>
+	
+	<select id="idTestTime" resultType="egovMap">
+		SELECT id_test_time FROM sm_inspection_excel_history
+		WHERE id_doc = #{idDoc}
+	</select>
+	
+	<select id="mfProc" resultType="egovMap">
+	
+	SELECT * FROM sm_mf_proc
+WHERE PO_LOTNO = #{str}
+	</select>
+	
+	<select id="checkjungbok" resultType="int">
+	SELECT COUNT(*) FROM sm_orders
+	WHERE or_id = #{orId}
+	</select>
+	
+	<select id="checkVision" resultType="int">
+	SELECT COUNT(*) FROM sm_inspection_data
+WHERE id_doc = #{idDoc}
+	</select>
+	
+	<select id="outProList" resultType="egovMap">
+	SELECT a.or_id, a.mfl_manager, FORMAT(a.mfl_ed_date, 'yyyy-MM-dd HH:mm') AS mfl_ed_date, b.mp_mfno, b.mp_prod_name, b.po_lotno, b.MP_QTY
+FROM sm_mf_proc_log a
+JOIN sm_mf_proc b ON a.OR_ID = b.OR_ID
+WHERE CAST(a.mfl_ed_date AS DATE) = CAST(GETDATE() AS DATE)
+
+	
+	</select>
+	
+	<insert id="registinspData">
+	INSERT INTO sm_inspection_data
+	(id_doc,
+	 po_lotno,
+	 id_prod_name,
+	 id_name,
+	 id_mfno,
+	 id_test_time,
+	 id_check_time,
+	 or_id) values(
+	 #{idDoc},
+	 #{poLotno},
+	 #{idProdName},
+	 #{idName},
+	 #{mpMfno},
+	 #{idTestTime},
+	 #{idCheckTime},
+	 #{orId}
+	 )
+	
+	</insert>
+
+	<insert id="registdb" parameterType="egovMap">
+		INSERT INTO sm_product_info
+		(
+		pi_id,
+		pi_item_type,
+		pi_item_code01,
+		pi_item_code02,
+		pi_item_code03,
+		pi_item_code04,
+		pi_item_state,
+		pi_item_name,
+		pi_cnt,
+		pi_item_remain,
+		pi_price,
+		pi_item_middle,
+		pi_heat,
+		mi_reg_id,
+		pi_reg_date) VALUES(
+		#{piId},
+		#{piItemType},
+		#{piItemCode1},
+		#{piItemCode2},
+		#{piItemCode3},
+		#{piItemCode4},
+		#{piItemState},
+		#{piItemName},
+		CONVERT(INT,CONVERT(float,#{piCnt})),
+		CONVERT(float,#{piItemRemain}),
+		CONVERT(INT,CONVERT(float,#{piPrice})),
+		CONVERT(float,#{piItemMiddle}),
+		#{piHeat},
+		#{miRegId},
+		GETDATE()
+		)
+
+	</insert>
+
+	<insert id="registOrder">
+		INSERT INTO sm_orders(
+		or_id,
+		or_company,
+		or_prod,
+		or_date,
+		or_due_date,
+		<if test="orFinDate !='00000000'">or_fin_date,</if>
+		or_or_type,
+		or_work_type,
+		or_texture,
+		or_thickness,
+		or_standard,
+		or_state,
+		or_manager,
+		or_pr_no,
+		or_unit,
+		or_money,
+		or_qty,
+		or_process
+		) VALUES
+		(
+		#{orId},
+		#{orCompany},
+		#{orProd},
+		#{orDate},
+		#{orDueDate},
+		<if test="orFinDate !='00000000'">#{orFinDate},</if>
+		#{orOrType},
+		#{orWorkType},
+		#{orTexture},
+		#{orThickness},
+		#{orStandard},
+		#{orState},
+		#{orManager},
+		#{orPrNo},
+		#{orUnit},
+		#{orMoney},
+		#{orQty},
+		0
+		)
+	</insert>
+	<insert id="registRelease">
+		insert into sm_release_info
+		(
+			or_id,
+			rel_compony,
+			rel_del,
+			rel_esno,
+			rel_prno,
+			rel_or_type,
+			rel_nabgi,
+			rel_qty,
+			rel_unit,
+			rel_price,
+			rel_prod,
+			rel_texture,
+			rel_thickness,
+			rel_state,
+			po_lotno,
+			rel_report,
+			rel_completion,
+			rel_person,
+			rel_note1,
+			rel_note2,
+			rel_clgo
+		) values
+		(
+			#{orId},
+			#{relCompony},
+			#{relDel},
+			#{relEsno},
+			#{relPrno},
+			#{relOrType},
+			#{relNabgi},
+			#{relQty},
+			#{relUnit},
+			#{relPrice},
+			#{relProd},
+			#{relTexture},
+			#{relThickness},
+			#{relState},
+			#{poLotno},
+			#{relReport},
+			#{relCompletion},
+			#{relPerson},
+			#{relNote1},
+			#{relNote2},
+			GETDATE()
+		)
+
+	</insert>
+	
+	<insert id="registProc">
+	INSERT INTO sm_mf_proc(
+	mp_mfno,
+	or_id,
+	mp_prod_name,
+	mp_texture,
+	mp_thickness,
+	mp_state,
+	mp_standard,
+	po_lotno,
+	mp_qty,
+	mp_note,
+	mp_reg_date,
+	mp_pr_state
+	) 
+	values(
+	#{mpMfno},
+	#{orId},
+	#{mpProdName},
+	#{mpTexture},
+	#{mpThickness},
+	#{mpState},
+	#{mpStandard},
+	#{poLotno},
+	#{mpQty},
+	#{mpNote},
+	GETDATE(),
+	0)
+	
+	</insert>
+	
+	<insert id="registCutpro">
+	INSERT INTO sm_cut_proc(
+	cp_mfno,
+	or_id,
+	cp_prod_name,
+	cp_texture,
+	cp_thickness,
+	cp_state,
+	cp_standard,
+	po_lotno,
+	cp_qty,
+	cp_note,
+	cp_reg_date
+	) 
+	values(
+	#{mpMfno},
+	#{orId},
+	#{mpProdName},
+	#{mpTexture},
+	#{mpThickness},
+	#{mpState},
+	#{mpStandard},
+	#{poLotno},
+	#{mpQty},
+	#{mpNote},
+	GETDATE()
+	)
+	
+	</insert>
+
+	<insert id="registMm">
+		<!-- INSERT INTO sm_material_move ( mm_id, pi_id, mm_in, mm_in_kg, mm_out, 
+			mm_out_kg, mm_cnt, mm_cnt_kg, mm_reg_id, mm_reg_date ) VALUES ( 'MM' + SUBSTRING(CONVERT(VARCHAR(8), 
+			GETDATE(), 112), 3, 6) + '-' + RIGHT('0000' + CAST(CAST( COALESCE(( SELECT 
+			MAX(CAST(SUBSTRING(a.mm_id, 10, 12) AS INT)) + 1 FROM sm_material_move a 
+			WHERE a.MM_ID LIKE CONCAT(CONCAT('MM', SUBSTRING(CONVERT(VARCHAR(8), GETDATE(), 
+			112), 3, 8)), '%') ), '0') AS VARCHAR(4)) AS INT), 4), #{piId}, CONVERT(INT,CONVERT(float,#{mmIn})), 
+			CONVERT(FLOAT,#{mmInKg}), CONVERT(INT,CONVERT(float,#{mmOut})), CONVERT(FLOAT,#{mmOutKg}), 
+			CONVERT(INT,CONVERT(float,#{piCnt})), CONVERT(FLOAT,#{piItemRemain}), #{mmRegId}, 
+			GETDATE() ) -->
+<!-- 		DECLARE @CurrentDate VARCHAR(8) = CONVERT(VARCHAR(8), GETDATE(), 112) -->
+<!-- 		DECLARE @MaxID INT -->
+
+<!-- 		SELECT @MaxID = MAX(CAST(SUBSTRING(a.pi_id, 10, 4) -->
+<!-- 		AS INT)) + 1 -->
+<!-- 		FROM sm_product_info a -->
+<!-- 		WHERE a.pi_id LIKE 'MM' + -->
+<!-- 		SUBSTRING(@CurrentDate, 3, 8) + '%' -->
+
+<!-- 		SET @MaxID = ISNULL(@MaxID, 1) -->
+
+<!-- 		INSERT INTO sm_product_info ( -->
+<!-- 		pi_id, -->
+<!-- 		pi_item_type, -->
+<!-- 		pi_item_heat, -->
+<!-- 		pi_item_name, -->
+<!-- 		pi_item_texture, -->
+<!-- 		pi_item_standard, -->
+<!-- 		pi_item_thickness, -->
+<!-- 		pi_item_long, -->
+<!-- 		pi_middle, -->
+<!-- 		pi_item_unit, -->
+<!-- 		pi_remain_qty, -->
+<!-- 		pi_remain_kg, -->
+<!-- 		pi_reg_date -->
+<!-- 		) -->
+<!-- 		VALUES ( -->
+<!-- 		#{piId}, -->
+<!-- 		#{piItemType}, -->
+<!-- 		#{piItemHeat}, -->
+<!-- 		#{piItemName}, -->
+<!-- 		#{piItemTexture}, -->
+<!-- 		#{piItemStandard}, -->
+<!-- 		#{piItemThickness}, -->
+<!-- 		#{piItemLong}, -->
+<!-- 		#{piMiddle}, -->
+<!-- 		#{piItemUnit}, -->
+<!-- 		#{piRemainQty}, -->
+<!-- 		#{piRemainKg}, -->
+<!-- 		GETDATE() -->
+<!-- 		) -->
+<!-- 		ON DUPLICATE KEY UPDATE -->
+<!--     	pi_remain_qty = #{piRemainQty}; -->
+<!-- 		'MM' + -->
+<!-- 		SUBSTRING(@CurrentDate, 3, 6) + '-' + RIGHT('000' + CAST(@MaxID -->
+<!-- 		AS -->
+<!-- 		VARCHAR(4)), 4), -->
+	MERGE INTO sm_product_info AS target
+    USING (VALUES (
+        #{piId},
+        #{piItemType},
+        #{piItemHeat},
+        #{piItemName},
+        #{piItemTexture},
+        #{piItemStandard},
+        #{piItemThickness},
+        #{piItemLong},
+        #{piMiddle},
+        #{piItemUnit},
+        #{piRemainQty},
+        #{piRemainKg},
+        GETDATE()
+    )) AS source (piId, piItemType, piItemHeat, piItemName, piItemTexture, piItemStandard, piItemThickness, piItemLong, piMiddle, piItemUnit, piRemainQty, piRemainKg, piRegDate)
+    ON target.pi_id = source.piId
+    WHEN MATCHED THEN
+        UPDATE SET target.pi_remain_qty = source.piRemainQty
+    WHEN NOT MATCHED THEN
+        INSERT (pi_id, pi_item_type, pi_item_heat, pi_item_name, pi_item_texture, pi_item_standard, pi_item_thickness, pi_item_long, pi_middle, pi_item_unit, pi_remain_qty, pi_remain_kg, pi_reg_date)
+        VALUES (source.piId, source.piItemType, source.piItemHeat, source.piItemName, source.piItemTexture, source.piItemStandard, source.piItemThickness, source.piItemLong, source.piMiddle, source.piItemUnit, source.piRemainQty, source.piRemainKg, source.piRegDate);
+	</insert>
+
+	<insert id="testRegist">
+		insert into sm_test(
+		te_idx,
+		te_name,
+		te_name2
+		) values
+		(
+		#{teIdx},
+		#{teName},
+		#{teName2}
+		)
+	</insert>
+	
+	<update id="insFileStateUpdate">
+	UPDATE sm_inspection_excel_history SET
+	id_reg_state = 1
+	WHERE id_doc = #{idDoc}
+	</update>
+
+	<delete id="deletedb">
+		DELETE FROM sm_product_info;
+	</delete>
+
+	<delete id="deleteMm">
+		DELETE FROM sm_material_move;
+	</delete>
+	<select id="sublList" resultType="egovMap">
+		SELECT 
+			pi_remain_qty,
+			pi_remain_kg
+		FROM
+			sm_product_info
+		WHERE
+			pi_id = #{piId}
+	</select>
+	
+	<update id="updateMm">
+		UPDATE
+			sm_material_move
+		SET
+			<if test="mmIn != '' or mmIn != null">
+				mm_in = #{mmIn},
+			</if>
+			<if test="mmInKg != '' or mmInKg != null">
+				mm_in_kg = #{mmInKg},
+			</if>
+			<if test="mmOut != '' or mmOut != null">
+				mm_out = #{mmOut},
+			</if>
+			<if test="mmOutKg != '' or mmOutKg != null">
+				mm_out_kg = #{mmOutKg},
+			</if>
+			mm_reg_date = GETDATE()
+		WHERE
+			pi_id = #{piId}
+	</update>
+	
+	
+	<insert id="registPi">
+	MERGE INTO sm_product_info AS target
+    USING (VALUES (
+        #{piId},
+        #{piItemType},
+        #{piItemHeat},
+        #{piItemName},
+        #{piItemTexture},
+        #{piItemStandard},
+        #{piItemThickness},
+        #{piItemLong},
+        #{piMiddle},
+        #{piItemUnit},
+        #{piRemainQty},
+        #{piRemainKg},
+        GETDATE()
+    )) AS source (piId, piItemType, piItemHeat, piItemName, piItemTexture, piItemStandard, piItemThickness, piItemLong, piMiddle, piItemUnit, piRemainQty, piRemainKg, piRegDate)
+    ON target.pi_id = source.piId
+    WHEN MATCHED THEN
+        UPDATE SET target.pi_remain_qty = source.piRemainQty, target.pi_remain_kg = source.piRemainKg 
+    WHEN NOT MATCHED THEN
+        INSERT (pi_id, pi_item_type, pi_item_heat, pi_item_name, pi_item_texture, pi_item_standard, pi_item_thickness, pi_item_long, pi_middle, pi_item_unit, pi_remain_qty, pi_remain_kg, pi_reg_date)
+        VALUES (source.piId, source.piItemType, source.piItemHeat, source.piItemName, source.piItemTexture, source.piItemStandard, source.piItemThickness, source.piItemLong, source.piMiddle, source.piItemUnit, source.piRemainQty, source.piRemainKg, source.piRegDate);
+	</insert>
+	
+	<select id="clgoList" resultType="egovMap">
+		SELECT 
+			or_id
+		FROM
+			sm_release_info
+		WHERE
+			or_id = #{orId}
+	</select>
+</mapper>

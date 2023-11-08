@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="apc.sl.monitoring.ordersOutput.service.impl.OrdersOutputMapper">
+	<select id="selectOrderOutputData" resultType="egovMap">
+		SELECT
+		a.es_idx,
+		b.or_dte,
+		DATE_FORMAT(or_dte, '%Y') AS years,
+		DATE_FORMAT(or_dte, '%m')
+		AS MONTH,
+		SUM(
+		IFNULL(es_cnt1,0)+IFNULL(es_cnt2,0)+
+		IFNULL(es_cnt3,0)+IFNULL(es_cnt4,0)+
+		IFNULL(es_cnt5,0)+IFNULL(es_cnt6,0)+
+		IFNULL(es_cnt7,0)+IFNULL(es_cnt8,0)+
+		IFNULL(es_cnt9,0)+IFNULL(es_cnt10,0)
+		) AS orderCnt,
+		SUM(pr_re_cnt) AS
+		prodCnt
+		from sm_estimate a
+		JOIN sm_orders b
+		ON a.es_idx = b.es_idx
+		JOIN
+		sm_work_order c
+		ON b.or_idx = c.or_idx
+		JOIN sm_prod_result d
+		ON
+		c.wo_idx =
+		d.wo_idx
+		JOIN sm_delivery e
+		ON b.or_idx = e.or_idx
+		WHERE
+		DATE_FORMAT(or_dte, '%Y') = DATE_FORMAT(NOW(), '%Y')
+		GROUP BY MONTH
+		ORDER BY or_dte
+	</select>
+
+	<select id="selectOrdersCnt" resultType="egovMap">
+		<!-- SELECT a.es_idx, b.or_dte, DATE_FORMAT(or_dte, '%Y') AS years, DATE_FORMAT(or_dte, 
+			'%m') AS MONTH, SUM( IFNULL(es_cnt1,0)+IFNULL(es_cnt2,0)+ IFNULL(es_cnt3,0)+IFNULL(es_cnt4,0)+ 
+			IFNULL(es_cnt5,0)+IFNULL(es_cnt6,0)+ IFNULL(es_cnt7,0)+IFNULL(es_cnt8,0)+ 
+			IFNULL(es_cnt9,0)+IFNULL(es_cnt10,0) ) AS orderCnt from sm_estimate a JOIN 
+			sm_orders b ON a.es_idx = b.es_idx WHERE DATE_FORMAT(or_dte, '%Y') = DATE_FORMAT(NOW(), 
+			'%Y') GROUP BY MONTH ORDER BY or_dte -->
+		SELECT YEAR(or_date) AS years, MONTH(or_date) AS months,
+		ISNULL(SUM(or_qty), 0)AS order_cnt 
+		<if test="searchCondition2 != ''"> , day(or_date) AS days</if>
+		<if test="searchCondition2 == ''"> , '' AS days</if>
+		FROM sm_orders
+		WHERE YEAR(or_date) =
+		#{searchCondition}
+		<if test="searchCondition2 != ''">AND MONTH(or_date) = #{searchCondition2}</if>
+		GROUP BY YEAR(or_date), MONTH(or_date) <if test="searchCondition2 != ''"> , or_date</if>
+		ORDER BY months <if test="searchCondition2 != ''"> , or_date</if>
+	</select>
+
+	<select id="selectProdCnt" resultType="egovMap">
+		SELECT YEAR(rel_clgo) AS
+		years, MONTH(rel_clgo) AS months, ISNULL(SUM(rel_qty), 0)AS prod_cnt,
+		SUM(CASE WHEN CONVERT(float, rel_price) >= 0 THEN CONVERT(float, rel_price) ELSE 0 END) AS rel_price
+		<if test="searchCondition2 != ''"> , day(rel_clgo) as rel_day</if>
+		<if test="searchCondition2 == ''"> , '' AS rel_day</if>
+		FROM sm_release_info a
+		WHERE YEAR(rel_clgo) = #{searchCondition}
+		<if test="searchCondition2 != ''">AND MONTH(rel_clgo) = #{searchCondition2}</if>
+		GROUP BY YEAR(rel_clgo), MONTH(rel_clgo)<if test="searchCondition2 != ''"> , rel_clgo</if>
+		ORDER BY months <if test="searchCondition2 != ''"> , rel_clgo</if>
+	</select>
+
+	<select id="selectSales" resultType="egovMap">
+		SELECT
+		DATE_FORMAT(or_dte,
+		'%Y-%m') AS monthly,
+		DATE_FORMAT(or_dte, '%m') AS MONTH,
+		SUM(or_money)/10000 AS money
+		FROM sm_orders
+		WHERE 1=1
+		AND
+		DATE_FORMAT(NOW(), '%Y') =
+		DATE_FORMAT(or_dte, '%Y')
+		GROUP BY monthly
+	</select>
+</mapper>

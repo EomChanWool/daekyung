@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="apc.sl.basicInfo.prodInfo.service.impl.ProdInfoMapper">
+	<select id="selectProdInfoListToCnt" resultType="int">
+		SELECT COUNT(*) FROM sm_product_info
+		WHERE 1=1
+		<if test="searchCondition == '제품코드'">
+			AND pi_id LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '제품구분'">
+			AND pi_item_type LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '제품명'">
+			AND pi_item_name LIKE '%' + #{searchKeyword} + '%'
+		</if>
+<!-- 		<if test="searchKeyword != ''"> -->
+<!-- 				AND item_name LIKE CONCAT ('%', #{searchKeyword}, '%') -->
+<!-- 		</if> -->
+	</select>
+	
+	<select id="selectProdInfoList" resultType="egovMap">
+		SELECT
+			pi_id,
+			pi_item_type,
+			pi_item_name,
+			pi_item_texture,
+			pi_item_standard,
+			pi_item_thickness,
+			pi_item_long
+		FROM sm_product_info
+		WHERE 1=1
+		<if test="searchCondition == '제품코드'">
+			AND pi_id LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '제품구분'">
+			AND pi_item_type LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		<if test="searchCondition == '제품명'">
+			AND pi_item_name LIKE '%' + #{searchKeyword} + '%'
+		</if>
+		ORDER BY pi_id DESC
+		OFFSET #{firstIndex} ROWS
+		FETCH NEXT #{recordCountPerPage} ROWS ONLY
+	</select>
+	
+	<insert id="registProdInfo">
+		INSERT INTO sm_product_info
+			(
+			pi_id,
+			pi_item_type,
+			pi_item_texture,
+			pi_item_standard,
+			pi_item_thickness,
+			pi_item_long,
+			pi_item_heat,
+			pi_item_name,
+			pi_remain_qty,
+			pi_remain_kg,
+			pi_item_unit,
+			pi_middle,
+			pi_reg_date
+			)
+		VALUES
+			(
+			#{piId},
+			#{piItemType},
+			#{piItemTexture},
+			#{piItemStandard},
+			#{piItemThickness},
+			#{piItemLong},
+			#{piItemHeat},
+			#{piItemName},
+			#{piRemainQty},
+			#{piRemainKg},
+			#{piItemUnit},
+			#{piMiddle},
+			GETDATE()
+			)
+	</insert>
+	
+	<select id="selectProdInfoInfo" resultType="egovMap">
+		SELECT
+			pi_id,
+			pi_item_type,
+			pi_item_name,
+			pi_item_texture,
+			pi_item_standard,
+			pi_item_thickness,
+			pi_item_long,
+			pi_item_heat,
+			pi_middle,
+			pi_item_unit,
+			pi_remain_qty,
+			pi_remain_kg,
+			pi_reg_date
+		FROM sm_product_info
+		WHERE pi_id = #{piId}
+	</select>
+	
+	<update id="modifyProdInfo">
+		UPDATE sm_product_info SET
+			pi_item_type = #{piItemType},
+			pi_item_texture = #{piItemTexture},
+			pi_item_standard = #{piItemStandard},
+			pi_item_thickness = #{piItemThickness},
+			pi_item_long = #{piItemLong},
+			pi_item_heat = #{piItemHeat},
+			pi_item_name = #{piItemName},
+			pi_remain_qty = #{piRemainQty},
+			pi_remain_kg = #{piRemainKg},
+			pi_item_unit = #{piItemUnit},
+			pi_middle = #{piMiddle}
+		WHERE pi_id = #{piId}
+	</update>
+	
+	<delete id="deleteProdInfo">
+		DELETE FROM sm_product_info WHERE pi_id= #{piId}
+	</delete>
+</mapper>
