@@ -11,6 +11,8 @@ public interface WaterPressureService {
 
 	List<?> selectWaterPressureList(SearchVO searchVO);
 
+	List<?> selectWaterPressureGraphList(SearchVO searchVO);
+
 	List<?> selectDeliveryList();
 
 	List<?> selectDeliveryInfo(Map<String, Object> map);

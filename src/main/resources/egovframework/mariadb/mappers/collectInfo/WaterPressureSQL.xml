@@ -4,8 +4,8 @@
 	<select id="selectWaterPressureListToCnt" resultType="int">
 		SELECT COUNT(*) FROM sm_water_press
 	WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND wp_code = #{searchKeyword}
+		<if test="searchStDate == '' or searchStDate == null">
+			AND CONVERT(DATE, wp_time) = CAST(GETDATE() AS DATE)
 		</if>
 		<if test="searchStDate != ''">
 			AND wp_time >= #{searchStDate}
@@ -18,8 +18,8 @@
 	<select id="selectWaterPressureList" resultType="egovMap">
 		SELECT * FROM sm_water_press
 		WHERE 1=1
-		<if test="searchKeyword != ''">
-			AND wp_code = #{searchKeyword}
+		<if test="searchStDate == '' or searchStDate == null">
+			AND CONVERT(DATE, wp_time) = CAST(GETDATE() AS DATE)
 		</if>
 		<if test="searchStDate != ''">
 			AND wp_time >= #{searchStDate}
@@ -32,6 +32,20 @@
 		FETCH
 		NEXT
 		#{recordCountPerPage} ROWS ONLY
+	</select>
+	
+	<select id="selectWaterPressureGraphList" resultType="egovMap">
+		SELECT * FROM sm_water_press
+		WHERE 1=1
+		<if test="searchStDate == '' or searchStDate == null">
+			AND CONVERT(DATE, wp_time) = CAST(GETDATE() AS DATE)
+		</if>
+		<if test="searchStDate != ''">
+			AND wp_time >= #{searchStDate}
+		</if>
+		<if test="searchEdDate !=''">
+			AND wp_time <![CDATA[<=]]> #{searchEdDate}
+		</if>
 	</select>
 	
 	<select id="selectDeliveryList" resultType="egovMap">

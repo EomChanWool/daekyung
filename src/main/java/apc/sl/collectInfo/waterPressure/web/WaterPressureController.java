@@ -1,5 +1,7 @@
 package apc.sl.collectInfo.waterPressure.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,24 @@ public class WaterPressureController {
 	
 	@RequestMapping("/sl/collectInfo/waterPressure/waterPressureList.do")
 	public String waterPressureList(@ModelAttribute("searchVO") SearchVO searchVO, ModelMap model, HttpSession session) {
+//		Date now = new Date();
+//		
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//		
+//		String currentDay =  format.format(now);
+//		
+//		if(searchVO.getSearchStDate().equals("")) {
+//			searchVO.setSearchStDate(currentDay);
+//		}
+//		if(searchVO.getSearchEdDate().equals("")) {
+//			searchVO.setSearchEdDate(currentDay);
+//		}
+		String temp = searchVO.getSearchStDate().replace("T", " ");
+		String temp2 = searchVO.getSearchEdDate().replace("T", " ");
+		searchVO.setSearchStDate(temp);
+		searchVO.setSearchEdDate(temp2);
+		
+		System.out.println(searchVO.getSearchStDate() + "  " + searchVO.getSearchEdDate());
 		int totCnt = waterPressureService.selectWaterPressureListToCnt(searchVO);
 		/** pageing setting */
 		searchVO.setPageSize(10);
@@ -39,7 +59,9 @@ public class WaterPressureController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 		List<?> waterPressureList = waterPressureService.selectWaterPressureList(searchVO);
+		List<?> waterPressureGraphList = waterPressureService.selectWaterPressureGraphList(searchVO);
 		model.put("waterPressureList", waterPressureList);
+		model.put("waterPressureGraphList", waterPressureGraphList);
 		model.put("paginationInfo", paginationInfo);
 		return "sl/collectInfo/waterPressure/waterPressureList";
 	}
