@@ -23,6 +23,10 @@ public class WaterPressureServieImpl implements WaterPressureService {
 	public List<?> selectWaterPressureList(SearchVO searchVO) {
 		return waterPressureMapper.selectWaterPressureList(searchVO);
 	}
+	@Override
+	public List<?> selectWaterPressureGraphList(SearchVO searchVO) {
+		return waterPressureMapper.selectWaterPressureGraphList(searchVO);
+	}
 
 	@Override
 	public List<?> selectDeliveryList() {

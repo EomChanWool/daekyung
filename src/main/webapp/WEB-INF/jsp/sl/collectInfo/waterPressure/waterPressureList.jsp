@@ -57,25 +57,26 @@
 									<input type="hidden" name="wpId">
 									<input type="hidden" name="orIdx">
 									<input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword"
-						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요"
-						    									style="background-color:#eaecf4; width: 25%; float: left;">
+<!-- 									<input type="text" class="form-control bg-light border-0 small" name="searchKeyword" -->
+<%-- 						    									value="${searchVO.searchKeyword}" placeholder="검색어를 입력해 주세요" --%>
+<!-- 						    									style="background-color:#eaecf4; width: 25%; float: left;"> -->
 						    		
-						    		<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="date">
+						    		<input class="btn btn-secondary searchDate" id="searchStDate" name="searchStDate" value="${searchVO.searchStDate}" type="datetime-local">
 									<span class="dash" style="display: inline-block; float: left; margin: 0.5rem 0.3rem 0 0">~</span>
-									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="date">
+									<input class="btn btn-secondary searchDate" id="searchEdDate" name="searchEdDate" value="${searchVO.searchEdDate}" type="datetime-local">
 						    	</form>
 						    	<a href="#" class="btn btn-info btn-icon-split" onclick="fn_search_water()" style="margin-left: 0.3rem;">
 	                                <span class="text">검색</span>
 	                            </a>
 						    	<a href="#" class="btn btn-success btn-icon-split" onclick="fn_searchAll_water()">
-	                                <span class="text">전체목록</span>
+	                                <span class="text">오늘 전체목록</span>
 	                            </a>
 	                            <a href="#" class="btn btn-primary btn-icon-split" onclick="fn_regist_water()" style="float: right;">
 	                                <span class="text">등록</span>
 	                            </a>
 							</div>
                         </div>
+                        <div id="graph" style="width: 100%; height:300px;"></div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable"  >
@@ -153,11 +154,19 @@
 		}
 		
 		function fn_search_water(){
+			var searchStDate = document.getElementById('searchStDate').value;
+	        var searchEdDate = document.getElementById('searchEdDate').value;
+			var searchStDateValue = searchStDate.replace('T', ' ');
+			var searchEdDateValue = searchEdDate.replace('T', ' ');
+	        if (searchStDateValue > searchEdDateValue) {
+	            alert('검색 시작일은 검색 종료일보다 클 수 없습니다.');
+	            return;
+	        }
+	        
 			listForm.submit();
 		}
 		
 		function fn_searchAll_water(){
-			listForm.searchKeyword.value = "";
 			listForm.searchStDate.value = "";
 			listForm.searchEdDate.value = "";
 			listForm.pageIndex.value = 1;
@@ -183,6 +192,7 @@
 			}
 		}
 		
+		
 		$(function() {
 			$('#collectInfoMenu').addClass("active");
 			$('#collectInfo').addClass("show");
@@ -196,6 +206,58 @@
 			
 		});
 			
+		var chartDom = document.getElementById('graph');
+		var myChart = echarts.init(chartDom);
+		var option;
+
+		let lineTime = [];
+		
+		let lineValue = [];
+		
+		<c:forEach items="${waterPressureGraphList}" var="list">
+		lineValue.push('${list.wpValue}');
+		lineTime.push('${list.wpTime}'.split('.')[0]);
+		</c:forEach>
+		
+		console.log(lineValue)
+		console.log(lineTime)
+		
+		option = {
+		  animation: false,
+		  xAxis: {
+		    type: 'category',
+		    name: '측정시간',
+		    data: lineTime,
+		    axisLabel: {
+		        formatter: function (value, index) {
+		          var date = new Date(value);
+		          var minutes = date.getMinutes();
+		          return date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes;
+		        }
+		      }
+		  },
+		  yAxis: {
+		    type: 'value',
+		    name: '측정값'
+		  },
+		  tooltip: {
+			    trigger: 'axis', 
+			    formatter: function (params) {
+			      var xValue = params[0].name;
+			      var yValue = params[0].value;
+			      return '<span style="font-weight: bold; letter-spacing: 4.7px;">측정값:</span>' + yValue + '<br><strong>측정시간:</strong> ' + xValue;
+			    }
+			  },
+		  series: [
+		    {
+		      data: lineValue,
+		      type: 'line',
+		      smooth: true
+		    }
+		  ]
+		};
+
+		option && myChart.setOption(option);
 		
 	</script>
 </body>
