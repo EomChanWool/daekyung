@@ -452,23 +452,35 @@ public class Scheduler {
 //		            mmMap.put("mmOutKg", 0);
 					
 					if ( result == "kUp") { //kg증가
+						mmMap.put("mmOutKg", 0);
 						mmMap.put("mmInKg", addKg - nowKg);
 					} else if ( result == "kDown") { //kg감소
+						mmMap.put("mmInKg", 0);
 						mmMap.put("mmOutKg", nowKg - addKg);
 					} else if ( result == "qUp") { //qty증가
+						mmMap.put("mmOut", 0);
 						mmMap.put("mmIn", addQty - nowQty);
 					} else if ( result == "qDown") { //qty감소
+						mmMap.put("mmIn", 0);
 						mmMap.put("mmOut", nowQty - addQty);
 					} else if ( result == "qkUp") { //qty,kg 증가
+						mmMap.put("mmOut", 0);
+						mmMap.put("mmOutKg", 0);
 						mmMap.put("mmIn", addQty - nowQty);
 						mmMap.put("mmInKg", addKg - nowKg);
 					} else if ( result == "qUpkDown") { //qty증가, kg감소
+						mmMap.put("mmOut", 0);
+						mmMap.put("mmInKg", 0);
 						mmMap.put("mmIn", addQty - nowQty);
 						mmMap.put("mmOutKg", nowKg - addKg);
 					} else if ( result == "qDownkUp") { //qty감소, kg증가
+						mmMap.put("mmIn", 0);
+						mmMap.put("mmOutKg", 0);
 						mmMap.put("mmOut", nowQty - addQty);
 						mmMap.put("mmInKg", addKg - nowKg);
 					} else if ( result == "qDownkDown") { //qty감소, kg감소
+						mmMap.put("mmIn", 0);
+						mmMap.put("mmInKg", 0);
 						mmMap.put("mmOut", nowQty - addQty);
 						mmMap.put("mmOutKg", nowKg - addKg);
 					}
