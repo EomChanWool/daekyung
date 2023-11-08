@@ -31,6 +31,9 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 			
 			return true;
 		}
+		if(str2[5].equals("popMf")) {
+			return true;
+		}
 		int accessLevel = userAuthorityService.selectAccess(str2[5]);
 		int menuState = userAuthorityService.menuState(str2[5]);
 		Map<String, Object> userMap = (Map<String, Object>) session.getAttribute("memberVO");
